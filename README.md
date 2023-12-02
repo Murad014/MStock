@@ -1,2 +1,2 @@
 # MStock
-Stock Application
+Stock Application - REST API
