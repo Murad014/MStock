@@ -2,13 +2,12 @@ package com.mstockRestAPI.mstockRestAPI.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Instant;
+
 @Entity
 @Table(name = "company", uniqueConstraints = {
         @UniqueConstraint(name = "uk_companyName", columnNames = "companyName")
@@ -17,6 +16,8 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@ToString
 public class Company {
     @Id
     @Column(name="id")
@@ -30,9 +31,9 @@ public class Company {
     private Timestamp createdDate;
 
     @Column(name="updatedDate")
-    private Timestamp updatedTime;
+    private Timestamp updatedDate = Timestamp.from(Instant.now());
 
     @Column(name="isActive")
-    private Integer isActive = 1;
+    private Byte isActive = 1;
 
 }
