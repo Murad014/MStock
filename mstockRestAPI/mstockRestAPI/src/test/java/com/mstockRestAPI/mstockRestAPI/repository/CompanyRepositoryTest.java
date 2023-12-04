@@ -2,7 +2,6 @@ package com.mstockRestAPI.mstockRestAPI.repository;
 
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
-import com.mstockRestAPI.mstockRestAPI.helper.Helper;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
