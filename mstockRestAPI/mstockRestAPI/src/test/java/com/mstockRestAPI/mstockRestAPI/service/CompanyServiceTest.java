@@ -102,23 +102,22 @@ public class CompanyServiceTest {
 
     @Test
     @DisplayName("Update Company by Id if there is")
-    @Disabled
     public void givenId_whenFindAndUpdate_thenReturnUpdateCompanyObject(){
         Long notExistID = 100L;
-        Long exitsId = 1L;
+        Long existId = 1L;
 
         // Arrange
         when(converter.mapToEntity(companyDto, Company.class)).thenReturn(companyEntity);
         when(converter.mapToDto(companyEntity, CompanyDto.class)).thenReturn(companyDto);
         when(companyRepository.save(companyEntity)).thenReturn(companyEntity);
-        when(companyRepository.findById(exitsId)).thenReturn(java.util.Optional.ofNullable(companyEntity));
+        when(companyRepository.findById(existId)).thenReturn(java.util.Optional.ofNullable(companyEntity));
 
         // Act
         CompanyDto companyDtoUpdated = companyService.update(companyDto.getId(), companyDto);
 
         // Arrange
         assertNotNull(companyDtoUpdated);
-        assertEquals(1L, companyDtoUpdated.getId());
+        assertEquals(existId, companyDtoUpdated.getId());
         assertEquals(companyDto.getCompanyName(), companyDtoUpdated.getCompanyName());
         assertEquals(companyDto.getIsActive(), companyDtoUpdated.getIsActive());
         assertEquals(companyDto.getUpdatedDate(), companyDtoUpdated.getUpdatedDate());

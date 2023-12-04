@@ -25,11 +25,8 @@ properties = "server.port=8081")
 public class CompanyRepositoryTest {
 
     @Autowired
-    @Mock
     private CompanyRepository companyRepository;
 
-    @InjectMocks
-    private ModelMapper modelMapper;
 
     private final List<Company> companies = new ArrayList<>();
 
@@ -62,8 +59,6 @@ public class CompanyRepositoryTest {
     @Test
     @DisplayName("Save company")
     public void givenCompanyObject_whenSave_thenReturnSaveCompany(){
-        // Arrange
-        company.setId(0L);
 
         // Act
         Company savedCompany = companyRepository.save(company);
