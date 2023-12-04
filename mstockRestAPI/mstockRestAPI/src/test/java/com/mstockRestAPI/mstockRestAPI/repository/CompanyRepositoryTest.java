@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(locations = "/application-test.properties",
@@ -61,6 +62,8 @@ public class CompanyRepositoryTest {
     @Test
     @DisplayName("Save company")
     public void givenCompanyObject_whenSave_thenReturnSaveCompany(){
+        // Arrange
+        company.setId(0L);
 
         // Act
         Company savedCompany = companyRepository.save(company);
@@ -70,6 +73,30 @@ public class CompanyRepositoryTest {
         assertEquals(company.getIsActive(), savedCompany.getIsActive());
         assertEquals(company.getCreatedDate(), savedCompany.getCreatedDate());
         assertEquals(company.getUpdatedDate(), savedCompany.getUpdatedDate());
+    }
+
+    @Test
+    @DisplayName("Update company")
+    public void givenCompanyObject_whenUpdated_thenReturnCompanyObject(){
+        // Arrange
+        String companyName = "CocaCola";
+        Long updatedId = 1L, savedId = 0L;
+        Byte isActive = 1;
+        company.setId(savedId);
+        companyRepository.save(company);
+        company.setId(updatedId);
+        company.setCompanyName(companyName);
+        company.setIsActive(isActive);
+
+        // Act
+        Company updatedCompany = companyRepository.save(company);
+
+        // Assets
+        assertNotNull(updatedCompany);
+        assertEquals(companyName, updatedCompany.getCompanyName());
+        assertEquals(isActive, updatedCompany.getIsActive());
+        assertEquals(updatedId, updatedCompany.getId());
+
     }
 
     @Test
@@ -130,6 +157,25 @@ public class CompanyRepositoryTest {
         assertNull(companyThatNotExist);
 
         System.out.println(companyFromDBByName);
+    }
+
+    @Test
+    @DisplayName("Find company by id")
+    public void givenId_whenFind_thenReturnCompanyObject(){
+        // Arrange
+        companyRepository.save(company);
+
+        // Act
+        Company companyFromDB = companyRepository.findById(company.getId())
+                .orElse(null);
+
+        // Asserts
+        assertNotNull(companyFromDB);
+        assertEquals(companyFromDB.getId(), companyFromDB.getId());
+        assertEquals(companyFromDB.getCompanyName(), companyFromDB.getCompanyName());
+        assertEquals(companyFromDB.getUpdatedDate(), companyFromDB.getUpdatedDate());
+        assertEquals(companyFromDB.getCreatedDate(), companyFromDB.getCreatedDate());
+        assertEquals(companyFromDB.getIsActive(), companyFromDB.getIsActive());
     }
 
     @Test

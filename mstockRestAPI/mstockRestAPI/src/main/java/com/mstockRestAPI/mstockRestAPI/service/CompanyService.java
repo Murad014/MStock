@@ -8,8 +8,8 @@ import java.util.Set;
 
 public interface CompanyService {
     CompanyDto add(CompanyDto companyDto);
-    CompanyDto update(CompanyDto companyDto);
+    CompanyDto update(Long companyId, CompanyDto companyDto);
     List<CompanyDto> getAllCompanies();
-    CompanyDto getCompanyById(Long id);
+    CompanyDto getCompanyById(Long companyId);
     CompanyDto existsByCompanyName(String name);
 }

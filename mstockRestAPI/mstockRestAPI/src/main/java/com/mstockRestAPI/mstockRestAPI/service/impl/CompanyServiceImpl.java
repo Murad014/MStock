@@ -3,12 +3,14 @@ package com.mstockRestAPI.mstockRestAPI.service.impl;
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
 import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
+import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.CompanyRepository;
 import com.mstockRestAPI.mstockRestAPI.service.CompanyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CompanyServiceImpl implements CompanyService {
 
@@ -31,8 +33,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto update(CompanyDto companyDto) {
-        return null;
+    public CompanyDto update(Long companyId, CompanyDto companyDto) {
+        Company company = companyRepository.findById(companyId).orElseThrow(
+                () -> new ResourceNotFoundException("Company", "id", companyId));
+
+        companyDto.setId(companyId);
+        System.out.println(companyId);
+        Company companyToUpdate = companyRepository.save(converter.mapToEntity(companyDto, Company.class));
+
+        return converter.mapToDto(companyToUpdate, CompanyDto.class);
     }
 
     @Override
@@ -41,8 +50,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto getCompanyById(Long id) {
-        return null;
+    public CompanyDto getCompanyById(Long companyId) {
+        Company company = companyRepository.findById(companyId).orElseThrow(() ->
+                new ResourceNotFoundException("Company", "id", companyId));
+
+        return converter.mapToDto(company, CompanyDto.class);
     }
 
     @Override
