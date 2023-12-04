@@ -125,7 +125,7 @@ public class CompanyServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () -> {
             companyService.update(notExistID, companyDto);
-        });
+        }, "If there is not company in DB then should be throw exception.");
     }
 
 
