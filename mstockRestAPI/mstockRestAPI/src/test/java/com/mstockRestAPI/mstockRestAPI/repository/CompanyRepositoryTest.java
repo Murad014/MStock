@@ -33,6 +33,7 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Save company")
+    @Order(7)
     public void givenCompanyObject_whenSave_thenReturnSaveCompany(){
 
         // Act
@@ -48,6 +49,7 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Update company")
+    @Order(6)
     public void givenCompanyObject_whenUpdated_thenReturnCompanyObject(){
         // Arrange
         Company company2 = CompanyCreator.createCompanyEntity();
@@ -73,6 +75,7 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Get company by Id")
+    @Order(2)
     public void givenId_whenFind_thenReturnCompany(){
         // Arrange
         Company savedCompany = companyRepository.save(company);
@@ -112,6 +115,7 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Find company by company name")
+    @Order(3)
     public void givenCompanyName_whenFind_returnCompanyObject(){
         // Arrange
         companyRepository.save(company);
@@ -125,12 +129,11 @@ public class CompanyRepositoryTest {
         assertEquals(company.getCompanyName(), companyFromDBByName.getCompanyName(),
                 "Company name could not find.");
         assertNull(companyThatNotExist);
-
-        System.out.println(companyFromDBByName);
     }
 
     @Test
     @DisplayName("Find company by id")
+    @Order(4)
     public void givenId_whenFind_thenReturnCompanyObject(){
         // Arrange
         companyRepository.save(company);
@@ -150,6 +153,7 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Check exists company by Name")
+    @Order(5)
     public void givenCompanyName_whenExists_returnBoolean(){
         // Arrange
         Company companyFromDB = companyRepository.save(company);
