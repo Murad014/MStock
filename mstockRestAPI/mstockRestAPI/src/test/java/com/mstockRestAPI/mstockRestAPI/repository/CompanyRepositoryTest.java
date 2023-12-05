@@ -3,9 +3,9 @@ package com.mstockRestAPI.mstockRestAPI.repository;
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import com.mstockRestAPI.mstockRestAPI.tools.creator.CompanyCreator;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
@@ -22,39 +22,14 @@ import java.util.Optional;
 @SpringBootTest
 @TestPropertySource(locations = "/application-test.properties",
 properties = "server.port=8081")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CompanyRepositoryTest {
 
     @Autowired
     private CompanyRepository companyRepository;
 
-
-    private final List<Company> companies = new ArrayList<>();
-
-    private Company company;
-
-    private final Timestamp createdDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
-
-    @BeforeEach
-    public void setupTestData(){
-
-        this.company = Company.builder()
-                .id(1L)
-                .companyName("Nexus")
-                .createdDate(createdDate)
-                .updatedDate(createdDate)
-                .isActive((byte)1)
-                .build();
-
-        companies.add(company);
-        companies.add(
-                Company.builder()
-                        .companyName("Royal")
-                        .createdDate(createdDate)
-                        .updatedDate(createdDate)
-                        .isActive((byte) 0)
-                        .build()
-        );
-    }
+    private final static List<Company> companies = CompanyCreator.createCompanyEntities();
+    private final static Company company = CompanyCreator.createCompanyEntity();
 
     @Test
     @DisplayName("Save company")
@@ -64,6 +39,7 @@ public class CompanyRepositoryTest {
         Company savedCompany = companyRepository.save(company);
 
         // Assert
+        assertNotNull(savedCompany);
         assertEquals(company.getCompanyName(), savedCompany.getCompanyName());
         assertEquals(company.getIsActive(), savedCompany.getIsActive());
         assertEquals(company.getCreatedDate(), savedCompany.getCreatedDate());
@@ -74,17 +50,18 @@ public class CompanyRepositoryTest {
     @DisplayName("Update company")
     public void givenCompanyObject_whenUpdated_thenReturnCompanyObject(){
         // Arrange
+        Company company2 = CompanyCreator.createCompanyEntity();
         String companyName = "CocaCola";
         Long updatedId = 1L, savedId = 0L;
         Byte isActive = 1;
-        company.setId(savedId);
+        company2.setId(savedId);
         companyRepository.save(company);
-        company.setId(updatedId);
-        company.setCompanyName(companyName);
-        company.setIsActive(isActive);
+        company2.setId(updatedId);
+        company2.setCompanyName(companyName);
+        company2.setIsActive(isActive);
 
         // Act
-        Company updatedCompany = companyRepository.save(company);
+        Company updatedCompany = companyRepository.save(company2);
 
         // Assets
         assertNotNull(updatedCompany);
@@ -115,17 +92,15 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Get all companies")
+    @Order(1)
     public void whenFindAll_ThenReturnListOfCompanies(){
         // Arrange
-        for(Company company: companies){
-            companyRepository.save(company);
-        }
+         companyRepository.saveAll(companies);
 
         // Act
         List<Company> companiesFromDB = companyRepository.findAll();
-
         // Assert
-        int expectedCompaniesCount = 2;
+        int expectedCompaniesCount = companies.size();
         assertEquals(expectedCompaniesCount, companiesFromDB.size());
         for(int i = 0; i < companies.size(); i++){
             assertEquals(companies.get(i).getCompanyName(), companiesFromDB.get(i).getCompanyName());
@@ -142,7 +117,7 @@ public class CompanyRepositoryTest {
         companyRepository.save(company);
 
         // Act
-        Company companyFromDBByName = companyRepository.findByCompanyName("Nexus");
+        Company companyFromDBByName = companyRepository.findByCompanyName(company.getCompanyName());
         Company companyThatNotExist = companyRepository.findByCompanyName("Unknown");
 
         // Assert
@@ -188,8 +163,6 @@ public class CompanyRepositoryTest {
         assertTrue(existsCompany);
         assertFalse(notExistsCompany);
     }
-
-
 
 
 
