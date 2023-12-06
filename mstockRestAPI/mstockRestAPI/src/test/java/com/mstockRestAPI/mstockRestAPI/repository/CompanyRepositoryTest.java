@@ -157,9 +157,9 @@ public class CompanyRepositoryTest {
     public void givenCompanyName_whenExists_returnBoolean(){
         // Arrange
         Company companyFromDB = companyRepository.save(company);
+        String notExists = "unknown";
 
         // Act
-        String notExists = "unknown";
         boolean existsCompany = companyRepository.existsByCompanyName(companyFromDB.getCompanyName());
         boolean notExistsCompany = companyRepository.existsByCompanyName(notExists);
 
