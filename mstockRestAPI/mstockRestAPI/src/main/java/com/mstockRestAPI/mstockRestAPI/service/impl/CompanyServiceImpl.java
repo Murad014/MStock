@@ -8,10 +8,12 @@ import com.mstockRestAPI.mstockRestAPI.repository.CompanyRepository;
 import com.mstockRestAPI.mstockRestAPI.service.CompanyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;

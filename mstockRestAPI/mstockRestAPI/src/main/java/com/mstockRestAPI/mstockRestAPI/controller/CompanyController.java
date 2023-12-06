@@ -24,10 +24,10 @@ public class CompanyController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<CompanyDto> getAllCompanies(@Valid @RequestBody CompanyDto companyDto){
+    public ResponseEntity<CompanyDto> addCompany(@Valid @RequestBody CompanyDto companyDto){
         CompanyDto companyDtoSaved = companyService.add(companyDto);
-
-        return new ResponseEntity<>(companyDtoSaved, HttpStatus.CREATED);
+        var response =  new ResponseEntity<>(companyDtoSaved, HttpStatus.CREATED);
+        return response;
     }
 
 

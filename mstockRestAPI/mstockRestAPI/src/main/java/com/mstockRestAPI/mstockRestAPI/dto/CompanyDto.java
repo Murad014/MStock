@@ -7,10 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -21,6 +18,8 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyDto {
     private Long id;
 
@@ -28,8 +27,8 @@ public class CompanyDto {
     @Size(min = 2, max = 100, message = "Company name: min: 2, max: 100")
     private String companyName;
 
-    @NotEmpty
-    private Timestamp updatedDate;
+    @Builder.Default
+    private Timestamp updatedDate = Timestamp.from(Instant.now());
 
     @Builder.Default
     private Byte isActive = 1;
