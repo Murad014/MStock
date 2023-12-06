@@ -1,6 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.service;
 
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;

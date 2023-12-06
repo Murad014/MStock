@@ -25,7 +25,7 @@ public class CompanyDto {
     private Long id;
 
     @NotEmpty
-    @Size(min = 2, max = 100)
+    @Size(min = 2, max = 100, message = "Company name: min: 2, max: 100")
     private String companyName;
 
     @NotEmpty
