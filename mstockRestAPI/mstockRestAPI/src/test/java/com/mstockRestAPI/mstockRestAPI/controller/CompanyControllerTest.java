@@ -48,10 +48,8 @@ public class CompanyControllerTest {
 
     @MockBean
     private CompanyService companyService;
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -133,6 +131,7 @@ public class CompanyControllerTest {
 
     @Test
     @DisplayName("Get All Companies")
+    @Order(4)
     public void getAllCompanies_whenGetAll_thenReturnListOfCompanies() throws Exception {
         IntStream.range(0, companyDtoList.size())
                 .forEach(i -> companyDtoList.get(i).setId((long) (i + 1)));
@@ -161,16 +160,25 @@ public class CompanyControllerTest {
                     .andExpect(jsonPath("$[" + i + "].isActive").value(companyDtoList.get(i).getIsActive().toString()));
 
         }
-
-//        result.andExpect(jsonPath("$[" + i + "].id").value(expectedCompanyDto.getId()))
-//                .andExpect(jsonPath("$[" + i + "].companyName").value(expectedCompanyDto.getCompanyName()))
-//                .andExpect(jsonPath("$[" + i + "].updatedDate").value(expectedCompanyDto.getUpdatedDate().toString()))
-//                .andExpect(jsonPath("$[" + i + "].isActive").value(expectedCompanyDto.isActive()));
-
-
-
     }
 
+    @Test
+    @DisplayName("Add company with incorrect inputs")
+    @Order(5)
+    public void addCompanyWithIncorrectInputs_whenTryAdd_thenReturnException() throws Exception {
+        companyDto.setCompanyName("");
+
+        when(companyService.add(any(CompanyDto.class))).thenReturn(companyDto);
+        // When
+        String endPoint = "/api/v1/company/";
+        ResultActions result = mockMvc.perform(post(endPoint)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(companyDto)));
+
+        // Then
+        result.andExpect(status().isBadRequest());
+
+    }
 
 
 
