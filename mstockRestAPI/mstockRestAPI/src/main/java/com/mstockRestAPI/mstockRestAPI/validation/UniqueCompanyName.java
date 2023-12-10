@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UniqueCompanyNameValidator.class)
 public @interface UniqueCompanyName {
-    String message() default "PIN already exists";
+    String message() default "Already exist";
     boolean isUnique() default false;
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

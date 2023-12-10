@@ -1,5 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.dto;
 
+import com.mstockRestAPI.mstockRestAPI.validation.UniqueCompanyName;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +25,7 @@ public class CompanyDto {
     private Long id;
 
     @NotEmpty
+    @UniqueCompanyName
     @Size(min = 2, max = 100, message = "Company name: min: 2, max: 100")
     private String companyName;
 

@@ -60,8 +60,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto existsByCompanyName(String name) {
-        return null;
+    public boolean existsByCompanyName(String name) {
+        return companyRepository.existsByCompanyName(name);
     }
 
 
