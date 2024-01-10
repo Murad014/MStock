@@ -44,10 +44,10 @@ public class CompanyCreator {
         List<CompanyDto> companies = new ArrayList<>();
 
         for(int i = 0; i < 5; i++){
-            byte by = (byte) (i % 2);
+            byte active = (byte) (i % 2);
             CompanyDto company = CompanyDto.builder()
                     .companyName(RandomString.make(10))
-                    .isActive(by)
+                    .isActive(active)
                     .updatedDate(createdDate)
                     .build();
             companies.add(company);

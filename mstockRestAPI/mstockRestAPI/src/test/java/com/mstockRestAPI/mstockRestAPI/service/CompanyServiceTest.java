@@ -26,17 +26,13 @@ public class CompanyServiceTest {
 
     @Mock
     private Converter converter;
-
     @Mock
     private CompanyRepository companyRepository;
-
     @InjectMocks
     private CompanyServiceImpl companyService;
 
     private final Company companyEntity = CompanyCreator.createCompanyEntity();
     private final CompanyDto companyDto = CompanyCreator.createCompanyDto();
-
-
     private final Timestamp createdDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
 
 
@@ -60,6 +56,7 @@ public class CompanyServiceTest {
         assertEquals(companyDto.getCompanyName(), companySaved.getCompanyName());
         assertEquals(companyDto.getIsActive(), companySaved.getIsActive());
         assertEquals(companyDto.getUpdatedDate(), companySaved.getUpdatedDate());
+
     }
 
     @Test
@@ -110,8 +107,6 @@ public class CompanyServiceTest {
             companyService.update(notExistID, companyDto);
         }, "If there is not company in DB then should be throw exception.");
     }
-
-
 
 
 
