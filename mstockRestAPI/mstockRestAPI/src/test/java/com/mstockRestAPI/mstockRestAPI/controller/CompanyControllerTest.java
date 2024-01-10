@@ -163,7 +163,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    @DisplayName("Add company with incorrect inputs")
+    @DisplayName("Add company with incorrect CompanyName")
     @Order(5)
     public void addCompanyWithIncorrectInputs_whenTryAdd_thenReturnException() throws Exception {
         companyDto.setCompanyName("");
@@ -175,9 +175,11 @@ public class CompanyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(companyDto)));
 
+        MvcResult mvcResult = result.andReturn();
+        String responseContent = mvcResult.getResponse().getContentAsString();
+        System.out.println(responseContent);
         // Then
         result.andExpect(status().isBadRequest());
-
     }
 
 

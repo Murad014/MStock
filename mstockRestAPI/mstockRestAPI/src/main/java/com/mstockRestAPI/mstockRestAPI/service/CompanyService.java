@@ -12,5 +12,5 @@ public interface CompanyService {
     CompanyDto update(Long companyId, CompanyDto companyDto);
     List<CompanyDto> getAllCompanies();
     CompanyDto getCompanyById(Long companyId);
-    CompanyDto existsByCompanyName(String name);
+    boolean existsByCompanyName(String name);
 }

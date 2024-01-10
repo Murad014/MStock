@@ -20,7 +20,6 @@ public class GlobalAPIException {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                         WebRequest webRequest){
-        String expMessage = exception.getMessage();
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
                 exception.getMessage(),
