@@ -169,6 +169,7 @@ public class CompanyControllerTest {
         companyDto.setCompanyName("");
 
         when(companyService.add(any(CompanyDto.class))).thenReturn(companyDto);
+
         // When
         String endPoint = "/api/v1/company/";
         ResultActions result = mockMvc.perform(post(endPoint)
@@ -177,10 +178,13 @@ public class CompanyControllerTest {
 
         MvcResult mvcResult = result.andReturn();
         String responseContent = mvcResult.getResponse().getContentAsString();
-        System.out.println(responseContent);
+
         // Then
         result.andExpect(status().isBadRequest());
     }
+
+
+
 
 
 

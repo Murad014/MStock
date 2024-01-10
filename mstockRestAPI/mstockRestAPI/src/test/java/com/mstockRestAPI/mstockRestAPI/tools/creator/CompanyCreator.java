@@ -12,7 +12,6 @@ import java.util.Random;
 public class CompanyCreator {
     private static Company company;
     private static  final Timestamp createdDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
-    private static final Random random = new Random();
 
     public static List<Company> createCompanyEntities(){
         List<Company> companies = new ArrayList<>();
