@@ -13,4 +13,5 @@ public interface CompanyService {
     List<CompanyDto> getAllCompanies();
     CompanyDto getCompanyById(Long companyId);
     boolean existsByCompanyName(String name);
+
 }
