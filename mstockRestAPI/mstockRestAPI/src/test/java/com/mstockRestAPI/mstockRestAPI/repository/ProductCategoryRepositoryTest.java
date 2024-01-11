@@ -7,14 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.swing.text.html.Option;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @TestPropertySource(locations = "/application-test.properties")
@@ -28,8 +24,8 @@ public class ProductCategoryRepositoryTest {
 
     @BeforeEach()
     public void beforeEach(){
-        productCategory = ProductCategoryCreator.createRandomProductCategory();
-        productCategoryList = ProductCategoryCreator.createProductCategories();
+        productCategory = ProductCategoryCreator.createRandomProductCategoryEntity();
+        productCategoryList = ProductCategoryCreator.createProductCategoryEntities();
         productCategoryRepository.deleteAll();
     }
 
@@ -98,9 +94,7 @@ public class ProductCategoryRepositoryTest {
     @DisplayName("Get all product categories")
     @Order(4)
     public void whenFindAll_thenReturnListOfProductCategories(){
-
-        for(ProductCategory productCategoryFromList: productCategoryList)
-            productCategoryRepository.save(productCategoryFromList);
+        productCategoryRepository.saveAll(productCategoryList);
 
         List<ProductCategory> allProductCategoriesFromDb = productCategoryRepository.findAll();
 
