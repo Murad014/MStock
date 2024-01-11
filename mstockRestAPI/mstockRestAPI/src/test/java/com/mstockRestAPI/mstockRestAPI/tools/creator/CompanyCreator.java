@@ -8,25 +8,19 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CompanyCreator {
     private static Company company;
     private static  final Timestamp createdDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
-
+    private static final int COMPANY_RANDOM_NAME_LENGTH = 10;
+    private static final int COMPANY_ENTITY_LENGTH = 10;
     public static List<Company> createCompanyEntities(){
-        List<Company> companies = new ArrayList<>();
 
-        for(int i = 0; i < 5; i++){
-            byte by = (byte) (i % 2);
-            Company company = Company.builder()
-                    .companyName(RandomString.make(10))
-                    .isActive(by)
-                    .createdDate(createdDate)
-                    .updatedDate(createdDate)
-                    .build();
-            companies.add(company);
-        }
-        return companies;
+        return Stream.generate(CompanyCreator:: createCompanyEntity)
+                .limit(COMPANY_ENTITY_LENGTH)
+                .toList();
     }
 
     public static Company createCompanyEntity(){
@@ -40,18 +34,9 @@ public class CompanyCreator {
 
 
     public static List<CompanyDto> createListOfCompanyDto(){
-        List<CompanyDto> companies = new ArrayList<>();
-
-        for(int i = 0; i < 5; i++){
-            byte active = (byte) (i % 2);
-            CompanyDto company = CompanyDto.builder()
-                    .companyName(RandomString.make(10))
-                    .isActive(active)
-                    .updatedDate(createdDate)
-                    .build();
-            companies.add(company);
-        }
-        return companies;
+        return Stream.generate(CompanyCreator:: createCompanyDto)
+                .limit(COMPANY_ENTITY_LENGTH)
+                .toList();
     }
 
     public static CompanyDto createCompanyDto(){

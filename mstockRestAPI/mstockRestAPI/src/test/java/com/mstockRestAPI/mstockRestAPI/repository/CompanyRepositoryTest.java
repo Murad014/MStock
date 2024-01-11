@@ -5,6 +5,7 @@ import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CompanyCreator;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductCategoryCreator;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,94 +29,88 @@ public class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-    private final static List<Company> companies = CompanyCreator.createCompanyEntities();
-    private final static Company company = CompanyCreator.createCompanyEntity();
+    private List<Company> companies;
+    private Company company;
+
+    @BeforeEach
+    public void beforeEach(){
+        company = CompanyCreator.createCompanyEntity();
+        companies = CompanyCreator.createCompanyEntities();
+        companyRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("Save company")
-    @Order(7)
+    @Order(1)
     public void givenCompanyObject_whenSave_thenReturnSaveCompany(){
 
         // Act
         Company savedCompany = companyRepository.save(company);
 
         // Assert
-        assertNotNull(savedCompany);
-        assertEquals(company.getCompanyName(), savedCompany.getCompanyName());
-        assertEquals(company.getIsActive(), savedCompany.getIsActive());
-        assertEquals(company.getCreatedDate(), savedCompany.getCreatedDate());
-        assertEquals(company.getUpdatedDate(), savedCompany.getUpdatedDate());
+        assertions(company, savedCompany);
     }
 
     @Test
     @DisplayName("Update company")
-    @Order(6)
+    @Order(2)
     public void givenCompanyObject_whenUpdated_thenReturnCompanyObject(){
         // Arrange
-        Company company2 = CompanyCreator.createCompanyEntity();
         String companyName = "CocaCola";
-        Long updatedId = 1L, savedId = 0L;
+        Long updatedId = 1L;
         Byte isActive = 1;
-        company2.setId(savedId);
-        companyRepository.save(company);
-        company2.setId(updatedId);
-        company2.setCompanyName(companyName);
-        company2.setIsActive(isActive);
 
         // Act
-        Company updatedCompany = companyRepository.save(company2);
+        Company savedCompany = companyRepository.save(company);
+
+        // Arrange
+        savedCompany.setId(updatedId);
+        savedCompany.setCompanyName(companyName);
+        savedCompany.setIsActive(isActive);
+
+        // Act
+        Company updatedCompany = companyRepository.save(company);
 
         // Assets
-        assertNotNull(updatedCompany);
-        assertEquals(companyName, updatedCompany.getCompanyName());
-        assertEquals(isActive, updatedCompany.getIsActive());
-        assertEquals(updatedId, updatedCompany.getId());
+        assertions(savedCompany, updatedCompany);
 
     }
 
     @Test
     @DisplayName("Get company by Id")
-    @Order(2)
+    @Order(3)
     public void givenId_whenFind_thenReturnCompany(){
-        // Arrange
         Company savedCompany = companyRepository.save(company);
 
         // Act
         Company companyFromDB = companyRepository.findById(savedCompany.getId()).orElse(null);
 
         // Assert
-        assert companyFromDB != null;
-        assertEquals(savedCompany.getId(), companyFromDB.getId());
-        assertEquals(savedCompany.getCompanyName(), companyFromDB.getCompanyName());
-        assertEquals(savedCompany.getUpdatedDate(), companyFromDB.getUpdatedDate());
-        assertEquals(savedCompany.getCreatedDate(), companyFromDB.getCreatedDate());
-        assertEquals(savedCompany.getIsActive(), companyFromDB.getIsActive());
+        assertions(savedCompany, companyFromDB);
 
     }
 
     @Test
     @DisplayName("Get all companies")
-    @Order(1)
+    @Order(4)
     public void whenFindAll_ThenReturnListOfCompanies(){
         // Arrange
          companyRepository.saveAll(companies);
 
         // Act
         List<Company> companiesFromDB = companyRepository.findAll();
+
         // Assert
         int expectedCompaniesCount = companies.size();
+
+        assertNotNull(companiesFromDB);
+        assertFalse(companiesFromDB.isEmpty());
         assertEquals(expectedCompaniesCount, companiesFromDB.size());
-        for(int i = 0; i < companies.size(); i++){
-            assertEquals(companies.get(i).getCompanyName(), companiesFromDB.get(i).getCompanyName());
-            assertEquals(companies.get(i).getIsActive(), companiesFromDB.get(i).getIsActive());
-            assertEquals(companies.get(i).getCreatedDate(), companiesFromDB.get(i).getCreatedDate());
-            assertEquals(companies.get(i).getUpdatedDate(), companiesFromDB.get(i).getUpdatedDate());
-        }
     }
 
     @Test
     @DisplayName("Find company by company name")
-    @Order(3)
+    @Order(5)
     public void givenCompanyName_whenFind_returnCompanyObject(){
         // Arrange
         companyRepository.save(company);
@@ -133,7 +128,7 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("Find company by id")
-    @Order(4)
+    @Order(6)
     public void givenId_whenFind_thenReturnCompanyObject(){
         // Arrange
         companyRepository.save(company);
@@ -143,17 +138,12 @@ public class CompanyRepositoryTest {
                 .orElse(null);
 
         // Asserts
-        assertNotNull(companyFromDB);
-        assertEquals(companyFromDB.getId(), companyFromDB.getId());
-        assertEquals(companyFromDB.getCompanyName(), companyFromDB.getCompanyName());
-        assertEquals(companyFromDB.getUpdatedDate(), companyFromDB.getUpdatedDate());
-        assertEquals(companyFromDB.getCreatedDate(), companyFromDB.getCreatedDate());
-        assertEquals(companyFromDB.getIsActive(), companyFromDB.getIsActive());
+        assertions(company, companyFromDB);
     }
 
     @Test
     @DisplayName("Check exists company by Name")
-    @Order(5)
+    @Order(7)
     public void givenCompanyName_whenExists_returnBoolean(){
         // Arrange
         Company companyFromDB = companyRepository.save(company);
@@ -166,6 +156,17 @@ public class CompanyRepositoryTest {
         // Assert
         assertTrue(existsCompany);
         assertFalse(notExistsCompany);
+    }
+
+
+    private void assertions(Company expected, Company actual){
+        assertNotNull(actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getCompanyName(), actual.getCompanyName());
+        assertEquals(expected.getIsActive(), actual.getIsActive());
+        assertEquals(expected.getCreatedDate(), actual.getCreatedDate());
+        assertEquals(expected.getUpdatedDate(), actual.getUpdatedDate());
+
     }
 
 
