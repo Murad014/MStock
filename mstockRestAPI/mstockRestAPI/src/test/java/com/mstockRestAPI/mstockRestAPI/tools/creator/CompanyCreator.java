@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class CompanyCreator {
     private static Company company;
     private static  final Timestamp createdDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
-    private static final int COMPANY_RANDOM_NAME_LENGTH = 10;
+
     private static final int COMPANY_ENTITY_LENGTH = 10;
     public static List<Company> createCompanyEntities(){
 
