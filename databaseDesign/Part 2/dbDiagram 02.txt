@@ -1,0 +1,120 @@
+// Designed by Murad
+// GitHub: https://github.com/Murad014 
+
+Table products{
+  id LONG [PK]
+  productName VARCHAR(100)
+  description text
+  wholesale DECIMAL(10, 2) [not null, default: 0.00]
+  unit ENUM('kg', 'liters', 'pieces', 'packs', 'grams', 'milliliters', 'kg', 'litr') [not null]
+  quantity DECIMAL(10, 2) [not null, default: 0.00]
+  currentQuantity DECIMAL(10, 2) [not null, default: 0.00]
+  expiredDate TIMESTAMP [default: null]
+  categoryId long [not null]
+  companyId long
+  picture BLOB
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+
+Table productBarcodes{
+  id LONG [PK]
+  barcode TEXT
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+  // UNIQUE(id, productId)
+}
+
+Table productSalePrices{
+  id LONG [PK]
+  sellingPrice DECIMAL(10, 2) [not null, default: 0.00]
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+
+Table productCategories{
+  id LONG [PK]
+  categoryName VARCHAR(100) unique [not null]
+  description TEXT 
+  createDate TIMESTAMP
+  udatedDate TIMESTAMP
+  isActive TINYINT [not null, default: 1]
+}
+
+
+Table supplieriesOfProdcuts{
+  id LONG [PK]
+  name VARCHAR(100) [not null]
+  surname VARCHAR(100)
+  email VARCHAR(100) UNIQUE
+  phone VARCHAR(100) UNIQUE
+  description TEXT
+  address TEXT UNIQUE [default: null]
+  companyId LONG [NOT NULL]
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP
+  isActive TINYINT [not null, default: 1]
+}
+
+Table companies{
+  id LONG [PK]
+  companyName VARHCAR(100) UNIQUE [not null]
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [default: 1]
+}
+
+
+Table invoices{
+  id LONG [PK]
+  invoiceCode VARCHAR(100) UNIQUE [not null]
+  supplierId LONG [not null]
+  invoiceDate TIMESTAMP
+  initialTotalAmount DECIMAL(10, 2) [default: 0.00]
+  createdDate TIMESTAMP
+  updatedDate TIMESTAMP
+  isActive TINYINT [default: 1]
+}
+
+Table invoiceItems{
+  id LONG [PK]
+  invoiceId LONG
+  productId LONG
+  quantity DECIMAL(10, 2)
+  totalPrice DECIMAL(10, 2)
+  createdDate TIMESTAMP
+  updatedDate TIMESTAMP
+  isActive TINYINT [default: 1]
+}
+
+Table payInvoices{
+  id LONG [PK]
+  invoiceId LONG [not null]
+  plusPay DECIMAL(10, 2) [not null]
+  minusPay DECIMAL(10, 2) [not null]
+  createdDate TIMESTAMP [not null]
+  updatedDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+// FOREIGN KEYS
+Ref: products.categoryId > productCategories.id // ManyToOne
+Ref: products.companyId > companies.id // ManyToOne
+Ref: supplieriesOfProdcuts.companyId > companies.id // ManyToOne
+Ref: invoiceItems.invoiceId > invoices.id // ManyToOne
+Ref: payInvoices.invoiceId > invoices.id // ManyToOne
+Ref: invoices.supplierId > supplieriesOfProdcuts.id // ManyToOne
+
+Ref: productBarcodes.productId > products.id // ManyToOne
+Ref: productSalePrices.productId > products.id // ManyToOne
+
+
+
+
+
+
