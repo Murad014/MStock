@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,20 @@ public class CompanyServiceImpl implements CompanyService {
         this.converter = converter;
 
     }
+
+    @Override
+    public List<CompanyDto> addAll(List<CompanyDto> companyDtoList) {
+        List<Company> convertDtoToEntity = companyDtoList.stream()
+                .map(c -> converter.mapToEntity(c, Company.class))
+                .toList();
+
+        List<Company> saveAll = companyRepository.saveAll(convertDtoToEntity);
+
+        return saveAll.stream()
+                .map(c ->
+                        converter.mapToDto(c, CompanyDto.class)).toList();
+    }
+
     @Override
     public CompanyDto add(CompanyDto companyDto) {
         Company company = converter.mapToEntity(companyDto, Company.class);
@@ -36,11 +51,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto update(Long companyId, CompanyDto companyDto) {
-        Company company = companyRepository.findById(companyId).orElseThrow(
+        companyRepository.findById(companyId).orElseThrow(
                 () -> new ResourceNotFoundException("Company", "id", companyId));
-
         companyDto.setId(companyId);
-        System.out.println(companyId);
         Company companyToUpdate = companyRepository.save(converter.mapToEntity(companyDto, Company.class));
 
         return converter.mapToDto(companyToUpdate, CompanyDto.class);
@@ -48,7 +61,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyDto> getAllCompanies() {
-        return null;
+        return companyRepository.findAll().stream().map(c ->
+                converter.mapToDto(c, CompanyDto.class)).toList();
     }
 
     @Override
@@ -64,7 +78,15 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.existsByCompanyName(name);
     }
 
+    @Override
+    public List<CompanyDto> getAllCompaniesWhereIsActive(Byte isActive) {
+        List<Company> fetchAll = companyRepository.findByIsActive(isActive);
 
+        return fetchAll
+                .stream().map(
+                        c -> converter.mapToDto(c, CompanyDto.class)
+                ).toList();
+    }
 
 
 }

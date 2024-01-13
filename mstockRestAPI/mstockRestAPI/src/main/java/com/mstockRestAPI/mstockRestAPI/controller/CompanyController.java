@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -45,6 +47,15 @@ public class CompanyController {
         List<CompanyDto> allCompanies = companyService.getAllCompanies();
         return new ResponseEntity<>(allCompanies, HttpStatus.OK);
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<CompanyDto>> getAllCompaniesWhereIsActive(@RequestParam Byte isActive) {
+        List<CompanyDto> companies = companyService.getAllCompaniesWhereIsActive(isActive);
+        return new ResponseEntity<>(companies, HttpStatus.OK);
+    }
+
+
+
 
 
 

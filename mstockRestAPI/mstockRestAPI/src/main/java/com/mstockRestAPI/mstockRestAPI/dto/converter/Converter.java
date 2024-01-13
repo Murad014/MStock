@@ -1,9 +1,12 @@
 package com.mstockRestAPI.mstockRestAPI.dto.converter;
 
 
+import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class Converter {
@@ -23,6 +26,9 @@ public class Converter {
     public  <E, D> D mapToDto(E entity, Class<D> dto){
         return modelMapper.map(entity, dto);
     }
+
+
+
 
 
 

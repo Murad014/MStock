@@ -30,8 +30,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -54,13 +56,19 @@ public class CompanyControllerTest {
     private ObjectMapper objectMapper;
 
     // DTO
-    private final CompanyDto companyDto = CompanyCreator.createCompanyDto();
-    private final List<CompanyDto> companyDtoList = CompanyCreator.createListOfCompanyDto();
+    private CompanyDto companyDto;
+    private List<CompanyDto> companyDtoList;
 
     // Keys
     private final String companyName = "$.companyName";
     private final String isActive = "$.isActive";
     private final String id = "$.id";
+
+    @BeforeEach
+    public void beforeEach(){
+        companyDto = CompanyCreator.createCompanyDto();
+        companyDtoList = CompanyCreator.createListOfCompanyDto();
+    }
 
     @Test
     @DisplayName("Add Company")
@@ -119,7 +127,8 @@ public class CompanyControllerTest {
         String endPoint = String.format("/api/v1/company/%d", 1);
 
         ResultActions result = mockMvc.perform(get(endPoint, searchCompanyId)
-                        .contentType(MediaType.APPLICATION_JSON));
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
 
         // Then
         result.andExpect(status().isOk())
@@ -128,6 +137,42 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath(isActive).value(companyDto.getIsActive().toString()))
                 .andExpect(jsonPath(id).value(companyDto.getId().toString()));
     }
+    @Test
+    @DisplayName("Get All Companies Where IsActive is 1")
+    @Order(5)
+    void getAllCompaniesWhereIsActive_whenGetActiveCompanies_thenReturnListOfActiveCompanies() throws Exception {
+
+        // Given
+        List<CompanyDto> activeCompanies = companyDtoList.stream()
+                .filter(c -> c.getIsActive() == 1)
+                .toList();
+
+        // When
+        when(companyService.getAllCompaniesWhereIsActive((byte) 1)).thenReturn(activeCompanies);
+
+        // Then
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/company/active?isActive=1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(activeCompanies.size())));
+
+        MvcResult mvcResult = resultActions.andReturn();
+        String responseBody = mvcResult.getResponse().getContentAsString();
+
+        //Convert
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<CompanyDto> responseBodyList =
+                objectMapper.readValue(responseBody, new TypeReference<>() {});
+
+
+
+        // Assert
+        assertNotNull(responseBodyList);
+        assertFalse(responseBodyList.isEmpty());
+        assertionsBulk(responseBodyList);
+    }
+
 
     @Test
     @DisplayName("Get All Companies")
@@ -151,15 +196,9 @@ public class CompanyControllerTest {
         List<CompanyDto> responseBodyList =
                 objectMapper.readValue(responseBody, new TypeReference<>() {});
 
-        // Then
-        assertNotNull(responseBody);
-        assertEquals(companyDtoList.size(), responseBodyList.size());
-        for(int i = 0; i < companyDtoList.size(); i++){
-            result.andExpect(jsonPath("$[" + i + "].id").value(companyDtoList.get(i).getId()))
-                    .andExpect(jsonPath("$[" + i + "].companyName").value(companyDtoList.get(i).getCompanyName()))
-                    .andExpect(jsonPath("$[" + i + "].isActive").value(companyDtoList.get(i).getIsActive().toString()));
-
-        }
+        assertNotNull(responseBodyList);
+        assertFalse(responseBodyList.isEmpty());
+        assertionsBulk(responseBodyList);
     }
 
     @Test
@@ -185,7 +224,21 @@ public class CompanyControllerTest {
 
 
 
+    private void assertionsBulk(List<CompanyDto> responseBodyList){
+        assertAll("Companies",
+                () -> IntStream.range(0, companyDtoList.size())
+                        .forEach(i -> {
+                            CompanyDto expected = companyDtoList.get(i);
+                            CompanyDto actual = responseBodyList.get(i);
 
+                            assertAll("Company " + i,
+                                    () -> assertEquals(expected.getId(), actual.getId()),
+                                    () -> assertEquals(expected.getCompanyName(), actual.getCompanyName()),
+                                    () -> assertEquals(expected.getIsActive().toString(), actual.getIsActive().toString())
+                            );
+                        })
+        );
+    }
 
 
 

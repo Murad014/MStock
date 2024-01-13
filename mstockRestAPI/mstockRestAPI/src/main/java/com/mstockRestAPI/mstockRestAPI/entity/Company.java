@@ -31,9 +31,11 @@ public class Company {
     private Timestamp createdDate;
 
     @Column(name="updatedDate")
+    @Builder.Default
     private Timestamp updatedDate = Timestamp.from(Instant.now());
 
     @Column(name="isActive")
+    @Builder.Default
     private Byte isActive = 1;
 
 }
