@@ -112,7 +112,7 @@ public class ProductCategoryRepositoryTest {
         ProductCategory productCategorySaved = productCategoryRepository.save(productCategory);
         ProductCategory productCategoryFromDb = productCategoryRepository.findByCategoryName(
                 productCategorySaved.getCategoryName()
-        );
+        ).orElse(null);
 
         // Assert
         assertions(productCategorySaved, productCategoryFromDb);
