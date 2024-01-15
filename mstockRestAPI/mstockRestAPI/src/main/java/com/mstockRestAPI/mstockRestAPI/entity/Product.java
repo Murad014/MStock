@@ -25,7 +25,7 @@ public class Product {
     @Column(name = "productName", length = 100)
     private String productName;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description")
     private String description;
 
     @Column(name = "wholesale",
@@ -50,7 +50,7 @@ public class Product {
             precision = 10,
             scale = 2,
             nullable = false,
-            columnDefinition = "Description: Exist in stock right now. - DECIMAL(10, 2) DEFAULT 0.00.")
+            columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal currentQuantity;
 
     @Column(name = "expiredDate")
