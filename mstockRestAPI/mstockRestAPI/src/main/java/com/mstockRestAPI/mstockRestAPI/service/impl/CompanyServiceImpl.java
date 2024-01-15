@@ -52,7 +52,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDto update(Long companyId, CompanyDto companyDto) {
         companyRepository.findById(companyId).orElseThrow(
-                () -> new ResourceNotFoundException("Company", "id", companyId));
+                () -> new ResourceNotFoundException("Company", "id", companyId.toString()));
         companyDto.setId(companyId);
         Company companyToUpdate = companyRepository.save(converter.mapToEntity(companyDto, Company.class));
 
@@ -68,7 +68,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDto getCompanyById(Long companyId) {
         Company company = companyRepository.findById(companyId).orElseThrow(() ->
-                new ResourceNotFoundException("Company", "id", companyId));
+                new ResourceNotFoundException("Company", "id", companyId.toString()));
 
         return converter.mapToDto(company, CompanyDto.class);
     }

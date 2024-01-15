@@ -18,8 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.*;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.request.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -74,8 +73,9 @@ public class CompanyControllerTest {
     @DisplayName("Add Company")
     @Order(1)
     public void saveCompany_whenSaved_thenReturnCompanyDto() throws Exception {
-        when(companyService.add(any(CompanyDto.class))).thenReturn(companyDto);
         // When
+        when(companyService.add(any(CompanyDto.class))).thenReturn(companyDto);
+
         String endPoint = "/api/v1/company/";
         ResultActions result = mockMvc.perform(post(endPoint)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -95,10 +95,9 @@ public class CompanyControllerTest {
     @DisplayName("Update Company")
     @Order(2)
     public void updateCompany_whenUpdated_thenReturnCompanyDto() throws Exception {
-        companyDto.setId(1L);
-        // When
-        when(companyService.add(any(CompanyDto.class))).thenReturn(companyDto);
 
+        when(companyService.update(any(), any(CompanyDto.class))).thenReturn(companyDto);
+        // When
         String endPoint = "/api/v1/company/";
         ResultActions result = mockMvc.perform(put(endPoint)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,10 +107,9 @@ public class CompanyControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(companyName).value(companyDto.getCompanyName()))
-                .andExpect(jsonPath(isActive).value(companyDto.getIsActive().toString()))
-                .andExpect(jsonPath(id).value(companyDto.getId()));
+                .andExpect(jsonPath(isActive).value(companyDto.getIsActive().toString()));
 
-        verify(companyService, times(1)).add(any(CompanyDto.class));
+        verify(companyService, times(1)).update(eq(companyDto.getId()), any(CompanyDto.class));
 
     }
 
