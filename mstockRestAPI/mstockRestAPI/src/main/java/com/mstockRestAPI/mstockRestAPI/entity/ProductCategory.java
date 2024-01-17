@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +13,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "productCategories")
 public class ProductCategory {
 
     @Id
@@ -31,6 +31,9 @@ public class ProductCategory {
 
     @Column(name="updatedDate")
     private Timestamp updatedDate;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Product> products;
 
     @Column(name="isActive")
     private Byte isActive;

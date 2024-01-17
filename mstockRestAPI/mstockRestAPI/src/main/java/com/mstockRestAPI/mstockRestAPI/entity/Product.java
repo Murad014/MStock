@@ -2,6 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
@@ -56,11 +57,13 @@ public class Product {
     @Column(name = "expiredDate")
     private Timestamp expiredDate;
 
-    @Column(name = "categoryId", nullable = false)
-    private Long categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productCategory_id")
+    private ProductCategory category;
 
-    @Column(name = "companyId")
-    private Long companyId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @Column(name = "picture")
     private Blob  picture;

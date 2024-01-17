@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mstockRestAPI.mstockRestAPI.dto.ProductCategoryDto;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.text.DecimalFormat;
 import java.util.*;
 import java.io.UnsupportedEncodingException;
 
@@ -22,6 +24,18 @@ public class Util {
         return objectMapper.readValue(
                 convertApiResultToString(result),
                 new TypeReference<>() {});
+    }
+
+
+
+    public static double generateRandomPrice(double minPrice, double maxPrice) {
+        Random random = new Random();
+        return minPrice + (maxPrice - minPrice) * random.nextDouble();
+    }
+
+    public static String formatPrice(double price) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        return decimalFormat.format(price);
     }
 
 }
