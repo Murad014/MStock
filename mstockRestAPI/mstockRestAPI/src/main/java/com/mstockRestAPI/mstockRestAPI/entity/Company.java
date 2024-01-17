@@ -7,6 +7,7 @@ import lombok.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "company", uniqueConstraints = {
@@ -33,6 +34,10 @@ public class Company {
     @Column(name="updatedDate")
     @Builder.Default
     private Timestamp updatedDate = Timestamp.from(Instant.now());
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private List<Product> products;
+
 
     @Column(name="isActive")
     @Builder.Default
