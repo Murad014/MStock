@@ -50,8 +50,6 @@ public class ProductDto {
 
     private byte[] picture;
 
-    private Timestamp createdDate;
-
     private Timestamp updatedDate;
 
     @NotNull(message = "isActive cannot be null")

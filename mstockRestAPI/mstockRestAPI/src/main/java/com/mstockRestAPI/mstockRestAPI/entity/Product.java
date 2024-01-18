@@ -8,6 +8,7 @@ import java.sql.Blob;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,6 +27,16 @@ public class Product {
     @Column(name = "productName", length = 100)
     private String productName;
 
+    @OneToMany(mappedBy = "product",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    private List<ProductBarcode> productBarcodeList;
+
+    @OneToMany(mappedBy = "product",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    private List<ProductSalePrice> productSalePrices;
+
     @Column(name = "description")
     private String description;
 
@@ -39,6 +50,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(name = "unit", nullable = false)
     private Unit unit;
+
 
     @Column(name = "quantity",
             precision = 10,
