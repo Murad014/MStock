@@ -2,6 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
 import com.mstockRestAPI.mstockRestAPI.entity.Product;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
+import com.mstockRestAPI.mstockRestAPI.entity.Unit;
 import com.mstockRestAPI.mstockRestAPI.tools.utils.Util;
 import net.bytebuddy.utility.RandomString;
 
@@ -52,8 +53,8 @@ public class ProductCreator {
     }
 
 
-    private static Product.Unit chooseRandomUnit(){
-        Product.Unit[] values = Product.Unit.values();
+    private static Unit chooseRandomUnit(){
+        Unit[] values = Unit.values();
         Random random = new Random();
         int index = random.nextInt(values.length);
 

@@ -29,8 +29,10 @@ public class Invoice {
     @Column(unique = true, nullable = false, length = 100)
     private String invoiceCode;
 
-    @Column(nullable = false)
-    private Long supplierId;
+
+    @ManyToOne
+    @JoinColumn(name="supplierOfProduct_id")
+    private SupplierOfProduct supplier;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime invoiceDate;

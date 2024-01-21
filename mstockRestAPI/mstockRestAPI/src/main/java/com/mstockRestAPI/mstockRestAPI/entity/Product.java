@@ -78,7 +78,7 @@ public class Product {
     private Company company;
 
     @Column(name = "picture")
-    private Blob  picture;
+    private Blob picture;
 
     @Column(name = "createdDate")
     @Builder.Default
@@ -91,13 +91,5 @@ public class Product {
     @Column(name = "isActive", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
     private byte isActive;
 
-    public enum Unit {
-        KG,
-        LITERS,
-        PIECES,
-        PACKS,
-        GRAMS,
-        MILLILITERS,
-        UNIT
-    }
+
 }

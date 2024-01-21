@@ -1,6 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.dto;
 
 import com.mstockRestAPI.mstockRestAPI.entity.Product;
+import com.mstockRestAPI.mstockRestAPI.entity.Unit;
 import lombok.*;
 
 import jakarta.validation.constraints.*;
@@ -31,7 +32,7 @@ public class ProductDto {
 
     @NotBlank(message = "Unit cannot be blank")
     @Size(max = 10, message = "Unit must be less than or equal to 10 characters")
-    private Product.Unit unit;
+    private Unit unit;
 
     @NotNull(message = "Quantity cannot be null")
     @DecimalMin(value = "0.00", inclusive = false, message = "Quantity must be greater than 0.00")

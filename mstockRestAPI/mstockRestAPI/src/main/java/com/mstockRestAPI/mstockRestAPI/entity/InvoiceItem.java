@@ -25,11 +25,13 @@ public class InvoiceItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long invoiceId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="invoice_id")
+    private Invoice invoice;
 
-    @Column(nullable = false)
-    private Long productId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal quantity;
