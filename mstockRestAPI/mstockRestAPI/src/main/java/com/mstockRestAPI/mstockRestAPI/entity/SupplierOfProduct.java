@@ -42,8 +42,9 @@ public class SupplierOfProduct {
     @Column(unique = true, columnDefinition = "TEXT default null")
     private String address;
 
-    @Column(nullable = false)
-    private Long companyId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="company_id")
+    private Company company;
 
     @Column(columnDefinition = "TIMESTAMP")
     @Builder.Default

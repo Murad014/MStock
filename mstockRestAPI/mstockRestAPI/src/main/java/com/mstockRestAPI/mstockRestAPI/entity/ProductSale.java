@@ -44,8 +44,9 @@ public class ProductSale {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    @Column(nullable = false)
-    private Long receiptId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="receipt_id")
+    private Receipt receipt;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP")
     @Builder.Default

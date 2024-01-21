@@ -1,8 +1,9 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jdk.jfr.Timespan;
 import lombok.*;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -12,45 +13,44 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "paymentInvoices")
+@Table(name = "paymentCustomer")
 @Getter
 @Setter
 @ToString
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class PaymentInvoice {
+public class PaymentCustomer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "invoice_id")
-    private Invoice invoice;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    @Column(name = "plusPay", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
+    @Column(name = "plusPay", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal plusPay;
 
-    @Column(name = "minusPay", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
+    @Column(name = "minusPay", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal minusPay;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "createdDate", nullable = false)
     @Builder.Default
     private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(name = "updatedDate", nullable = false)
     private Timestamp updatedDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PaymentType typePayment;
+    @Column(name = "typePayment", nullable = false)
+    private PaymentType paymentType;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="bankCardAccount_accountNumber")
+    @JoinColumn(name = "bankCardAccount_accountNumber")
     private BankCardAccount bankCardAccount;
 
-    @Column(nullable = false, columnDefinition = "TINYINT default 1")
+    @Column(name = "isActive", columnDefinition = "TINYINT DEFAULT 1")
     @Builder.Default
     private Byte isActive = 1;
 
@@ -63,6 +63,5 @@ public class PaymentInvoice {
         }
     }
 
-    public PaymentType paymentType;
 
 }
