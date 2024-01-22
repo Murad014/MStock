@@ -24,6 +24,7 @@ public class ProductCreator {
     public static Product entity(){
         BigDecimal wholesale = BigDecimal.valueOf(Util.generateRandomPrice(1.00, 1000.00));
         BigDecimal quantity = BigDecimal.valueOf(Util.generateRandomPrice(1.00, 1000.00));
+        BigDecimal discount = BigDecimal.valueOf(Util.generateRandomPrice(1.00, 100.00));
         byte isActive = (byte) (Math.random() * 2);
 
         ProductCategory productCategory = ProductCategoryCreator.createRandomProductCategoryEntity();
@@ -45,6 +46,8 @@ public class ProductCreator {
                 .expiredDate(Timestamp.valueOf(createdDate.toLocalDateTime().plusDays(20)))
                 .category(productCategory)
                 .company(productCompany)
+                .discount(discount)
+                .discountLastDate(null)
                 .createdDate(createdDate)
                 .updatedDate(createdDate)
                 .isActive(isActive)

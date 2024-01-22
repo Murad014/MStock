@@ -80,6 +80,16 @@ public class Product {
     @Column(name = "picture")
     private Blob picture;
 
+    @Column(name = "discount",
+            precision = 10,
+            scale = 2,
+            columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
+    private BigDecimal discount;
+
+    @Column(name="discountLastDate")
+    @Builder.Default
+    private Timestamp discountLastDate = null;
+
     @Column(name = "createdDate")
     @Builder.Default
     private Timestamp createdDate = Timestamp.from(Instant.now());
@@ -87,6 +97,7 @@ public class Product {
     @Column(name = "updatedDate")
     @Builder.Default
     private Timestamp updatedDate = Timestamp.from(Instant.now());
+
 
     @Column(name = "isActive", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
     private byte isActive;
