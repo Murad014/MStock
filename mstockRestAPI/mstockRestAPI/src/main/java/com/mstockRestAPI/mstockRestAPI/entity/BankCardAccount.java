@@ -37,4 +37,8 @@ public class BankCardAccount {
     @Builder.Default
     private Byte isActive = 1;
 
+    @Column(name="currency")
+    @Builder.Default
+    private String currency = "AZN";
+
 }
