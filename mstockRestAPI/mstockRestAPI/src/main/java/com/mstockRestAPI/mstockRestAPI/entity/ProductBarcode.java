@@ -32,9 +32,9 @@ public class ProductBarcode {
     @Column(unique = true, nullable = false)
     private String barcode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_id")
+//    private Product product;
 
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP")

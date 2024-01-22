@@ -3,13 +3,13 @@ package com.mstockRestAPI.mstockRestAPI.tools.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mstockRestAPI.mstockRestAPI.dto.ProductCategoryDto;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.text.DecimalFormat;
 import java.util.*;
 import java.io.UnsupportedEncodingException;
+import java.util.stream.Collectors;
 
 public class Util {
 
@@ -26,16 +26,21 @@ public class Util {
                 new TypeReference<>() {});
     }
 
-
-
     public static double generateRandomPrice(double minPrice, double maxPrice) {
         Random random = new Random();
-        return minPrice + (maxPrice - minPrice) * random.nextDouble();
+        String priceStr = formatPrice(minPrice + (maxPrice - minPrice) * random.nextDouble());
+        return Double.parseDouble(priceStr);
     }
 
     public static String formatPrice(double price) {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         return decimalFormat.format(price);
+    }
+
+    public static String generateRandomBarcode(int length) {
+        return new Random().ints(length, '0', '9' + 1)
+                .mapToObj(i -> String.valueOf((char) i))
+                .collect(Collectors.joining());
     }
 
 }

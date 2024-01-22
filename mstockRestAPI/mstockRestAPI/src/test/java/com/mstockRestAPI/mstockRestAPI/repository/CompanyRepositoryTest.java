@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CompanyCreator;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -149,39 +151,31 @@ public class CompanyRepositoryTest {
         assertFalse(notExistsCompany);
     }
 
-    @Test
-    @DisplayName("Get All companies which is active")
+    @ParameterizedTest
+    @ValueSource(bytes = {0, 1})
+    @DisplayName("Get All companies where isActive")
     @Order(8)
-    public void givenIsActive_whenFind_thenReturnActiveCompanies(){
-        Byte isActive = 1;
+    public void givenIsActive_whenFind_thenReturnActiveCompanies(byte isActive){
+        List<Company> list = companies.stream()
+                .filter(company -> company.getIsActive() == isActive)
+                        .toList();
 
         // Act
         companyRepository.saveAll(companies);
-        List<Company> activeCompanies = companyRepository.findByIsActive(isActive);
+        List<Company> companiesWhere = companyRepository.findByIsActive(isActive);
 
         // Asset
-        assertNotNull(activeCompanies);
-        assertFalse(activeCompanies.isEmpty());
-        assertEquals(companies.size(), activeCompanies.size());
+        assertNotNull(companiesWhere);
+        assertFalse(companiesWhere.isEmpty());
+        assertFalse(
+                companiesWhere.stream().anyMatch(
+                        company -> company.getIsActive() != isActive
+                )
+        );
+        assertEquals(list.size(), companiesWhere.size());
     }
 
-    @Test
-    @DisplayName("Get All companies which is not active")
-    @Order(9)
-    public void givenIsActive_whenFind_thenReturnDeActiveCompanies(){
-        Byte isActive = 0;
-        setAllCompaniesDeactivate(companies);
 
-        // Act
-        companyRepository.saveAll(companies);
-        List<Company> deActiveCompanies = companyRepository.findByIsActive(isActive);
-
-        // Asset
-        assertNotNull(deActiveCompanies);
-        assertFalse(deActiveCompanies.isEmpty());
-        assertEquals(companies.size(), deActiveCompanies.size());
-
-    }
 
     @Test
     @DisplayName("Save All companies")
@@ -196,9 +190,7 @@ public class CompanyRepositoryTest {
         assertEquals(companies.size(), saveAll.size());
     }
 
-    private void setAllCompaniesDeactivate(List<Company> companies){
-        companies.forEach(t -> t.setIsActive((byte)0));
-    }
+
     private void assertions(Company expected, Company actual){
         assertNotNull(actual);
         assertEquals(expected.getId(), actual.getId());

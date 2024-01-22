@@ -1,8 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
-import com.mstockRestAPI.mstockRestAPI.entity.Product;
-import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
-import com.mstockRestAPI.mstockRestAPI.entity.Unit;
+import com.mstockRestAPI.mstockRestAPI.entity.*;
 import com.mstockRestAPI.mstockRestAPI.tools.utils.Util;
 import net.bytebuddy.utility.RandomString;
 
@@ -29,6 +27,10 @@ public class ProductCreator {
         byte isActive = (byte) (Math.random() * 2);
 
         ProductCategory productCategory = ProductCategoryCreator.createRandomProductCategoryEntity();
+        Company productCompany = CompanyCreator.createCompanyEntity();
+        List<ProductSalePrice> productSalePrice = ProductSalePricesCreator.entityList();
+        List<ProductBarcode> productBarcodeList = ProductBarcodeCreator.entityList();
+
         productCategory.setId(1L);
         return Product.builder()
                 .productName(RandomString.make(CATEGORY_PRODUCT_NAME_LENGTH))
@@ -38,8 +40,11 @@ public class ProductCreator {
                 .company(CompanyCreator.createCompanyEntity())
                 .quantity(quantity)
                 .currentQuantity(quantity)
+                .productSalePrices(productSalePrice)
+                .productBarcodeList(productBarcodeList)
                 .expiredDate(Timestamp.valueOf(createdDate.toLocalDateTime().plusDays(20)))
                 .category(productCategory)
+                .company(productCompany)
                 .createdDate(createdDate)
                 .updatedDate(createdDate)
                 .isActive(isActive)
