@@ -178,7 +178,10 @@ public class ProductRepositoryTest {
         List<Product> productSave = productRepository.saveAll(productEntityList);
 
         Product findInList = productSave.stream()
-                .filter(product -> product.getId() > 3 % productSave.size()) // mod used because might be size change.
+                .filter(
+                        product -> product.getId() > 3 % productSave.size()
+                        && product.getIsActive() == 1
+                ) // mod used because might be size change.
                 // Prevent the error
                 .findAny().orElse(null);
 
@@ -188,12 +191,45 @@ public class ProductRepositoryTest {
         );
 
         // Find product by Barcode in Database
-        List<Product> productByBarcode = productRepository.findByBarcode(actualBarcodeInList.getBarcode());
+        List<Product> productByBarcode = productRepository.findByBarcode(actualBarcodeInList.getBarcode(),
+                (byte) 1);
 
         assertNotNull(productByBarcode);
         assertFalse(productByBarcode.isEmpty());
-        assertEquals(1, productByBarcode.size());
+        assertEquals(1, productByBarcode.size()); // Everytime size is 1 because there is no
+        // duplicate barcode in ProductBarcode table..
 
+    }
+
+    @RepeatedTest(5)
+    @DisplayName("Find By ProductName Where isActive")
+    @Transactional
+    @Order(7)
+    public void findByProductName_whenFind_thenReturnList(){
+        String keyword = "x".toLowerCase();
+        byte isActive = 1;
+        saveProductReferences();
+
+        // From List find
+        List<Product> likeProductNameList = productEntityList.stream()
+                .filter(product ->
+                        product.getProductName().toLowerCase().contains(keyword)
+                                &&
+                                product.getIsActive() == isActive)
+                .toList();
+
+        // Save All
+        productRepository.saveAll(productEntityList);
+
+        // From Database find
+        List<Product> likeProductFromDB = productRepository.findByProductName(keyword, isActive);
+
+        // Assert
+        assertNotNull(likeProductFromDB);
+        assertFalse(likeProductFromDB.stream().anyMatch(
+                product -> product.getIsActive() != isActive
+        ));
+        assertEquals(likeProductNameList.size(), likeProductFromDB.size());
     }
 
 
