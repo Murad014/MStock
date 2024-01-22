@@ -1,14 +1,15 @@
 package com.mstockRestAPI.mstockRestAPI.repository;
 
 
-import com.mstockRestAPI.mstockRestAPI.entity.Company;
-import com.mstockRestAPI.mstockRestAPI.entity.Product;
-import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
+import com.mstockRestAPI.mstockRestAPI.entity.*;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductBarcodeCreator;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductCreator;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "/application-test.properties",
@@ -38,6 +40,10 @@ public class ProductRepositoryTest {
     private ProductCategoryRepository productCategoryRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private ProductBarcodeRepository productBarcodeRepository;
+    @Autowired
+    private ProductSalePricesRepository productSalePricesRepository;
 
 
     private List<Product> productEntityList;
@@ -49,11 +55,15 @@ public class ProductRepositoryTest {
         productEntityList = ProductCreator.entityList();
 
         productRepository.deleteAll();
+        productBarcodeRepository.deleteAll();
+        companyRepository.deleteAll();
+        productSalePricesRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Add")
     @Order(1)
+    @Transactional
     public void givenProductEntity_whenAdd_thenReturnEntity(){
         // Arrange
         saveCategoryAndCompanyAndSet();
@@ -94,7 +104,7 @@ public class ProductRepositoryTest {
     @DisplayName("Find By id")
     @Transactional
     @Order(3)
-    public void givenId_whenFind_thenReturnDto(){
+    public void givenId_whenFind_thenReturnEntity(){
         saveCategoryAndCompanyAndSet();
 
         // Act
@@ -113,16 +123,109 @@ public class ProductRepositoryTest {
     @DisplayName("Get All")
     @Transactional
     @Order(4)
-    public void whenGetAll_thenReturnListDto(){
+    public void whenGetAll_thenReturnListEntity(){
+        saveProductReferences();
+
+        // Act
+        List<Product> products = productRepository.saveAll(productEntityList);
+
+        // Arrange
+        List<Product> findAll = productRepository.findAll();
+
+        assertNotNull(findAll);
+        assertFalse(findAll.isEmpty());
+        assertEquals(products.size(), findAll.size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(bytes = {0, 1})
+    @DisplayName("Get where isActive")
+    @Transactional
+    @Order(5)
+    public void whenGetAllByIsActive_thenReturnList(byte isActive){
+        saveProductReferences();
+
+        // Act
+        List<Product> productListExist = productEntityList
+                .stream()
+                .filter(product -> product.getIsActive() == isActive)
+                .toList();
+
+        // Save All
+        productRepository.saveAll(productEntityList);
+
+        // Find All by IsActive
+        List<Product> findAllByIsActive = productRepository.findByIsActive(isActive);
+
+        // Assert
+        assertNotNull(findAllByIsActive);
+        assertFalse(findAllByIsActive.isEmpty());
+        assertFalse(findAllByIsActive.stream().anyMatch(
+                product -> product.getIsActive() != isActive
+        ));
+        assertEquals(productListExist.size(), findAllByIsActive.size());
+
+    }
+
+    @Test
+    @DisplayName("Get by Barcode")
+    @Transactional
+    @Order(6)
+    public void whenFindByBarcode_thenReturnProduct(){
+        saveProductReferences();
+
+        // Save All
+        List<Product> productSave = productRepository.saveAll(productEntityList);
+
+        Product findInList = productSave.stream()
+                .filter(product -> product.getId() > 3 % productSave.size()) // mod used because might be size change.
+                // Prevent the error
+                .findAny().orElse(null);
+
+        assert findInList != null;
+        ProductBarcode actualBarcodeInList = findInList.getProductBarcodeList().get(
+                3 % findInList.getProductBarcodeList().size()
+        );
+
+        // Find product by Barcode in Database
+        List<Product> productByBarcode = productRepository.findByBarcode(actualBarcodeInList.getBarcode());
+
+        assertNotNull(productByBarcode);
+        assertFalse(productByBarcode.isEmpty());
+        assertEquals(1, productByBarcode.size());
 
     }
 
 
 
+
+
+    private void saveProductReferences(){
+        for(Product productEntity: productEntityList) {
+            ProductCategory productCategory = productCategoryRepository.save(productEntity.getCategory());
+            Company productCompany = companyRepository.save(productEntity.getCompany());
+            List<ProductSalePrice> productSalePrice =
+                    productSalePricesRepository.saveAll(productEntity.getProductSalePrices());
+            List<ProductBarcode> productBarcodeList =
+                    productBarcodeRepository.saveAll(productEntity.getProductBarcodeList());
+            productEntity.setProductBarcodeList(productBarcodeList);
+            productEntity.setProductSalePrices(productSalePrice);
+            productEntity.setCategory(productCategory);
+            productEntity.setCompany(productCompany);
+        }
+
+    }
+
     private void saveCategoryAndCompanyAndSet(){
         ProductCategory productCategory = productCategoryRepository.save(productEntity.getCategory());
         Company productCompany = companyRepository.save(productEntity.getCompany());
+        List<ProductSalePrice> productSalePrice =
+                productSalePricesRepository.saveAll(productEntity.getProductSalePrices());
+        List<ProductBarcode> productBarcodeList =
+                productBarcodeRepository.saveAll(productEntity.getProductBarcodeList());
 
+        productEntity.setProductBarcodeList(productBarcodeList);
+        productEntity.setProductSalePrices(productSalePrice);
         productEntity.setCategory(productCategory);
         productEntity.setCompany(productCompany);
     }

@@ -24,9 +24,11 @@ public class CompanyCreator {
     }
 
     public static Company createCompanyEntity(){
+        Byte isActive = (byte) (Math.random() * 2);
+
         return Company.builder()
                 .companyName(RandomString.make(10))
-                .isActive((byte)1)
+                .isActive(isActive)
                 .createdDate(createdDate)
                 .updatedDate(createdDate)
                 .build();

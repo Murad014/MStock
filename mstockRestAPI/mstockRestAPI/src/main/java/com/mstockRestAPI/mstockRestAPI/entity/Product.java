@@ -27,12 +27,12 @@ public class Product {
     @Column(name = "productName", length = 100)
     private String productName;
 
-    @OneToMany(mappedBy = "product",
+    @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     private List<ProductBarcode> productBarcodeList;
 
-    @OneToMany(mappedBy = "product",
+    @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     private List<ProductSalePrice> productSalePrices;
