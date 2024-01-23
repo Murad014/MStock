@@ -237,7 +237,7 @@ public class ProductCategoryServiceTest {
                 .categoryName(productCategoryDto.getCategoryName())
                 .isActive(productCategoryDto.getIsActive())
                 .description(productCategoryDto.getDescription())
-                .updatedDate(productCategoryDto.getUpdatedDate())
+
                 .build();
 
     }
@@ -247,7 +247,6 @@ public class ProductCategoryServiceTest {
                 .categoryName(productCategory.getCategoryName())
                 .description(productCategory.getDescription())
                 .isActive(productCategory.getIsActive())
-                .updatedDate(productCategory.getUpdatedDate())
                 .build();
 
     }
@@ -262,8 +261,6 @@ public class ProductCategoryServiceTest {
                 , "Product category description name must be identical.");
         assertEquals(expected.getIsActive(), actual.getIsActive()
                 , "Product category id must be identical.");
-        assertEquals(expected.getUpdatedDate(), actual.getUpdatedDate()
-                , "Product category updated date must be identical.");
     }
 
 

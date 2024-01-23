@@ -1,6 +1,8 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -26,11 +28,12 @@ public class ProductSalePrice {
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal sellingPrice;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Column(nullable = false)

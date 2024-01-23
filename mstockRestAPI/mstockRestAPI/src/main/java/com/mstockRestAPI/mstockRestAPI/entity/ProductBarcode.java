@@ -6,6 +6,8 @@ import lombok.*;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Blob;
 import java.sql.Time;
@@ -37,11 +39,12 @@ public class ProductBarcode {
 //    private Product product;
 
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Column(nullable = false)

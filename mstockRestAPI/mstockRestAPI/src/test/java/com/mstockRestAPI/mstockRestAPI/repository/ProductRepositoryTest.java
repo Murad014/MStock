@@ -16,7 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,10 +95,18 @@ public class ProductRepositoryTest {
         // Act
         Product save = productRepository.save(productEntity);
         save.setProductName("Updated");
+        save.getProductSalePrices().add(
+                ProductSalePrice.builder().sellingPrice(
+                        BigDecimal.valueOf(121.25)
+                )
+                .build()
+        );
 
         // When Find
         Product update = productRepository.save(productEntity);
-
+        assertTrue(update.getProductSalePrices().stream().anyMatch(
+                productSalePrice -> Objects.equals(productSalePrice.getSellingPrice(), BigDecimal.valueOf(121.25))
+        ));
         assertThat(update)
                 .usingRecursiveComparison()
                 .isEqualTo(productEntity);

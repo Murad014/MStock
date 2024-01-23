@@ -30,8 +30,5 @@ public class CompanyDto {
     private String companyName;
 
     @Builder.Default
-    private Timestamp updatedDate = Timestamp.from(Instant.now());
-
-    @Builder.Default
     private Byte isActive = 1;
 }

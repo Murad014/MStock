@@ -1,13 +1,12 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
 import com.mstockRestAPI.mstockRestAPI.entity.*;
+import com.mstockRestAPI.mstockRestAPI.enums.Unit;
 import com.mstockRestAPI.mstockRestAPI.tools.utils.Util;
 import net.bytebuddy.utility.RandomString;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -48,8 +47,6 @@ public class ProductCreator {
                 .company(productCompany)
                 .discount(discount)
                 .discountLastDate(null)
-                .createdDate(createdDate)
-                .updatedDate(createdDate)
                 .isActive(isActive)
                 .build();
     }

@@ -71,6 +71,8 @@ public class ProductBarcodeRepositoryTest {
         // Assert
         assertThat(productBarcodeUpdate)
                 .usingRecursiveComparison()
+                .ignoringFields("createdDate")
+                .ignoringFields("updatedDate")
                 .isEqualTo(find);
 
     }

@@ -6,13 +6,11 @@ import com.mstockRestAPI.mstockRestAPI.entity.Product;
 import java.util.List;
 
 public interface ProductService {
-    List<ProductDto> addAll(List<ProductDto> productDtoList);
-    Product add(ProductDto productDto);
-    Product update(ProductDto productDto);
+    ProductDto add(ProductDto productDto);
+    ProductDto update(ProductDto productDto);
     List<ProductDto> getAll();
-    ProductDto getById();
-    Product getByBarcode();
-    Product getAllWhereIsActive(byte isActive);
-
-
+    ProductDto getById(Long id);
+    ProductDto getByBarcodeAndIsActive(String barcode, byte isActive);
+    ProductDto getAllAndIsActive(byte isActive);
+    List<ProductDto> getListByProductNameAndIsActive(String productName, byte isActive);
 }

@@ -1,7 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.dto;
 
-import com.mstockRestAPI.mstockRestAPI.entity.Product;
-import com.mstockRestAPI.mstockRestAPI.entity.Unit;
+import com.mstockRestAPI.mstockRestAPI.enums.Unit;
 import lombok.*;
 
 import jakarta.validation.constraints.*;

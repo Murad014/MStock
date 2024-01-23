@@ -20,7 +20,6 @@ public class ProductCategoryCreator {
         return ProductCategory.builder()
                 .categoryName(RandomString.make(CATEGORY_RANDOM_NAME_LENGTH))
                 .description(RandomString.make(CATEGORY_RANDOM_DESCRIPTION_LENGTH))
-                .createDate(CREATED_DATE)
                 .isActive((byte)1)
                 .build();
     }

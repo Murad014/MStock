@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timespan;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -38,14 +40,15 @@ public class Customer {
     @Column(name="comment", columnDefinition =  "TEXT")
     private String comment;
 
-    @Column(name="createdDate", nullable = false)
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
-
     @Column(name="bonusRate", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal bonusRate;
 
-    @Column(nullable = false)
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
+
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Column(columnDefinition = "TINYINT DEFAULT 1")

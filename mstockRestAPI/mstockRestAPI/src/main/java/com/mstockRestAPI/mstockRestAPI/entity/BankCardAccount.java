@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timespan;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -36,6 +38,14 @@ public class BankCardAccount {
     @Column(name = "isActive", columnDefinition = "BOOLEAN DEFAULT false")
     @Builder.Default
     private Byte isActive = 1;
+
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
+
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
+    private Timestamp updatedDate;
 
     @Column(name="currency")
     @Builder.Default

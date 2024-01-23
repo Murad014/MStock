@@ -1,8 +1,10 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
 
+import com.mstockRestAPI.mstockRestAPI.enums.Unit;
 import jakarta.persistence.*;
 import lombok.*;
-import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
@@ -90,13 +92,13 @@ public class Product {
     @Builder.Default
     private Timestamp discountLastDate = null;
 
-    @Column(name = "createdDate")
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.from(Instant.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
     @Column(name = "updatedDate")
-    @Builder.Default
-    private Timestamp updatedDate = Timestamp.from(Instant.now());
+    @UpdateTimestamp
+    private Timestamp updatedDate;
 
 
     @Column(name = "isActive", nullable = false, columnDefinition = "TINYINT DEFAULT 1")

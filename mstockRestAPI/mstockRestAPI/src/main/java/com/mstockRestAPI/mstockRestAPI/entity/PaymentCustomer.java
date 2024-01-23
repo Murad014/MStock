@@ -1,16 +1,14 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
+import com.mstockRestAPI.mstockRestAPI.enums.Currency;
+import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jdk.jfr.Timespan;
 import lombok.*;
-import org.springframework.data.repository.cdi.Eager;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "paymentCustomer")
@@ -35,11 +33,12 @@ public class PaymentCustomer {
     @Column(name = "minusPay", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal minusPay;
 
-    @Column(name = "createdDate", nullable = false)
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(name = "updatedDate", nullable = false)
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +48,11 @@ public class PaymentCustomer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bankCardAccount_accountNumber")
     private BankCardAccount bankCardAccount;
+
+    @Column(name="currency")
+    @Builder.Default
+    private Currency currency = Currency.AZN;
+
 
     @Column(name = "isActive", columnDefinition = "TINYINT DEFAULT 1")
     @Builder.Default

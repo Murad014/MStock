@@ -17,7 +17,6 @@ public class ProductSalePricesCreator {
         BigDecimal sellingPrice = BigDecimal.valueOf(Util.generateRandomPrice(1, 200));
         return ProductSalePrice.builder()
                 .sellingPrice(sellingPrice)
-                .updatedDate(updateDate)
                 .isActive(isActive)
                 .build();
     }

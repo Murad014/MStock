@@ -2,6 +2,8 @@ package com.mstockRestAPI.mstockRestAPI.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -26,10 +28,12 @@ public class ProductCategory {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "createDate")
-    private Timestamp createDate;
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(name="updatedDate")
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

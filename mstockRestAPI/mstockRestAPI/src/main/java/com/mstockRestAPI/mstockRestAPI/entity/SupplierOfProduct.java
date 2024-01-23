@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timespan;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -46,12 +48,13 @@ public class SupplierOfProduct {
     @JoinColumn(name="company_id")
     private Company company;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    private LocalDateTime updatedDate;
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
+    private Timestamp updatedDate;
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default
