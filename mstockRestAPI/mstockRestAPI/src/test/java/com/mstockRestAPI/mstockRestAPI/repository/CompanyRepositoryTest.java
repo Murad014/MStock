@@ -196,9 +196,6 @@ public class CompanyRepositoryTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getCompanyName(), actual.getCompanyName());
         assertEquals(expected.getIsActive(), actual.getIsActive());
-        assertEquals(expected.getCreatedDate(), actual.getCreatedDate());
-        assertEquals(expected.getUpdatedDate(), actual.getUpdatedDate());
-
     }
 
 

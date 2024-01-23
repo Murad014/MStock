@@ -27,8 +27,5 @@ public class ProductCategoryDto {
         private String description;
 
         @Builder.Default
-        private Timestamp updatedDate = Timestamp.from(Instant.now());
-
-        @Builder.Default
         private Byte isActive = 1;
 }

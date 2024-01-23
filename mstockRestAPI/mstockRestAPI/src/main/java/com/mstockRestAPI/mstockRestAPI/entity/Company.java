@@ -3,6 +3,8 @@ package com.mstockRestAPI.mstockRestAPI.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -28,12 +30,13 @@ public class Company {
     @Column(name = "companyName", unique = true, nullable = false, length = 100)
     private String companyName;
 
-    @Column(name="createdDate")
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
     private Timestamp createdDate;
 
-    @Column(name="updatedDate")
-    @Builder.Default
-    private Timestamp updatedDate = Timestamp.from(Instant.now());
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
+    private Timestamp updatedDate;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Product> products;

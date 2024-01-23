@@ -65,6 +65,8 @@ public class ProductSalePricesRepositoryTest {
         // Assert
         assertThat(productSalePriceUpdate)
                 .usingRecursiveComparison()
+                .ignoringFields("createdDate")
+                .ignoringFields("updatedDate")
                 .isEqualTo(productSalePrice);
     }
 

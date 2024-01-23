@@ -3,6 +3,8 @@ package com.mstockRestAPI.mstockRestAPI.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -39,11 +41,12 @@ public class InvoiceItem {
     @Column(name = "totalPrice", precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    @Builder.Default
-    private Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")

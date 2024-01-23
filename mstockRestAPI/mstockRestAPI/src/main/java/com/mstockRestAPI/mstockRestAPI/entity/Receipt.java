@@ -1,16 +1,15 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
 
 
+import com.mstockRestAPI.mstockRestAPI.enums.Currency;
+import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jdk.jfr.Timespan;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Entity
@@ -29,17 +28,27 @@ public class Receipt {
     @Column(name = "typePayment", nullable = false)
     private PaymentType typePayment;
 
-    @Column(columnDefinition = "TIMESTAMP")
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
+
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
-    @Column
-    private Long customerId;
-
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
-
+    @Column(name="paymentType")
     private PaymentType paymentType;
+
+    @Column(name="currency")
+    @Builder.Default
+    private Currency currency = Currency.AZN;
+
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default

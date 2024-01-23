@@ -1,15 +1,14 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
 
+import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "paymentInvoices")
@@ -35,11 +34,12 @@ public class PaymentInvoice {
     @Column(name = "minusPay", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal minusPay;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    @Builder.Default
-    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
+    @Column(name = "createdDate", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdDate;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(name = "updatedDate")
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Enumerated(EnumType.STRING)

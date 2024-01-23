@@ -1,4 +1,4 @@
-package com.mstockRestAPI.mstockRestAPI.entity;
+package com.mstockRestAPI.mstockRestAPI.enums;
 
 public enum PaymentType {
     CASH,

@@ -29,8 +29,6 @@ public class CompanyCreator {
         return Company.builder()
                 .companyName(RandomString.make(10))
                 .isActive(isActive)
-                .createdDate(createdDate)
-                .updatedDate(createdDate)
                 .build();
     }
 
@@ -45,7 +43,6 @@ public class CompanyCreator {
         return CompanyDto.builder()
                 .companyName(RandomString.make(10))
                 .isActive((byte)1)
-                .updatedDate(createdDate)
                 .build();
     }
 

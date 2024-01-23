@@ -41,7 +41,6 @@ public class ConverterTest {
         this.companyDto = CompanyDto.builder()
                 .id(1L)
                 .companyName("Royal")
-                .updatedDate(createdDate)
                 .isActive((byte)0)
                 .build();
 
@@ -77,7 +76,7 @@ public class ConverterTest {
         // Assert
         assertEquals(companyDto.getCompanyName(), companyDto.getCompanyName());
         assertEquals(companyDto.getIsActive(), companyDto.getIsActive());
-        assertEquals(companyDto.getUpdatedDate(), companyDto.getUpdatedDate());
+
     }
 
 

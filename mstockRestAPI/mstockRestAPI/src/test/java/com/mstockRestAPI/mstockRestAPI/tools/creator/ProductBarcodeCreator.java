@@ -20,7 +20,6 @@ public class ProductBarcodeCreator {
         Byte isActive = (byte) (Math.random() * 2);
         return ProductBarcode.builder()
                 .barcode(Util.generateRandomBarcode(13))
-                .updatedDate(UPDATE_DATE)
                 .isActive(isActive)
                 .build();
     }

@@ -247,14 +247,13 @@ public class CompanyServiceTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getCompanyName(), actual.getCompanyName());
         assertEquals(expected.getIsActive(), actual.getIsActive());
-        assertEquals(expected.getUpdatedDate(), actual.getUpdatedDate());
+
     }
 
     private Company convertCompanyDtoToEntity(CompanyDto companyDto) {
         return new Company().builder()
                 .companyName(companyDto.getCompanyName())
                 .isActive(companyDto.getIsActive())
-                .updatedDate(companyDto.getUpdatedDate())
                 .build();
 
     }
@@ -263,7 +262,6 @@ public class CompanyServiceTest {
         return new CompanyDto().builder()
                 .companyName(company.getCompanyName())
                 .isActive(company.getIsActive())
-                .updatedDate(company.getUpdatedDate())
                 .build();
 
     }
