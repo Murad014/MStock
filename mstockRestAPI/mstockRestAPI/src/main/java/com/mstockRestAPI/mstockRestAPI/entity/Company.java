@@ -41,7 +41,6 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Product> products;
 
-
     @Column(name="isActive")
     @Builder.Default
     private Byte isActive = 1;

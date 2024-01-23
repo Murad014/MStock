@@ -79,8 +79,8 @@ public class Product {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @Column(name = "picture")
-    private Blob picture;
+    @Column(name = "pictureName")
+    private String pictureName;
 
     @Column(name = "discount",
             precision = 10,
