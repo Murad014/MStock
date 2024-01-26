@@ -1,4 +1,4 @@
-package com.mstockRestAPI.mstockRestAPI.dto.response;
+package com.mstockRestAPI.mstockRestAPI.payload.response;
 
 import lombok.Getter;
 import lombok.ToString;

@@ -1,7 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.exception;
 
-import com.mstockRestAPI.mstockRestAPI.dto.response.ErrorDetails;
-import jakarta.validation.ValidationException;
+import com.mstockRestAPI.mstockRestAPI.payload.response.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +44,36 @@ public class GlobalAPIException {
 
         return new ResponseEntity<>(
                 errors,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<Object> handleSQLException(SQLException exception, WebRequest webRequest) {
+        String staticMessage = "Error occurred in SQL process";
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                staticMessage,
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(
+                errorDetails,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(SqlProcessException.class)
+    public ResponseEntity<Object> handleSQLException(SqlProcessException exception, WebRequest webRequest) {
+        String message = exception.getMessage();
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                message,
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(
+                errorDetails,
                 HttpStatus.BAD_REQUEST
         );
     }

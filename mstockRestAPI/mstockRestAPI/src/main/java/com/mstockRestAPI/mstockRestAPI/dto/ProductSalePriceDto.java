@@ -26,6 +26,7 @@ public class ProductSalePriceDto {
     private BigDecimal sellingPrice;
 
     @NotNull(message = "isActive cannot be null")
-    private Byte isActive;
+    @Builder.Default
+    private Byte isActive = 1;
 
 }

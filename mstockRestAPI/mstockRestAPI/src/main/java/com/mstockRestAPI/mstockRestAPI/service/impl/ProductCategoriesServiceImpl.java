@@ -1,7 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.service.impl;
 
 import com.mstockRestAPI.mstockRestAPI.dto.ProductCategoryDto;
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.ProductCategoryRepository;

@@ -1,7 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.converter;
 
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;

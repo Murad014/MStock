@@ -1,10 +1,8 @@
 package com.mstockRestAPI.mstockRestAPI.service;
 
 
-import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
 import com.mstockRestAPI.mstockRestAPI.dto.ProductCategoryDto;
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
-import com.mstockRestAPI.mstockRestAPI.entity.Company;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.ProductCategoryRepository;
@@ -20,7 +18,6 @@ import static org.mockito.Mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 

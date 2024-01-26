@@ -49,6 +49,9 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductSalePricesRepository productSalePricesRepository;
 
+    @Autowired
+    private ProductPictureRepository productPictureRepository;
+
 
     private List<Product> productEntityList;
     private Product productEntity;
@@ -271,11 +274,13 @@ public class ProductRepositoryTest {
                 productSalePricesRepository.saveAll(productEntity.getProductSalePrices());
         List<ProductBarcode> productBarcodeList =
                 productBarcodeRepository.saveAll(productEntity.getProductBarcodeList());
+        List<ProductPicture> productPictureList = productPictureRepository.saveAll(productEntity.getProductPictureList());
 
         productEntity.setProductBarcodeList(productBarcodeList);
         productEntity.setProductSalePrices(productSalePrice);
         productEntity.setCategory(productCategory);
         productEntity.setCompany(productCompany);
+        productEntity.setProductPictureList(productPictureList);
     }
 
     private void saveCategoryAndCompanyListAndSet(){

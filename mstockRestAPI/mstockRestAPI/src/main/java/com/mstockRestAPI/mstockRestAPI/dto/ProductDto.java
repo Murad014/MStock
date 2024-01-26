@@ -23,6 +23,8 @@ public class ProductDto {
     private Long id;
 
     @NotBlank(message = "Product name is required")
+    @NotEmpty
+    @NotNull
     @Size(max = 100, message = "Product name must be less than or equal to 100 characters")
     private String productName;
 
@@ -55,7 +57,7 @@ public class ProductDto {
 
     private ProductCategoryDto productCategoryDto;
 
-    private CompanyDto companyId;
+    private CompanyDto companyDto;
 
     private String pictureName;
 
@@ -67,5 +69,6 @@ public class ProductDto {
 
     @Min(value = 0, message = "isActive must be 0 or 1")
     @Max(value = 1, message = "isActive must be 0 or 1")
-    private byte isActive;
+    @Builder.Default
+    private byte isActive = 1;
 }

@@ -32,7 +32,14 @@ public class Product {
     @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
+    @Column(unique = true)
     private List<ProductBarcode> productBarcodeList;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @Column(unique = true)
+    private List<ProductPicture> productPictureList;
 
     @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
@@ -79,9 +86,6 @@ public class Product {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @Column(name = "pictureName")
-    private String pictureName;
-
     @Column(name = "discount",
             precision = 10,
             scale = 2,
@@ -102,7 +106,8 @@ public class Product {
 
 
     @Column(name = "isActive", nullable = false, columnDefinition = "TINYINT DEFAULT 1")
-    private byte isActive;
+    @Builder.Default
+    private byte isActive = 1;
 
 
 }
