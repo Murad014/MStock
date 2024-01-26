@@ -18,21 +18,21 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "productBarcodes")
+@Table(name = "productPictures")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductBarcode {
+public class ProductPicture {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String barcode;
+    private String pictureName;
 
     @Column(name = "createdDate", updatable = false)
     @CreationTimestamp
@@ -46,8 +46,4 @@ public class ProductBarcode {
     @Builder.Default
     private Byte isActive = 1;
 
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_id")
-//    private Product product;
 }

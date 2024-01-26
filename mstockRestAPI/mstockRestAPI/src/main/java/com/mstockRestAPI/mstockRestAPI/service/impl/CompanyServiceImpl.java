@@ -1,18 +1,15 @@
 package com.mstockRestAPI.mstockRestAPI.service.impl;
 
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.CompanyRepository;
 import com.mstockRestAPI.mstockRestAPI.service.CompanyService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -87,6 +84,9 @@ public class CompanyServiceImpl implements CompanyService {
                         c -> converter.mapToDto(c, CompanyDto.class)
                 ).toList();
     }
+
+
+
 
 
 }

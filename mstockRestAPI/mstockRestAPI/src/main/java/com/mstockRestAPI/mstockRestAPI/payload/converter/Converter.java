@@ -1,4 +1,4 @@
-package com.mstockRestAPI.mstockRestAPI.dto.converter;
+package com.mstockRestAPI.mstockRestAPI.payload.converter;
 
 
 import com.mstockRestAPI.mstockRestAPI.entity.Company;

@@ -18,7 +18,7 @@ public class ProductBarcodeDto {
     @NotBlank(message = "Barcode cannot be blank")
     private String barcode;
 
-    @NotNull(message = "isActive cannot be null")
-    private Byte isActive;
+    @Builder.Default
+    private Byte isActive = 1;
 
 }

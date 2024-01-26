@@ -30,6 +30,7 @@ public class ProductCreator {
         Company productCompany = CompanyCreator.createCompanyEntity();
         List<ProductSalePrice> productSalePrice = ProductSalePricesCreator.entityList();
         List<ProductBarcode> productBarcodeList = ProductBarcodeCreator.entityList();
+        List<ProductPicture> productPictureList = ProductPictureCreator.entityList();
 
         productCategory.setId(1L);
         return Product.builder()
@@ -41,6 +42,7 @@ public class ProductCreator {
                 .quantity(quantity)
                 .currentQuantity(quantity)
                 .productSalePrices(productSalePrice)
+                .productPictureList(productPictureList)
                 .productBarcodeList(productBarcodeList)
                 .expiredDate(Timestamp.valueOf(createdDate.toLocalDateTime().plusDays(20)))
                 .category(productCategory)

@@ -1,6 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.service.impl;
 
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
+import com.mstockRestAPI.mstockRestAPI.dto.ProductBarcodeDto;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductBarcode;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.ProductBarcodeRepository;
@@ -22,19 +23,25 @@ public class ProductBarcodeServiceImpl implements ProductBarcodeService {
         this.converter = converter;
     }
 
+
     @Override
-    public ProductBarcode add(ProductBarcode productBarcode) {
-        return productBarcodeRepository.save(productBarcode);
+    public ProductBarcodeDto add(ProductBarcodeDto productBarcode) {
+        ProductBarcode productBarcodeSaved = productBarcodeRepository.save(
+                converter.mapToEntity(productBarcode, ProductBarcode.class)
+        );
+        return converter.mapToDto(productBarcodeSaved, ProductBarcodeDto.class);
     }
 
     @Override
-    public ProductBarcode update(ProductBarcode productBarcode) {
-        Long id = productBarcode.getId();
+    public ProductBarcodeDto update(ProductBarcodeDto productBarcodeDto) {
+        Long id = productBarcodeDto.getId();
         productBarcodeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Product Barcode not found", "id", id.toString())
         );
-
-        return productBarcodeRepository.save(productBarcode);
+        ProductBarcode saved = productBarcodeRepository.save(
+                converter.mapToEntity(productBarcodeDto, ProductBarcode.class)
+        );
+        return converter.mapToDto(saved, ProductBarcodeDto.class);
     }
 
     @Override
@@ -52,8 +59,11 @@ public class ProductBarcodeServiceImpl implements ProductBarcodeService {
     }
 
     @Override
-    public List<ProductBarcode> findAllByIsActive(Byte isActive) {
-        return productBarcodeRepository.findByIsActive(isActive);
+    public List<ProductBarcodeDto> findAllByIsActive(Byte isActive) {
+        return productBarcodeRepository.findByIsActive(isActive)
+                .stream()
+                .map(barcode -> converter.mapToDto(barcode, ProductBarcodeDto.class))
+                .toList();
     }
 
     @Override

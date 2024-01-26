@@ -2,7 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.service;
 
 
 import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.CompanyRepository;
@@ -12,7 +12,6 @@ import com.mstockRestAPI.mstockRestAPI.tools.creator.CompanyCreator;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.platform.commons.util.StringUtils;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
@@ -21,7 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -236,9 +234,6 @@ public class CompanyServiceTest {
                     CompanyDto companyDtoArgument = invocation.getArgument(0);
                     return convertCompanyDtoToEntity(companyDtoArgument);
                 });
-
-
-
     }
 
 
@@ -251,7 +246,7 @@ public class CompanyServiceTest {
     }
 
     private Company convertCompanyDtoToEntity(CompanyDto companyDto) {
-        return new Company().builder()
+        return Company.builder()
                 .companyName(companyDto.getCompanyName())
                 .isActive(companyDto.getIsActive())
                 .build();
@@ -259,7 +254,7 @@ public class CompanyServiceTest {
     }
 
     private CompanyDto convertCompanyEntityToDto(Company company) {
-        return new CompanyDto().builder()
+        return  CompanyDto.builder()
                 .companyName(company.getCompanyName())
                 .isActive(company.getIsActive())
                 .build();

@@ -1,7 +1,10 @@
 package com.mstockRestAPI.mstockRestAPI.service;
 
 
-import com.mstockRestAPI.mstockRestAPI.dto.converter.Converter;
+import com.mstockRestAPI.mstockRestAPI.dto.CompanyDto;
+import com.mstockRestAPI.mstockRestAPI.dto.ProductBarcodeDto;
+import com.mstockRestAPI.mstockRestAPI.entity.Company;
+import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductBarcode;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.repository.ProductBarcodeRepository;
@@ -9,7 +12,6 @@ import com.mstockRestAPI.mstockRestAPI.service.impl.ProductBarcodeServiceImpl;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductBarcodeCreator;
 import org.junit.jupiter.api.*;
 
-import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,11 +42,17 @@ public class ProductBarcodeServiceTest {
     private ProductBarcode productBarcodeEntity;
     private List<ProductBarcode> productBarcodeList;
 
+    private ProductBarcodeDto productBarcodeDto;
+    private List<ProductBarcodeDto> productBarcodeDtoList;
+
 
     @BeforeEach
     public void beforeEach(){
         productBarcodeEntity = ProductBarcodeCreator.entity();
         productBarcodeList = ProductBarcodeCreator.entityList();
+
+        productBarcodeDto = ProductBarcodeCreator.dto();
+        productBarcodeDtoList = ProductBarcodeCreator.dtoList();
     }
 
     @Test
@@ -52,16 +60,19 @@ public class ProductBarcodeServiceTest {
     @Order(1)
     public void givenEntity_whenSave_thenReturnEntity(){
         // When
+        when(converter.mapToEntity(productBarcodeDto, ProductBarcode.class))
+                .thenReturn(productBarcodeEntity);
+        when(converter.mapToDto(productBarcodeEntity, ProductBarcodeDto.class))
+                .thenReturn(productBarcodeDto);
         when(productBarcodeRepository.save(productBarcodeEntity)).thenReturn(productBarcodeEntity);
-
         // Act
-        ProductBarcode save = productBarcodeService.add(productBarcodeEntity);
+        ProductBarcodeDto save = productBarcodeService.add(productBarcodeDto);
 
         // Assert
         assertNotNull(save);
         assertThat(save)
                 .usingRecursiveComparison()
-                .isEqualTo(productBarcodeEntity);
+                .isEqualTo(productBarcodeDto);
 
         // Verify
         verify(productBarcodeRepository, times(1)).save(productBarcodeEntity);
@@ -73,19 +84,24 @@ public class ProductBarcodeServiceTest {
     public void givenEntity_whenUpdate_thenReturnEntity(){
         String barcode = "12341541231";
         // When
+        productBarcodeDto.setId(1L);
         productBarcodeEntity.setId(1L);
+        when(converter.mapToEntity(productBarcodeDto, ProductBarcode.class))
+                .thenReturn(productBarcodeEntity);
+        when(converter.mapToDto(productBarcodeEntity, ProductBarcodeDto.class))
+                .thenReturn(productBarcodeDto);
         when(productBarcodeRepository.save(productBarcodeEntity)).thenReturn(productBarcodeEntity);
         when(productBarcodeRepository.findById(productBarcodeEntity.getId()))
                 .thenReturn(Optional.ofNullable(productBarcodeEntity));
         // Act
-        productBarcodeEntity.setBarcode(barcode);
-        ProductBarcode productBarcodeUpdated = productBarcodeService.update(productBarcodeEntity);
+        productBarcodeDto.setBarcode(barcode);
+        ProductBarcodeDto productBarcodeUpdated = productBarcodeService.update(productBarcodeDto);
 
         // Assert
         assertNotNull(productBarcodeUpdated);
         assertThat(productBarcodeUpdated)
                 .usingRecursiveComparison()
-                .isEqualTo(productBarcodeEntity);
+                .isEqualTo(productBarcodeDto);
         assertEquals(barcode, productBarcodeUpdated.getBarcode());
         // Verify
         verify(productBarcodeRepository, times(1)).save(productBarcodeEntity);
@@ -98,15 +114,24 @@ public class ProductBarcodeServiceTest {
     public void givenEntity_whenNotExistsId_thenReturnException(){
         String barcode = "12341541231";
         // When
+        productBarcodeDto.setId(1L);
         productBarcodeEntity.setId(1L);
+        when(converter.mapToEntity(productBarcodeDto, ProductBarcode.class))
+                .thenReturn(productBarcodeEntity);
+        when(converter.mapToEntity(productBarcodeDto, ProductBarcode.class))
+                .thenReturn(productBarcodeEntity);
+        when(converter.mapToDto(productBarcodeEntity, ProductBarcodeDto.class))
+                .thenReturn(productBarcodeDto);
+        when(converter.mapToDto(productBarcodeEntity, ProductBarcodeDto.class))
+                .thenReturn(productBarcodeDto);
         when(productBarcodeRepository.save(productBarcodeEntity)).thenReturn(productBarcodeEntity);
         when(productBarcodeRepository.findById(productBarcodeEntity.getId()))
                 .thenThrow(ResourceNotFoundException.class);
         // Act
-        productBarcodeEntity.setBarcode(barcode);
+        productBarcodeDto.setBarcode(barcode);
 
         // Assert
-        assertThrows(ResourceNotFoundException.class, () -> productBarcodeService.update(productBarcodeEntity));
+        assertThrows(ResourceNotFoundException.class, () -> productBarcodeService.update(productBarcodeDto));
         // Verify
         verify(productBarcodeRepository, times(1)).findById(productBarcodeEntity.getId());
     }
@@ -122,10 +147,11 @@ public class ProductBarcodeServiceTest {
                 .toList();
 
         // When
+        mockConverterMapping();
         when(productBarcodeRepository.findByIsActive(isActive)).thenReturn(productBarcodesFilter);
 
         // Act
-        List<ProductBarcode> listFromDB = productBarcodeService.findAllByIsActive(isActive);
+        List<ProductBarcodeDto> listFromDB = productBarcodeService.findAllByIsActive(isActive);
 
         // Assert
         assertNotNull(listFromDB);
@@ -153,6 +179,36 @@ public class ProductBarcodeServiceTest {
         assertTrue(exist);
     }
 
+
+    private void mockConverterMapping() {
+        when(converter.mapToDto(any(), eq(ProductBarcodeDto.class)))
+                .thenAnswer(invocation -> {
+                    ProductBarcode productBarcodeDtoArgument = invocation.getArgument(0);
+                    return convertCompanyEntityToDto(productBarcodeDtoArgument);
+                });
+
+        when(converter.mapToEntity(any(), eq(ProductBarcode.class)))
+                .thenAnswer(invocation -> {
+                    ProductBarcodeDto productBarcodeDtoArgument = invocation.getArgument(0);
+                    return convertCompanyDtoToEntity(productBarcodeDtoArgument);
+                });
+    }
+
+    private ProductBarcodeDto convertCompanyEntityToDto(ProductBarcode productBarcode) {
+        return  ProductBarcodeDto.builder()
+                .barcode(productBarcode.getBarcode())
+                .isActive(productBarcode.getIsActive())
+                .build();
+
+    }
+
+    private ProductBarcode convertCompanyDtoToEntity(ProductBarcodeDto productBarcodeDto) {
+        return ProductBarcode.builder()
+                .barcode(productBarcodeDto.getBarcode())
+                .isActive(productBarcodeDto.getIsActive())
+                .build();
+
+    }
 
 
 }
