@@ -45,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
     public ProductDto add(ProductDto productDto, List<MultipartFile> productPictures) throws SqlProcessException {
         if(productDto.getId() != null)
             throw new SqlProcessException("Product", "add", "product id must be null");

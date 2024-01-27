@@ -11,11 +11,11 @@ import org.springframework.test.context.TestPropertySource;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "/application-test.properties")
 public class ProductServiceTest {
-    @Mock
-    private ProductRepository productRepository;
-
 //    @Mock
-//    private Prod
+//    private ProductRepository productRepository;
+//
+//    @Mock
+//    private
 
 
 
