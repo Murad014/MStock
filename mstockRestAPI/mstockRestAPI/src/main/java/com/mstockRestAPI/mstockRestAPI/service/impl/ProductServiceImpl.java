@@ -1,6 +1,8 @@
 package com.mstockRestAPI.mstockRestAPI.service.impl;
 
 import com.mstockRestAPI.mstockRestAPI.dto.*;
+import com.mstockRestAPI.mstockRestAPI.entity.ProductPicture;
+import com.mstockRestAPI.mstockRestAPI.exception.FileUploadException;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.exception.SomethingWentWrongException;
 import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
@@ -15,7 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,15 +31,18 @@ public class ProductServiceImpl implements ProductService {
     private final ProductBarcodeRepository productBarcodeRepository;
 
     private final Converter converter;
+    private final Util util;
 
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
             ProductBarcodeRepository productBarcodeRepository,
+            Util util,
             Converter converter
     ){
         this.productRepository = productRepository;
         this.productBarcodeRepository = productBarcodeRepository;
+        this.util = util;
         this.converter = converter;
 
     }
@@ -112,8 +120,31 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
+    @Override
+    public ProductDto addPictures(Long productId, List<MultipartFile> pictures) {
+        Product productFromDB = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
 
+        for(MultipartFile file: pictures){
+            boolean isImage = util.isImageFile(file);
+            if(!isImage)
+                throw new FileUploadException(file.getOriginalFilename(), "only image files");
 
+            String pictureName = util.handleFileUpload(file,
+                    uploadDirectory,
+                    productId.toString());
+
+            productFromDB.getProductPictureList().add(
+                    ProductPicture.builder()
+                            .pictureName(pictureName)
+                            .build()
+            );
+        }
+
+        return converter.mapToDto(
+                productRepository.save(productFromDB),
+                ProductDto.class);
+    }
 
 
     // Not Override Methods

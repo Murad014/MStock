@@ -15,4 +15,5 @@ public interface ProductService {
     ProductDto getByBarcodeAndIsActive(String barcode, byte isActive);
     List<ProductDto> getAllAndIsActive(byte isActive);
     List<ProductDto> getListByProductNameAndIsActive(String productName, byte isActive);
+    ProductDto addPictures(Long productId, List<MultipartFile> pictures);
 }

@@ -1,11 +1,9 @@
 package com.mstockRestAPI.mstockRestAPI.service;
 
-import com.mstockRestAPI.mstockRestAPI.dto.ProductBarcodeDto;
-import com.mstockRestAPI.mstockRestAPI.dto.ProductDto;
-import com.mstockRestAPI.mstockRestAPI.dto.ProductPictureDto;
-import com.mstockRestAPI.mstockRestAPI.dto.ProductSalePriceDto;
+import com.mstockRestAPI.mstockRestAPI.dto.*;
 import com.mstockRestAPI.mstockRestAPI.entity.Product;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductBarcode;
+import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.exception.SomethingWentWrongException;
 import com.mstockRestAPI.mstockRestAPI.exception.SqlProcessException;
@@ -13,11 +11,15 @@ import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.repository.ProductRepository;
 import com.mstockRestAPI.mstockRestAPI.service.impl.ProductServiceImpl;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductCreator;
+import com.mstockRestAPI.mstockRestAPI.utils.Util;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.multipart.MultipartFile;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -27,8 +29,7 @@ import java.util.stream.LongStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -38,6 +39,10 @@ public class ProductServiceTest {
     private ProductRepository productRepository;
     @Mock
     private Converter converter;
+
+    @Mock
+    private Util util;
+
     @InjectMocks
     private ProductServiceImpl productService;
 
@@ -227,8 +232,6 @@ public class ProductServiceTest {
         assertThrows(SomethingWentWrongException.class, () ->
                 productService.getByBarcodeAndIsActive(existBarcode, (byte)1));
     }
-
-
 
 
     private void mockSingle(){

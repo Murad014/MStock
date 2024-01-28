@@ -39,6 +39,15 @@ public class ProductController {
                 HttpStatus.CREATED);
     }
 
+    @PostMapping("{productId}/pictures")
+    public ResponseEntity<ProductDto> addPictures(@PathVariable("productId") Long productId,
+                                                  @RequestParam("pictures") List<MultipartFile> pictures){
+        return new ResponseEntity<>(
+                productService.addPictures(productId, pictures),
+                HttpStatus.CREATED
+        );
+    }
+
     @PutMapping
     public ResponseEntity<ProductDto> update(@Valid @RequestBody ProductDto productDto) throws SqlProcessException {
         ProductDto saveProduct = productService.update(productDto);
