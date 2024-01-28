@@ -2,6 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.dto;
 
 import com.mstockRestAPI.mstockRestAPI.entity.Company;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
+import com.mstockRestAPI.mstockRestAPI.entity.ProductPicture;
 import com.mstockRestAPI.mstockRestAPI.enums.Unit;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -28,13 +29,15 @@ public class ProductDto {
     @Size(max = 100, message = "Product name must be less than or equal to 100 characters")
     private String productName;
 
-    @NotEmpty(message="Product barcode list cannot be empty")
-    @Valid
+//    @NotEmpty(message="Product barcode list cannot be empty")
+//    @Valid
     private List<ProductBarcodeDto> productBarcodeList;
 
     @NotEmpty(message="Product salePrices list cannot be empty")
     @Valid
     private List<ProductSalePriceDto> productSalePrices;
+
+    private List<ProductPictureDto> productPictureList;
 
     private String description;
 
@@ -55,11 +58,11 @@ public class ProductDto {
 
     private Timestamp expiredDate;
 
-    private ProductCategoryDto productCategoryDto;
+//    @NotNull(message="Category cannot be null")
+//    @Valid
+    private ProductCategoryDto productCategory;
 
     private CompanyDto companyDto;
-
-    private String pictureName;
 
     @DecimalMin(value = "0.00", message = "Discount must be greater than or equal to 0.00")
     private BigDecimal discount;

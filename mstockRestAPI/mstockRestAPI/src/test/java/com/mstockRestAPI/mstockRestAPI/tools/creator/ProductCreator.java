@@ -1,5 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
+import com.mstockRestAPI.mstockRestAPI.dto.*;
 import com.mstockRestAPI.mstockRestAPI.entity.*;
 import com.mstockRestAPI.mstockRestAPI.enums.Unit;
 import com.mstockRestAPI.mstockRestAPI.tools.utils.Util;
@@ -53,10 +54,49 @@ public class ProductCreator {
                 .build();
     }
 
+    public static ProductDto dto(){
+        BigDecimal wholesale = BigDecimal.valueOf(Util.generateRandomPrice(1.00, 1000.00));
+        BigDecimal quantity = BigDecimal.valueOf(Util.generateRandomPrice(1.00, 1000.00));
+        BigDecimal discount = BigDecimal.valueOf(Util.generateRandomPrice(1.00, 100.00));
+        byte isActive = (byte) (Math.random() * 2);
+
+        ProductCategoryDto productCategory = ProductCategoryCreator.createProductCategoryDto();
+        CompanyDto productCompany = CompanyCreator.createCompanyDto();
+        List<ProductSalePriceDto> productSalePrice = ProductSalePricesCreator.dtoList();
+        List<ProductBarcodeDto> productBarcodeList = ProductBarcodeCreator.dtoList();
+        List<ProductPictureDto> productPictureList = ProductPictureCreator.dtoList();
+
+        productCategory.setId(1L);
+        return ProductDto.builder()
+                .productName(RandomString.make(CATEGORY_PRODUCT_NAME_LENGTH))
+                .description(RandomString.make(PRODUCT_RANDOM_DESCRIPTION_LENGTH))
+                .wholesale(wholesale)
+                .unit(chooseRandomUnit())
+                .companyDto(CompanyCreator.createCompanyDto())
+                .quantity(quantity)
+                .currentQuantity(quantity)
+                .productSalePrices(productSalePrice)
+                .productPictureList(productPictureList)
+                .productBarcodeList(productBarcodeList)
+                .expiredDate(Timestamp.valueOf(createdDate.toLocalDateTime().plusDays(20)))
+                .productCategory(productCategory)
+                .companyDto(productCompany)
+                .discount(discount)
+                .discountLastDate(null)
+                .isActive(isActive)
+                .build();
+    }
+
     public static List<Product> entityList(){
         return Stream.generate(ProductCreator:: entity)
                 .limit(NUMBER_OF_PRODUCTS)
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    public static List<ProductDto> dtoList(){
+        return Stream.generate(ProductCreator:: dto)
+                .limit(NUMBER_OF_PRODUCTS)
+                .toList();
     }
 
 

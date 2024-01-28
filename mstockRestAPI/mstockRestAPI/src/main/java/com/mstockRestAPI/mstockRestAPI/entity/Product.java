@@ -31,19 +31,24 @@ public class Product {
 
     @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER,
+            orphanRemoval = true)
     @Column(unique = true)
     private List<ProductBarcode> productBarcodeList;
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+    )
     @Column(unique = true)
     private List<ProductPicture> productPictureList;
 
     @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+    )
     private List<ProductSalePrice> productSalePrices;
 
     @Column(name = "description")

@@ -184,17 +184,17 @@ public class ProductBarcodeServiceTest {
         when(converter.mapToDto(any(), eq(ProductBarcodeDto.class)))
                 .thenAnswer(invocation -> {
                     ProductBarcode productBarcodeDtoArgument = invocation.getArgument(0);
-                    return convertCompanyEntityToDto(productBarcodeDtoArgument);
+                    return convertEntityToDto(productBarcodeDtoArgument);
                 });
 
         when(converter.mapToEntity(any(), eq(ProductBarcode.class)))
                 .thenAnswer(invocation -> {
                     ProductBarcodeDto productBarcodeDtoArgument = invocation.getArgument(0);
-                    return convertCompanyDtoToEntity(productBarcodeDtoArgument);
+                    return convertDtoToEntity(productBarcodeDtoArgument);
                 });
     }
 
-    private ProductBarcodeDto convertCompanyEntityToDto(ProductBarcode productBarcode) {
+    private ProductBarcodeDto convertEntityToDto(ProductBarcode productBarcode) {
         return  ProductBarcodeDto.builder()
                 .barcode(productBarcode.getBarcode())
                 .isActive(productBarcode.getIsActive())
@@ -202,7 +202,7 @@ public class ProductBarcodeServiceTest {
 
     }
 
-    private ProductBarcode convertCompanyDtoToEntity(ProductBarcodeDto productBarcodeDto) {
+    private ProductBarcode convertDtoToEntity(ProductBarcodeDto productBarcodeDto) {
         return ProductBarcode.builder()
                 .barcode(productBarcodeDto.getBarcode())
                 .isActive(productBarcodeDto.getIsActive())
