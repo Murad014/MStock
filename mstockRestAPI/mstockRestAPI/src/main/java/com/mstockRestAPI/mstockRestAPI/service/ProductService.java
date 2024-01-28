@@ -8,11 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ProductService {
-    ProductDto add(ProductDto productDto, List<MultipartFile> file) throws SqlProcessException;
-    ProductDto update(ProductDto productDto, MultipartFile file);
+    ProductDto add(ProductDto productDto) throws SqlProcessException;
+    ProductDto update(ProductDto productDto) throws SqlProcessException;
     List<ProductDto> getAll();
     ProductDto getById(Long id);
     ProductDto getByBarcodeAndIsActive(String barcode, byte isActive);
-    ProductDto getAllAndIsActive(byte isActive);
+    List<ProductDto> getAllAndIsActive(byte isActive);
     List<ProductDto> getListByProductNameAndIsActive(String productName, byte isActive);
 }

@@ -1,5 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
+import com.mstockRestAPI.mstockRestAPI.dto.ProductDto;
+import com.mstockRestAPI.mstockRestAPI.dto.ProductSalePriceDto;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductSalePrice;
 import com.mstockRestAPI.mstockRestAPI.tools.utils.Util;
 
@@ -21,9 +23,25 @@ public class ProductSalePricesCreator {
                 .build();
     }
 
+    public static ProductSalePriceDto dto(){
+        byte isActive = (byte) (Math.random() * 2);
+        BigDecimal sellingPrice = BigDecimal.valueOf(Util.generateRandomPrice(1, 200));
+        return ProductSalePriceDto.builder()
+                .sellingPrice(sellingPrice)
+                .isActive(isActive)
+                .build();
+    }
+
     public static List<ProductSalePrice> entityList(){
         return Stream
                 .generate(ProductSalePricesCreator::entity)
+                .limit(CREATE_SIZE)
+                .toList();
+    }
+
+    public static List<ProductSalePriceDto> dtoList(){
+        return Stream
+                .generate(ProductSalePricesCreator:: dto)
                 .limit(CREATE_SIZE)
                 .toList();
     }

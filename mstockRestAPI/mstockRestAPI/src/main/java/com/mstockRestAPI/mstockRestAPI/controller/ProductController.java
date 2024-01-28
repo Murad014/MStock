@@ -25,28 +25,29 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ProductController(ProductService productService,
-                             ObjectMapper objectMapper){
-        this.objectMapper = objectMapper;
+    public ProductController(ProductService productService){
         this.productService = productService;
     }
 
-    @PostMapping(/*consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}*/)
-    public ResponseEntity<ProductDto> add(@Valid @ModelAttribute("productDto") ProductDto productDto,
-                                          @Valid @RequestParam("productPicture") List<MultipartFile> productPictures
-    ) throws JsonProcessingException, SqlProcessException {
-
-        // ProductDto productDto = objectMapper.readValue(productDtoString, ProductDto.class);
-        ProductDto saveProduct = productService.add(productDto, productPictures);
-
+    @PostMapping
+    public ResponseEntity<ProductDto> add(@Valid @RequestBody ProductDto productDto) throws SqlProcessException {
+        ProductDto saveProduct = productService.add(productDto);
         return new ResponseEntity<>(
                 saveProduct,
                 HttpStatus.CREATED);
     }
+
+    @PutMapping
+    public ResponseEntity<ProductDto> update(@Valid @RequestBody ProductDto productDto) throws SqlProcessException {
+        ProductDto saveProduct = productService.update(productDto);
+        return new ResponseEntity<>(
+                saveProduct,
+                HttpStatus.CREATED);
+    }
+
+
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAll(){

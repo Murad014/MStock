@@ -104,6 +104,8 @@ public class ProductRepositoryTest {
                 )
                 .build()
         );
+        save.getProductBarcodeList().get(0).setBarcode("0001234124");
+
 
         // When Find
         Product update = productRepository.save(productEntity);
@@ -113,6 +115,8 @@ public class ProductRepositoryTest {
         assertThat(update)
                 .usingRecursiveComparison()
                 .isEqualTo(productEntity);
+
+
     }
 
     @Test

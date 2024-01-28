@@ -47,7 +47,4 @@ public class ProductBarcode {
     private Byte isActive = 1;
 
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_id")
-//    private Product product;
 }

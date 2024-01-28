@@ -122,6 +122,7 @@ public class ProductCategoryServiceTest {
 
 
         // Assert
+        assertNotNull(productCategoryDtoFromDb);
         singleDtoAssertions(productCategoryDto, productCategoryDtoFromDb);
         assertThrows(ResourceNotFoundException.class, () -> {  productCategoriesService.getById(doesNotExists);}
                 , "If there is not product category in DB then should be throw exception.");
