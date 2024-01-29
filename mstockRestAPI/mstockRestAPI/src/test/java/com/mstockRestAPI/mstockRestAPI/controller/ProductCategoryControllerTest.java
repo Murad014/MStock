@@ -62,7 +62,8 @@ public class ProductCategoryControllerTest {
     @DisplayName("Add")
     @Order(1)
     public void saveProductCategory_whenAdd_thenReturnDto() throws Exception {
-        when(productCategoriesService.add(any(ProductCategoryDto.class))).thenReturn(productCategoryDto);
+        when(productCategoriesService.add(any(ProductCategoryDto.class)))
+                .thenReturn(productCategoryDto);
 
         ResultActions result = mockMvc.perform(post(endPoint)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,10 +123,7 @@ public class ProductCategoryControllerTest {
                 .thenReturn(productCategoryDtoList);
 
         // Act
-        ResultActions result = mockMvc.perform(get(endPoint)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(productCategoryDto))
-        );
+        ResultActions result = mockMvc.perform(get(endPoint));
 
 
         //Convert

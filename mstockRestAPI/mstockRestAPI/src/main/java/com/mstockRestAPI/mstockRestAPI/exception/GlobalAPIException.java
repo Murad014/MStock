@@ -32,6 +32,21 @@ public class GlobalAPIException {
         );
     }
 
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(FileUploadException exception,
+                                                                        WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                exception.getMessage(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<ErrorDetails>(
+                errorDetails,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                         WebRequest webRequest){

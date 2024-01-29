@@ -30,8 +30,8 @@ public class ProductDto {
     @Size(max = 100, message = "Product name must be less than or equal to 100 characters")
     private String productName;
 
-//    @NotEmpty(message="Product barcode list cannot be empty")
-//    @Valid
+    @NotEmpty(message="Product barcode list cannot be empty")
+    @Valid
     private List<ProductBarcodeDto> productBarcodeList;
 
     @NotEmpty(message="Product salePrices list cannot be empty")
