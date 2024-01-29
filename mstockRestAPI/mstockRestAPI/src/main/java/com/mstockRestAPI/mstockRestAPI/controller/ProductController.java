@@ -53,15 +53,41 @@ public class ProductController {
         ProductDto saveProduct = productService.update(productDto);
         return new ResponseEntity<>(
                 saveProduct,
-                HttpStatus.CREATED);
+                HttpStatus.OK);
     }
 
-
-
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAll(){
+    public ResponseEntity<List<ProductDto>> getAll(){ // Temporarily was not written pagination and sort
         return new ResponseEntity<>(
                 productService.getAll(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/active/{isActive}")
+    public ResponseEntity<List<ProductDto>> getByIActive(@PathVariable("isActive") byte isActive){
+        return new ResponseEntity<>(
+                productService.getAllAndIsActive(isActive),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("name/{productName}")
+    public ResponseEntity<List<ProductDto>> getByProductNameAndIsActive(
+            @PathVariable("productName") String productName,
+            @RequestParam("isActive") Byte isActive
+    ){
+        return new ResponseEntity<>(
+                productService.getListByProductNameAndIsActive(productName, isActive),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("{productBarcode}")
+    public ResponseEntity<ProductDto> getByBarcode(@PathVariable("productBarcode") String productBarcode,
+                                                   @RequestParam(defaultValue = "1") byte isActive){
+        return new ResponseEntity<>(
+                productService.getByBarcodeAndIsActive(productBarcode, isActive),
                 HttpStatus.OK
         );
     }

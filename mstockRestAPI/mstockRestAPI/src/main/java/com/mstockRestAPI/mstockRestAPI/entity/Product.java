@@ -39,8 +39,8 @@ public class Product {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            orphanRemoval = true
+            fetch = FetchType.EAGER
+//            orphanRemoval = true
     )
     @Column(unique = true)
     private List<ProductPicture> productPictureList;

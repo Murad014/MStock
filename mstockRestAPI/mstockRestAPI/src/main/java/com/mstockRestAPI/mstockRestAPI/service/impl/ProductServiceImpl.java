@@ -28,20 +28,16 @@ public class ProductServiceImpl implements ProductService {
     private String uploadDirectory;
     private final ProductRepository productRepository;
 
-    private final ProductBarcodeRepository productBarcodeRepository;
-
     private final Converter converter;
     private final Util util;
 
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
-            ProductBarcodeRepository productBarcodeRepository,
             Util util,
             Converter converter
     ){
         this.productRepository = productRepository;
-        this.productBarcodeRepository = productBarcodeRepository;
         this.util = util;
         this.converter = converter;
 
@@ -99,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
             throw new SomethingWentWrongException("One barcode cannot be has more than one products");
 
         else if(getProduct.isEmpty())
-            throw new ResourceNotFoundException("Product", "barcode", barcode);
+            throw new ResourceNotFoundException("Product", "barcode", barcode + " and isActive=" + isActive);
 
         return converter.mapToDto(getProduct.get(0), ProductDto.class);
     }
@@ -125,11 +121,9 @@ public class ProductServiceImpl implements ProductService {
         Product productFromDB = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
 
-        for(MultipartFile file: pictures){
-            boolean isImage = util.isImageFile(file);
-            if(!isImage)
-                throw new FileUploadException(file.getOriginalFilename(), "only image files");
+        checkImageFiles(pictures);
 
+        for(MultipartFile file: pictures){
             String pictureName = util.handleFileUpload(file,
                     uploadDirectory,
                     productId.toString());
@@ -147,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    // Not Override Methods
+    // ----------------------------------- Not Override Methods --------------------------------------------
     private boolean checkIdIsNull(ProductDto productDto) {
         return isProductIdNull(productDto)
                 && areBarcodeIdsNull(productDto.getProductBarcodeList())
@@ -170,7 +164,15 @@ public class ProductServiceImpl implements ProductService {
     private boolean arePictureIdsNull(List<ProductPictureDto> pictureList) {
         return pictureList == null || pictureList.stream().noneMatch(picture -> picture.getId() != null);
     }
-    // END - Not Override Methods
+
+    private void checkImageFiles(List<MultipartFile> pictures){
+        for(MultipartFile file: pictures) {
+            boolean isImage = util.isImageFile(file);
+            if (!isImage)
+                throw new FileUploadException(file.getOriginalFilename(), "only image files");
+        }
+    }
+    // ----------------------------------- END - Not Override Methods --------------------------------------------
 
 
 }
