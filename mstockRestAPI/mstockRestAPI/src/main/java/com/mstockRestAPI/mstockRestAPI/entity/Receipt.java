@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -26,12 +27,15 @@ public class Receipt {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "typePayment", nullable = false)
-    private PaymentType typePayment;
+    private PaymentType paymentType;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Column(columnDefinition = "TEXT")
+    private String comment;
 
     @Column(name = "createdDate", updatable = false)
     @CreationTimestamp
@@ -41,8 +45,10 @@ public class Receipt {
     @UpdateTimestamp
     private Timestamp updatedDate;
 
-    @Column(name="paymentType")
-    private PaymentType paymentType;
+    @OneToMany(mappedBy = "receipt",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    private List<ProductSale> productSaleList;
 
     @Column(name="currency")
     @Builder.Default

@@ -1,4 +1,5 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
+import com.mstockRestAPI.mstockRestAPI.enums.SaleStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,9 +47,12 @@ public class ProductSale {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="receipt_id")
     private Receipt receipt;
+
+    @Column(name="saleStatus")
+    private SaleStatus saleStatus;
 
     @Column(name = "createdDate", updatable = false)
     @CreationTimestamp

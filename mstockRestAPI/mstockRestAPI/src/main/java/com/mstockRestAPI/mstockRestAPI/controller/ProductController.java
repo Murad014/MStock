@@ -75,7 +75,7 @@ public class ProductController {
     @GetMapping("name/{productName}")
     public ResponseEntity<List<ProductDto>> getByProductNameAndIsActive(
             @PathVariable("productName") String productName,
-            @RequestParam("isActive") Byte isActive
+            @RequestParam(value = "isActive", defaultValue = "1") Byte isActive
     ){
         return new ResponseEntity<>(
                 productService.getListByProductNameAndIsActive(productName, isActive),
