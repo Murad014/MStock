@@ -38,7 +38,7 @@ public class ProductCreator {
                 .productName(RandomString.make(CATEGORY_PRODUCT_NAME_LENGTH))
                 .description(RandomString.make(PRODUCT_RANDOM_DESCRIPTION_LENGTH))
                 .wholesale(wholesale)
-                .unit(chooseRandomUnit())
+                .unit(Util.chooseRandomEnum(Unit.class))
                 .company(CompanyCreator.createCompanyEntity())
                 .quantity(quantity)
                 .currentQuantity(quantity)
@@ -71,7 +71,7 @@ public class ProductCreator {
                 .productName(RandomString.make(CATEGORY_PRODUCT_NAME_LENGTH))
                 .description(RandomString.make(PRODUCT_RANDOM_DESCRIPTION_LENGTH))
                 .wholesale(wholesale)
-                .unit(chooseRandomUnit())
+                .unit(Util.chooseRandomEnum(Unit.class))
                 .companyDto(CompanyCreator.createCompanyDto())
                 .quantity(quantity)
                 .currentQuantity(quantity)
@@ -100,13 +100,7 @@ public class ProductCreator {
     }
 
 
-    private static Unit chooseRandomUnit(){
-        Unit[] values = Unit.values();
-        Random random = new Random();
-        int index = random.nextInt(values.length);
 
-        return values[index];
-    }
 
 
 

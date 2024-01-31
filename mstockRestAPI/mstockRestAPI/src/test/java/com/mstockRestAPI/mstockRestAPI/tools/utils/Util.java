@@ -43,4 +43,17 @@ public class Util {
                 .collect(Collectors.joining());
     }
 
+
+    public static <T extends Enum<T>> T chooseRandomEnum(Class<T> enumType) {
+        T[] values = enumType.getEnumConstants();
+        if (values == null || values.length == 0) {
+            throw new IllegalArgumentException("Enum class must have constants");
+        }
+
+        Random random = new Random();
+        int index = random.nextInt(values.length);
+
+        return values[index];
+    }
+
 }
