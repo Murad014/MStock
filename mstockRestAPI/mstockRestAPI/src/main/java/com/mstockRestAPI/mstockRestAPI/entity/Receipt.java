@@ -29,7 +29,6 @@ public class Receipt {
     private PaymentType typePayment;
 
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -48,7 +47,6 @@ public class Receipt {
     @Column(name="currency")
     @Builder.Default
     private Currency currency = Currency.AZN;
-
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default

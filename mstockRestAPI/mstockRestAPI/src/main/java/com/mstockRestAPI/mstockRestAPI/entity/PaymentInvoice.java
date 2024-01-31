@@ -34,6 +34,12 @@ public class PaymentInvoice {
     @Column(name = "minusPay", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal minusPay;
 
+    @Column(name = "cashPay", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
+    private BigDecimal cashPay;
+
+    @Column(name = "cardPay", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
+    private BigDecimal cardPay;
+
     @Column(name = "createdDate", updatable = false)
     @CreationTimestamp
     private Timestamp createdDate;
@@ -61,6 +67,12 @@ public class PaymentInvoice {
                 && minusPay.compareTo(BigDecimal.ZERO) == 0) {
             throw new IllegalStateException("Plus pay and minus pay cannot both be 0.");
         }
+        if(paymentType == PaymentType.CARD && cardPay.compareTo(BigDecimal.ZERO) == 0)
+            throw new IllegalStateException("If payment type equals Card then card payment cannot be 0.");
+
+        if(paymentType == PaymentType.CASH_AND_CARD &&
+                (cardPay.compareTo(BigDecimal.ZERO) == 0 || cashPay.compareTo(BigDecimal.ZERO) == 0))
+            throw new IllegalStateException("If payment type cash and card then these fields cannot be 0.");
     }
 
     public PaymentType paymentType;

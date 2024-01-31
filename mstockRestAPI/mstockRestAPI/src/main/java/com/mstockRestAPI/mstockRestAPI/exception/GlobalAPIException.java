@@ -26,7 +26,22 @@ public class GlobalAPIException {
                 webRequest.getDescription(false)
         );
 
-        return new ResponseEntity<ErrorDetails>(
+        return new ResponseEntity<>(
+                errorDetails,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorDetails> handleIllegalStateException(IllegalStateException exception,
+                                                                        WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(),
+                exception.getMessage(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(
                 errorDetails,
                 HttpStatus.BAD_REQUEST
         );
