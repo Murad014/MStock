@@ -1,0 +1,259 @@
+// Designed by Murad
+// GitHub: https://github.com/Murad014 
+
+Table products{
+  id LONG [PK]
+  productName VARCHAR(100)
+  description text
+  wholesale DECIMAL(10, 2) [not null, default: 0.00]
+  unit  unitEnum [not null]
+  quantity DECIMAL(10, 2) [not null, default: 0.00]
+  currentQuantity DECIMAL(10, 2) [not null, default: 0.00]
+  expiredDate TIMESTAMP [default: null]
+  bonus DECIMAL(10, 2) [default: 0.00]
+  categoryId long [not null]
+  companyId long
+  discount DECIMAL(10, 2) [not null, default: 0.00]
+  discountLastDate TIMESTAMP
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+Table productPictures{
+  id LONG [PK]
+  pictureName VARCHAR(300) [not null]
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+
+Table productBarcodes{
+  id LONG [PK]
+  barcode TEXT UNIQUE
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+  // UNIQUE(id, productId)
+}
+
+Table productSalePrices{
+  id LONG [PK]
+  sellingPrice DECIMAL(10, 2) [not null, default: 0.00]
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+
+Table productCategories{
+  id LONG [PK]
+  categoryName VARCHAR(100) unique [not null]
+  description TEXT 
+  createDate TIMESTAMP
+  udatedDate TIMESTAMP
+  isActive TINYINT [not null, default: 1]
+}
+
+
+Table supplieriesOfProdcuts{
+  id LONG [PK]
+  name VARCHAR(100) [not null]
+  surname VARCHAR(100)
+  email VARCHAR(100) UNIQUE
+  phone VARCHAR(100) UNIQUE
+  description TEXT
+  address TEXT UNIQUE [default: null]
+  companyId LONG [NOT NULL]
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP
+  isActive TINYINT [not null, default: 1]
+}
+
+Table companies{
+  id LONG [PK]
+  companyName VARHCAR(100) UNIQUE [not null]
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [default: 1]
+}
+
+
+Table invoices{
+  id LONG [PK]
+  invoiceCode VARCHAR(100) UNIQUE [not null]
+  supplierId LONG [not null]
+  invoiceDate TIMESTAMP
+  initialTotalAmount DECIMAL(10, 2) [default: 0.00]
+  currency  currencyEnum [not null]
+  createdDate TIMESTAMP
+  updatedDate TIMESTAMP
+  isActive TINYINT [default: 1]
+}
+
+Table invoiceItems{ 
+  id LONG [PK]
+  invoiceId LONG
+  productId LONG
+  quantity DECIMAL(10, 2)
+  totalPrice DECIMAL(10, 2)
+  createdDate TIMESTAMP
+  updatedDate TIMESTAMP
+  isActive TINYINT [default: 1]
+}
+
+Table paymentInvoices{
+  id LONG [PK]
+  invoiceId LONG [not null]
+  plusPay DECIMAL(10, 2) [default: 0.00] // Debt pay
+  minusPay DECIMAL(10, 2) [default: 0.00] // Debt plus
+  cash DECIMAL(10, 2) [default: 0.00]
+  card DECIMAL(10, 2) [default: 0.00]
+
+  createdDate TIMESTAMP [not null]
+  updatedDate TIMESTAMP [not null]
+  typePayment paymentType [not null]
+  currency  currencyEnum [not null]
+  bankCardAccount VARCHAR(16) [default: null]
+  isActive TINYINT [default: 1]
+  // Can not be plus pay and minus pay 0.
+}
+
+Table customers{
+  id LONG [PK]
+  name VARCHAR(100)
+  surname VARHCAR(100)
+  email VARCHAR(100)
+  phone VARCHAR(100)
+  comment TEXT
+  createdDate TIMESTAMP [not null]
+  bonusRate DECIMAL(10, 2) [default: 0.00]
+  updatedDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+
+Table productSales{
+  id LONG [PK]
+  productId LONG [NOT NULL]
+  quantity DECIMAL(10, 2)
+  salePrice DECIMAL(10, 2)
+  discountPercent DECIMAL(10,2 )
+  discountDecimal DECIMAL(10, 2)
+  bonus DECIMAL(10, 2) [default: 0.00]
+  comment TEXT
+  receiptNumber LONG [not null]
+  saleStatus saleStatusEnum [not null]
+  createdDate TIMESTAMP [not null]
+  updatedDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+Table paymentCustomer{
+  id LONG [PK]
+  customerId LONG [not null]
+  plusPay DECIMAL(10, 2) [default: 0.00] // Debt pay
+  minusPay DECIMAL(10, 2) [default: 0.00] // Debt plus
+  createdDate TIMESTAMP [not null]
+  updatedDate TIMESTAMP [not null]
+  cash DECIMAL(10, 2) [default: 0.00]
+  card DECIMAL(10, 2) [default: 0.00]
+  typePayment paymentType [not null]
+  currency  currencyEnum [not null]
+  bankCardAccount VARCHAR(16) [default: null]
+  isActive TINYINT [default: 1]
+  // Can not be plus pay and minus pay 0.
+}
+
+
+Table receipts{
+  id LONG [PK]
+  receiptNumber VARCHAR(100) UNIQUE
+  typePayment paymentType [not null]
+  currency  currencyEnum [not null]
+  updatedDate TIMESTAMP [not null]
+  comment TEXT
+  customerId LONG [default: null]
+  createdDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+Table BankCardAccount {
+  accountNumber VARCHAR(16) [PK]
+  cardHolderName VARCHAR(255) [not null]
+  cardType VARCHAR(20) [not null]
+  balance DECIMAL(15, 2) [default: 0.00]
+  currency VARCHAR(5) [default: "AZN"]
+  isActive BOOLEAN [default: false]
+}
+
+/* ENUMS */
+enum paymentType {
+  CASH
+  CARD
+  CREDIT
+  CASH_AND_CARD
+  CREDIT_AND_CASH
+  CREDIT_AND_CARD
+}
+
+enum unitEnum{
+  KG
+  LITERS
+  PIECE
+  PACKS
+  GRAMS
+  MILLILITERS
+}
+
+enum currencyEnum{
+  AZN
+  USD 
+  EUR 
+  GBP
+  JPY
+  AUD
+  CAD
+  CNY
+  INR
+  BRL
+  ZAR
+  CHF
+  SEK
+  NZD
+  AED
+}
+
+enum saleStatusEnum{
+  SALED
+  RETURNED
+}
+
+/* END - ENUMS */
+
+
+
+// FOREIGN KEYS
+Ref: products.categoryId > productCategories.id // ManyToOne
+Ref: products.companyId > companies.id // ManyToOne
+Ref: supplieriesOfProdcuts.companyId > companies.id // ManyToOne
+Ref: invoiceItems.invoiceId > invoices.id // ManyToOne
+Ref: invoiceItems.productId > products.id // ManyToOne
+
+Ref: paymentInvoices.invoiceId > invoices.id // ManyToOne
+Ref: invoices.supplierId > supplieriesOfProdcuts.id // ManyToOne
+
+Ref: productSales.productId > products.id
+Ref: receipts.customerId > customers.id
+Ref: productSales.receiptNumber > receipts.receiptNumber
+Ref: productBarcodes.productId > products.id // ManyToOne
+Ref: productSalePrices.productId > products.id // ManyToOne
+Ref: paymentCustomer.customerId > customers.id
+Ref: paymentInvoices.bankCardAccount > BankCardAccount.accountNumber
+Ref: paymentCustomer.bankCardAccount > BankCardAccount.accountNumber
+
+Ref: productPictures.productId > products.id // ManyToOne
+
+
+
