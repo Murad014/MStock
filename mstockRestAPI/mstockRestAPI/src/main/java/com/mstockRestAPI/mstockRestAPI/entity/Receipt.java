@@ -4,6 +4,8 @@ package com.mstockRestAPI.mstockRestAPI.entity;
 import com.mstockRestAPI.mstockRestAPI.enums.Currency;
 import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,6 +26,10 @@ public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "number", unique = true)
+    private String number;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "typePayment", nullable = false)
@@ -47,7 +53,7 @@ public class Receipt {
 
     @OneToMany(mappedBy = "receipt",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private List<ProductSale> productSaleList;
 
     @Column(name="currency")
