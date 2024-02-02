@@ -48,7 +48,7 @@ public class ProductSale {
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="receipt_id")
+    @JoinColumn(name="receipt_number")
     private Receipt receipt;
 
     @Column(name="saleStatus")
