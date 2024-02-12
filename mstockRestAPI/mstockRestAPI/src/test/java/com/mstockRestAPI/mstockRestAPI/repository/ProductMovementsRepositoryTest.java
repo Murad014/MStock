@@ -3,9 +3,8 @@ package com.mstockRestAPI.mstockRestAPI.repository;
 import com.mstockRestAPI.mstockRestAPI.entity.*;
 import com.mstockRestAPI.mstockRestAPI.enums.SaleStatus;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CustomerCreator;
-import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductSaleCreator;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductMovementCreator;
 import jakarta.transaction.Transactional;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -14,10 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.from;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(locations = "/application-test.properties",
 properties = "server.port=8081")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ProductSaleRepositoryTest {
+public class ProductMovementsRepositoryTest {
 
     @Autowired
-    private ProductSaleRepository productSaleRepository;
+    private ProductMovementsRepository productSaleRepository;
     @Autowired
-    private ReceiptRepository receiptRepository;
+    private SaleReceiptRepository saleReceiptRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -43,22 +40,26 @@ public class ProductSaleRepositoryTest {
     private ProductSalePricesRepository productSalePricesRepository;
 
     @Autowired
+    private PaymentExtraInfoRepository paymentExtraInfoRepository;
+
+    @Autowired
     private CustomerRepository customerRepository;
 
     private static final String staticReceiptNumber = "14123123";
 
-    private ProductSale productSaleEntity;
-    private List<ProductSale> productSaleEntityList;
+    private ProductMovements productMovementEntity;
+    private List<ProductMovements> productMovementEntityList;
 
     @BeforeEach
     public void beforeEach(){
-        productSaleEntity = ProductSaleCreator.entity();
-        productSaleEntityList = ProductSaleCreator.entityList();
+        productMovementEntity = ProductMovementCreator.entity();
+        productMovementEntityList = ProductMovementCreator.entityList();
 
         productSaleRepository.deleteAll();
         productRepository.deleteAll();
         productBarcodeRepository.deleteAll();
-        receiptRepository.deleteAll();
+        saleReceiptRepository.deleteAll();
+        paymentExtraInfoRepository.deleteAll();
     }
 
     @Test
@@ -67,15 +68,15 @@ public class ProductSaleRepositoryTest {
     @Transactional
     public void givenEntity_thenSave_thenReturnEntity(){
         // Arrange
-        saveReferencesAndSet(productSaleEntity);
+        saveReferencesAndSet(productMovementEntity);
 
         // Act
-        ProductSale productSale = productSaleRepository.save(productSaleEntity);
+        ProductMovements productSale = productSaleRepository.save(productMovementEntity);
 
         // Assert
         assertThat(productSale)
                 .usingRecursiveComparison()
-                .isEqualTo(productSaleEntity);
+                .isEqualTo(productMovementEntity);
     }
 
     @Test
@@ -84,15 +85,16 @@ public class ProductSaleRepositoryTest {
     @Transactional
     public void givenEntity_whenUpdate_thenReturnEntity(){
         // Arrange
-        saveReferencesAndSet(productSaleEntity);
-        ProductSale productSale = productSaleRepository.save(productSaleEntity);
+        saveReferencesAndSet(productMovementEntity);
+
+        ProductMovements productSale = productSaleRepository.save(productMovementEntity);
         productSale.getProduct().setProductName("Update test ProductName");
         productSale.setComment("Comment Update Test");
 
 
-        ProductSale productSaleFromDB = productSaleRepository.findById(productSale.getId()).orElse(null);
+        ProductMovements productSaleFromDB = productSaleRepository.findById(productSale.getId()).orElse(null);
         assertNotNull(productSaleFromDB);
-        ProductSale productSaleUpdate = productSaleRepository.save(productSaleFromDB);
+        ProductMovements productSaleUpdate = productSaleRepository.save(productSaleFromDB);
 
         assertNotNull(productSaleUpdate);
         assertThat(productSaleUpdate)
@@ -106,18 +108,18 @@ public class ProductSaleRepositoryTest {
     @Transactional
     public void fetchAllProductSales(){
         // Arrange
-        for(ProductSale productSale: productSaleEntityList)
+        for(ProductMovements productSale: productMovementEntityList)
             saveReferencesAndSet(productSale);
 
-        productSaleRepository.saveAll(productSaleEntityList);
+        productSaleRepository.saveAll(productMovementEntityList);
 
         // Fetch All
-        List<ProductSale> list = productSaleRepository.findAll();
+        List<ProductMovements> list = productSaleRepository.findAll();
 
         // Assert
         assertNotNull(list);
         assertFalse(list.isEmpty());
-        assertEquals(productSaleEntityList.size(), list.size());
+        assertEquals(productMovementEntityList.size(), list.size());
     }
 
     @ParameterizedTest
@@ -127,20 +129,20 @@ public class ProductSaleRepositoryTest {
     @Transactional
     public void getAllBySaleStatusWithValidStatus(String status){
         // Filter
-        List<ProductSale> salesFilter = productSaleEntityList
+        List<ProductMovements> salesFilter = productMovementEntityList
                 .stream()
                 .filter(sale -> sale.getSaleStatus() == SaleStatus.valueOf(status))
                 .toList();
 
         // Arrange
-        for(ProductSale productSale: productSaleEntityList)
-            saveReferencesAndSet(productSale);
+        for(ProductMovements productMovements: productMovementEntityList)
+            saveReferencesAndSet(productMovements);
 
         // Save All
-        productSaleRepository.saveAll(productSaleEntityList);
+        productSaleRepository.saveAll(productMovementEntityList);
 
         // Find All
-        List<ProductSale> productSalesFromDB =
+        List<ProductMovements> productSalesFromDB =
                 productSaleRepository.findBySaleStatus(SaleStatus.valueOf(status));
 
         // Assert
@@ -159,29 +161,31 @@ public class ProductSaleRepositoryTest {
 
 
     /* --------------------------------- PRIVATE METHODS --------------------------------- */
-    private void saveReferencesAndSet(ProductSale productSaleEntity) {
-        arrangeProduct(productSaleEntity);
+    private void saveReferencesAndSet(ProductMovements productMovementEntity) {
+        arrangeProduct(productMovementEntity);
         Customer customer = customerRepository.save(CustomerCreator.entity());
-        productSaleEntity.getReceipt().setCustomer(customer);
-        Receipt findReceipt = receiptRepository.findByNumber(staticReceiptNumber);
+        productMovementEntity.getReceipt().setCustomer(customer);
+        SaleReceipt findReceipt = saleReceiptRepository.findByNumber(staticReceiptNumber);
+
         if(findReceipt == null) {
-            if(productSaleEntity.getReceipt().getProductSaleList() == null)
-                productSaleEntity.getReceipt().setProductSaleList(
-                        new ArrayList<>(List.of(productSaleEntity))
+            if(productMovementEntity.getReceipt().getProductSaleList() == null)
+                productMovementEntity.getReceipt().setProductSaleList(
+                        new ArrayList<>(List.of(productMovementEntity))
                 );
             else
-                productSaleEntity.getReceipt().getProductSaleList().add(productSaleEntity);
+                productMovementEntity.getReceipt().getProductSaleList().add(productMovementEntity);
 
-            Receipt receiptSaved = receiptRepository.save(productSaleEntity.getReceipt());
-            productSaleEntity.setReceipt(receiptSaved);
+            paymentExtraInfoRepository.save(productMovementEntity.getReceipt().getPaymentExtraInfo());
+            SaleReceipt receiptSaved = saleReceiptRepository.save(productMovementEntity.getReceipt());
+            productMovementEntity.setReceipt(receiptSaved);
         }else{
-            productSaleEntity.setReceipt(findReceipt);
+            productMovementEntity.setReceipt(findReceipt);
         }
 
     }
 
-    private void arrangeProduct(ProductSale productSaleEntity){
-        var productEntity = productSaleEntity.getProduct();
+    private void arrangeProduct(ProductMovements productMovementEntity){
+        var productEntity = productMovementEntity.getProduct();
 
         ProductCategory productCategory = productCategoryRepository.save(productEntity.getCategory());
         Company productCompany = companyRepository.save(productEntity.getCompany());
@@ -196,7 +200,7 @@ public class ProductSaleRepositoryTest {
         productEntity.setCategory(productCategory);
         productEntity.setCompany(productCompany);
 
-        productSaleEntity.setProduct(productSaved);
+        productMovementEntity.setProduct(productSaved);
 
     }
 

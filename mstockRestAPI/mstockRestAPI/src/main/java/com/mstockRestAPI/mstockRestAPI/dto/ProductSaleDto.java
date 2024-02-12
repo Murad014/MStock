@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -28,7 +27,7 @@ public class ProductSaleDto {
 
     @Valid
     @NotNull(message = "Every sale must generate receipt.")
-    private ReceiptDto receipt;
+    private SaleReceiptDto receipt;
 
     private BigDecimal salePrice;
 

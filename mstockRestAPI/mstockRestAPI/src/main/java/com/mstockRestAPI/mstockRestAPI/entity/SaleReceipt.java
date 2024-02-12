@@ -10,18 +10,18 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Entity
-@Table(name = "receipts")
+@Table(name = "SaleReceipts")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Receipt {
+public class SaleReceipt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,13 @@ public class Receipt {
     @Column(name = "number", unique = true)
     private String number;
 
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "typePayment", nullable = false)
-    private PaymentType paymentType;
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "paymentExtraInfo_id", referencedColumnName = "id", nullable = false)
+    private PaymentExtraInfo paymentExtraInfo;
 
     @Column(columnDefinition = "TEXT")
     private String comment;
@@ -52,9 +50,8 @@ public class Receipt {
     private Timestamp updatedDate;
 
     @OneToMany(mappedBy = "receipt",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private List<ProductSale> productSaleList;
+            fetch = FetchType.EAGER)
+    private List<ProductMovements> productSaleList;
 
     @Column(name="currency")
     @Builder.Default
