@@ -1,4 +1,8 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
+import com.mstockRestAPI.mstockRestAPI.enums.CardType;
+import com.mstockRestAPI.mstockRestAPI.enums.Currency;
+import com.mstockRestAPI.mstockRestAPI.exception.SomethingWentWrongException;
+import com.mstockRestAPI.mstockRestAPI.utils.Util;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timespan;
@@ -19,17 +23,20 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankCardAccount {
 
     @Id
-    @Column(name = "accountNumber", length = 16, nullable = false)
+    @Column(name = "accountNumber", nullable = false)
     private String accountNumber;
 
     @Column(name = "cardHolderName", nullable = false)
     private String cardHolderName;
 
-    @Column(name = "cardType", nullable = false, length = 20)
-    private String cardType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cardType", nullable = false)
+    private CardType cardType;
 
     @Column(name = "balance", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     @Builder.Default
@@ -49,6 +56,19 @@ public class BankCardAccount {
 
     @Column(name="currency")
     @Builder.Default
-    private String currency = "AZN";
+    private Currency currency = Currency.AZN;
+
+    @PrePersist
+    @PreUpdate
+    private void preSave(){
+        if(!Util.isValidBankAccountNumber(accountNumber)) {
+            throw new SomethingWentWrongException(
+                    "Wrong Format of Bank Account Number." +
+                            "Bank Card Number just must contain numbers and length must be 16");
+        }
+
+        if(accountNumber != null)
+            this.accountNumber = Util.makeBankCardNumberBeautiful(accountNumber);
+    }
 
 }

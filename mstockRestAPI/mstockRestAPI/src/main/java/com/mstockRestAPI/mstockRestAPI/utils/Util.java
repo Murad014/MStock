@@ -40,4 +40,24 @@ public class Util {
 
         }
     }
+
+    public static boolean isValidBankAccountNumber(String bankAccountNumber){
+        String regex = "[0-9]+";
+
+        return ((bankAccountNumber == null || bankAccountNumber.isEmpty()) ||
+                (bankAccountNumber.matches(regex) && bankAccountNumber.length() == 16));
+
+    }
+
+    public static String makeBankCardNumberBeautiful(String bankAccountNumber){
+        StringBuilder beautifulBankAccountNumber = new StringBuilder();
+
+        for(int i = 0; i < bankAccountNumber.length(); i++){
+            beautifulBankAccountNumber.append(bankAccountNumber.charAt(i));
+            if( i+1 != 16 && (i+1) % 4 == 0 )
+                beautifulBankAccountNumber.append("-");
+        }
+
+        return beautifulBankAccountNumber.toString();
+    }
 }

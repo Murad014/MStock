@@ -1,4 +1,5 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
+import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import com.mstockRestAPI.mstockRestAPI.enums.SaleStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,14 +13,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "productSales")
+@Table(name = "productMovements")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductSale {
+public class ProductMovements {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,9 @@ public class ProductSale {
     @Column(precision = 10, scale = 2)
     private BigDecimal salePrice;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal sumPrice; // is quantity * salePrice
+
     @Column(name = "discountPercent", precision = 10, scale = 2)
     private BigDecimal discountPercent;
 
@@ -47,9 +51,9 @@ public class ProductSale {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="receipt_number")
-    private Receipt receipt;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name="saleReceipt_number")
+    private SaleReceipt receipt;
 
     @Column(name="saleStatus")
     private SaleStatus saleStatus;
@@ -66,6 +70,11 @@ public class ProductSale {
     @Builder.Default
     private Byte isActive = 1;
 
+    @PrePersist
+    @PreUpdate
+    private void calcSumPrice() {
+        sumPrice = salePrice.multiply(quantity);
+    }
 
 
 }

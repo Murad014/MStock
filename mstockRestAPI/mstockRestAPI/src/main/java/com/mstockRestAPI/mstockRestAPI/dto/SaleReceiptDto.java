@@ -4,7 +4,7 @@ import com.mstockRestAPI.mstockRestAPI.enums.Currency;
 import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,13 +12,19 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReceiptDto {
+public class SaleReceiptDto {
 
     private Long id;
-    private PaymentType typePayment;
-    private Timestamp createdDate;
-    private Timestamp updatedDate;
+
     private PaymentType paymentType;
-    private Currency currency;
-    private Byte isActive;
+
+    @Builder.Default
+    private Currency currency = Currency.AZN;
+
+    private String comment;
+
+    private List<ProductSaleDto> productSaleList;
+
+    @Builder.Default
+    private Byte isActive = 1;
 }

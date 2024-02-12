@@ -38,7 +38,7 @@ public class Company {
     @UpdateTimestamp
     private Timestamp updatedDate;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "company")
     private List<Product> products;
 
     @Column(name="isActive")
