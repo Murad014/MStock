@@ -27,7 +27,7 @@ public class ProductMovements {
     private Long id;
 
     @JoinColumn(nullable = false, name="product_id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private Product product;
 
     @Column(precision = 10, scale = 2)

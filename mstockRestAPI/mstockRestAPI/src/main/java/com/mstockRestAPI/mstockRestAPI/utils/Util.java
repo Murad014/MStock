@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.UUID;
 @Component
 public class Util {
@@ -59,5 +60,22 @@ public class Util {
         }
 
         return beautifulBankAccountNumber.toString();
+    }
+
+
+
+    public static long generateReceiptNumber() {
+        LocalDateTime now = LocalDateTime.now();
+
+        int year = now.getYear() % 100; // Last two digits of the year
+        int month = now.getMonthValue(); // Month
+        int day = now.getDayOfMonth(); // Day
+        int hour = now.getHour(); // Hour
+        int minute = now.getMinute(); // Minute
+        int second = now.getSecond(); // Second
+        int millisecond = now.getNano() / 1000000; // Millisecond
+
+        return (year * 1000000000000L) + (month * 10000000000L) + (day * 100000000L) +
+                (hour * 1000000) + (minute * 10000) + (second * 100) + millisecond;
     }
 }

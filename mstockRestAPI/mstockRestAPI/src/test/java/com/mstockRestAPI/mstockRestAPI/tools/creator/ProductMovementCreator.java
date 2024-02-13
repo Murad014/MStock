@@ -1,6 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
-import com.mstockRestAPI.mstockRestAPI.dto.ProductSaleDto;
+import com.mstockRestAPI.mstockRestAPI.dto.ProductMovementDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Product;
 
 import com.mstockRestAPI.mstockRestAPI.entity.ProductMovements;
@@ -40,7 +40,7 @@ public class ProductMovementCreator {
                 .toList();
     }
 
-    public static ProductSaleDto dto(){
+    public static ProductMovementDto dto(){
         return null;
     }
 
