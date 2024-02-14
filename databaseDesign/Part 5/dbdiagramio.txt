@@ -1,0 +1,300 @@
+// Designed by Murad
+// GitHub: https://github.com/Murad014 
+
+Table products{
+  id LONG [PK]
+  productName VARCHAR(100)
+  description text
+  wholesale DECIMAL(10, 2) [not null, default: 0.00]
+  unit  unitEnum [not null]
+  quantity DECIMAL(10, 2) [not null, default: 0.00]
+  currentQuantity DECIMAL(10, 2) [not null, default: 0.00]
+  expiredDate TIMESTAMP [default: null]
+  bonus DECIMAL(10, 2) [default: 0.00]
+  categoryId long [not null]
+  companyId long
+  discount DECIMAL(10, 2) [not null, default: 0.00]
+  discountLastDate TIMESTAMP
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+Table productPictures{
+  id LONG [PK]
+  pictureName VARCHAR(300) [not null]
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+
+Table productBarcodes{
+  id LONG [PK]
+  barcode TEXT UNIQUE
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+  // UNIQUE(id, productId)
+}
+
+Table productSalePrices{
+  id LONG [PK]
+  sellingPrice DECIMAL(10, 2) [not null, default: 0.00]
+  productId LONG
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [not null, default: 1]
+}
+
+Table productCategories{
+  id LONG [PK]
+  categoryName VARCHAR(100) unique [not null]
+  description TEXT 
+  createDate TIMESTAMP
+  udatedDate TIMESTAMP
+  isActive TINYINT [not null, default: 1]
+}
+
+
+Table supplieriesOfProdcuts{
+  id LONG [PK]
+  name VARCHAR(100) [not null]
+  surname VARCHAR(100)
+  email VARCHAR(100) UNIQUE
+  phone VARCHAR(100) UNIQUE
+  description TEXT
+  address TEXT UNIQUE [default: null]
+  companyId LONG [NOT NULL]
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP
+  isActive TINYINT [not null, default: 1]
+}
+
+Table companies{
+  id LONG [PK]
+  companyName VARHCAR(100) UNIQUE [not null]
+  createdDate TIMESTAMP
+  udatedDate TIMESTAMP 
+  isActive TINYINT [default: 1]
+}
+
+
+Table invoices{
+  id LONG [PK]
+  invoiceCode VARCHAR(100) UNIQUE [not null]
+  supplierId LONG [not null]
+  invoiceDate TIMESTAMP
+  initialTotalAmount DECIMAL(10, 2) [default: 0.00]
+  currency  currencyEnum [not null]
+  createdDate TIMESTAMP
+  updatedDate TIMESTAMP
+  isActive TINYINT [default: 1]
+}
+
+Table invoiceItems{ 
+  id LONG [PK]
+  invoiceId LONG
+  productId LONG
+  quantity DECIMAL(10, 2)
+  totalPrice DECIMAL(10, 2)
+  createdDate TIMESTAMP
+  updatedDate TIMESTAMP
+  isActive TINYINT [default: 1]
+}
+
+Table paymentInvoices{
+  id LONG [PK]
+  invoiceId LONG [not null]
+  plusPay DECIMAL(10, 2) [default: 0.00] // Debt pay
+  minusPay DECIMAL(10, 2) [default: 0.00] // Debt plus
+  createdDate TIMESTAMP [not null]
+  updatedDate TIMESTAMP [not null]
+  paymentExtraInfoId LONG [not null]
+  currency  currencyEnum [not null]
+  bankCardAccount VARCHAR(16) [default: null]
+  isActive TINYINT [default: 1]
+  // Can not be plus pay and minus pay 0.
+}
+
+Table customers{
+  id LONG [PK]
+  name VARCHAR(100)
+  surname VARHCAR(100)
+  email VARCHAR(100)
+  phone VARCHAR(100)
+  comment TEXT
+  createdDate TIMESTAMP [not null]
+  bonusRate DECIMAL(10, 2) [default: 0.00]
+  updatedDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+
+Table productMovements{
+  id LONG [PK]
+  productId LONG [NOT NULL]
+  quantity DECIMAL(10, 2)
+  salePrice DECIMAL(10, 2)
+  sumPrice DECIMAL(10, 2) // It is quantity * salePrice
+  discountPercent DECIMAL(10,2 )
+  discountDecimal DECIMAL(10, 2)
+  bonus DECIMAL(10, 2) [default: 0.00]
+  comment TEXT
+  receiptNumber LONG [not null]
+  saleStatus saleStatusEnum [not null]
+  createdDate TIMESTAMP [not null]
+  updatedDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+// Table paymentCustomer{
+//   id LONG [PK]
+//   customerId LONG [not null]
+//   plusPay DECIMAL(10, 2) [default: 0.00] // Debt pay
+//   minusPay DECIMAL(10, 2) [default: 0.00] // Debt plus
+//   createdDate TIMESTAMP [not null]
+//   updatedDate TIMESTAMP [not null]
+//   paymentExtraInfoId LONG [not null]
+//   currency  currencyEnum [not null]
+//   bankCardAccount VARCHAR(16) [default: null]
+//   isActive TINYINT [default: 1]
+//   // Can not be plus pay and minus pay 0.
+// }
+
+
+Table saleReceipts{
+  id LONG [PK]
+  receiptNumber VARCHAR(100) UNIQUE
+  typePayment paymentType [not null]
+  currency  currencyEnum [not null]
+  comment TEXT
+  customerId LONG [default: null]
+  paymentExtraInfoId LONG [not null]
+  updatedDate TIMESTAMP [not null]
+  createdDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+Table bankCardAccount {
+  accountNumber VARCHAR(16) [PK]
+  cardHolderName VARCHAR(255) [not null]
+  cardType VARCHAR(20) [not null]
+  balance DECIMAL(15, 2) [default: 0.00]
+  currency VARCHAR(5) [default: "AZN"]
+  isActive BOOLEAN [default: false]
+}
+
+Table paymentExtraInfo{
+  id LONG [PK]
+  cashpay DECIMAL(10, 2) [default: 0.00]
+  cardpay DECIMAL(10, 2) [default: 0.00]
+  creditpay DECIMAL(10, 2) [default: 0.00]
+  bankAccountNumber VARCHAR
+  paymentType paymentType [not null]
+  updatedDate TIMESTAMP [not null]
+  createdDate TIMESTAMP [not null]
+}
+
+Table credit{
+  id LONG [PK]
+  customerId LONG [not null]
+  givenAmount DECIMAL(10, 2) [default: 0.00]
+  totalAmount DECIMAL(10, 2) [default: 0.00] // After calculate
+  percentageFee DECIMAL(10, 2) [default: 0.00]
+  commissionAmount DECIMAL(10, 2) [default: 0.00]
+  monthlyInstallment  DECIMAL(10, 2) [default: 0.00]
+  creditMonths INTEGER [default: 0.00]
+  finePercentage DECIMAL(10, 2) [default: 0.00]
+  dueDate DATE
+  installmentCount INT [default: 0]
+  closed BOOLEAN [default: false]
+  updatedDate TIMESTAMP [not null]
+  createdDate TIMESTAMP [not null]
+  isActive TINYINT [default: 1]
+}
+
+Table paymentCredit{
+  id INTEGER [PK]
+  creditId LONG [not null]
+  paymentAmount DECIMAL(10, 2)
+  paymentDate TIMESTAMP
+  paymentExtraInfoId LONG
+  isActive INTEGER [default: 1]
+}
+
+
+/* ENUMS */
+enum paymentType {
+  CASH
+  CARD
+  CREDIT
+  CASH_AND_CARD
+  CREDIT_AND_CASH
+  CREDIT_AND_CARD
+}
+
+enum unitEnum{
+  KG
+  LITERS
+  PIECE
+  PACKS
+  GRAMS
+  MILLILITERS
+}
+
+enum currencyEnum{
+  AZN
+  USD 
+  EUR 
+  GBP
+  JPY
+  AUD
+  CAD
+  CNY
+  INR
+  BRL
+  ZAR
+  CHF
+  SEK
+  NZD
+  AED
+}
+
+enum saleStatusEnum{
+  SALED
+  RETURNED
+}
+/* END - ENUMS */
+
+
+
+// Relations between Tables
+Ref: products.categoryId > productCategories.id // ManyToOne
+Ref: products.companyId > companies.id // ManyToOne
+Ref: supplieriesOfProdcuts.companyId > companies.id // ManyToOne
+Ref: invoiceItems.invoiceId > invoices.id // ManyToOne
+Ref: invoiceItems.productId > products.id // ManyToOne
+
+Ref: paymentInvoices.invoiceId > invoices.id // ManyToOne
+Ref: invoices.supplierId > supplieriesOfProdcuts.id // ManyToOne
+
+Ref: productMovements.productId > products.id
+Ref: saleReceipts.customerId > customers.id
+Ref: productMovements.receiptNumber > saleReceipts.receiptNumber
+Ref: productBarcodes.productId > products.id // ManyToOne
+Ref: productSalePrices.productId > products.id // ManyToOne
+// Ref: paymentCustomer.customerId > customers.id
+Ref: paymentInvoices.bankCardAccount > bankCardAccount.accountNumber
+// Ref: paymentCustomer.bankCardAccount > bankCardAccount.accountNumber
+Ref: productPictures.productId > products.id // ManyToOne
+
+Ref: saleReceipts.paymentExtraInfoId - paymentExtraInfo.id
+// Ref: paymentCustomer.paymentExtraInfoId - paymentExtraInfo.id
+Ref: paymentInvoices.paymentExtraInfoId - paymentExtraInfo.id
+Ref: paymentExtraInfo.bankAccountNumber > bankCardAccount.accountNumber
+Ref: credit.customerId > customers.id
+Ref: paymentCredit.creditId > credit.id
+
+Ref: paymentCredit.paymentExtraInfoId - paymentExtraInfo.id
+
