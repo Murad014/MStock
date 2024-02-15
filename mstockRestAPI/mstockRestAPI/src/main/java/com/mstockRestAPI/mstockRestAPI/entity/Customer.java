@@ -1,5 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jdk.jfr.Timespan;
 import lombok.*;
@@ -18,6 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Customer {
 
