@@ -27,7 +27,8 @@ public class ProductMovementListDto {
 
     private String receiptComment;
 
-    private Currency currency;
+    @Builder.Default
+    private Currency currency = Currency.AZN;
 
     @NotNull(message = "Product list cannot be null")
     @NotEmpty(message = "Product list cannot be empty")

@@ -4,5 +4,5 @@ import com.mstockRestAPI.mstockRestAPI.entity.BankCardAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BankCardAccountRepository extends JpaRepository<BankCardAccount, String> {
-
+    boolean existsByAccountNumber(String accountNumber);
 }
