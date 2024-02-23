@@ -18,6 +18,14 @@ public class CustomerCreditsController {
         this.creditsOfCustomersService = customersService;
     }
 
+    @GetMapping("/{creditId}")
+    public ResponseEntity<CreditOfCustomersDto> fetchById(
+            @PathVariable("creditId") Long creditId
+    ){
+        CreditOfCustomersDto creditFromDB = creditsOfCustomersService.fetchById(creditId);
+        return new ResponseEntity<>(creditFromDB, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<CreditOfCustomersDto> addByIdCardNumber(
             @RequestParam("customerIdCardNumber") String customerIdCardNumber,

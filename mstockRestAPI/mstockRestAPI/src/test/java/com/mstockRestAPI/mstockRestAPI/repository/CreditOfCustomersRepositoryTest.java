@@ -7,6 +7,7 @@ import com.mstockRestAPI.mstockRestAPI.entity.Customer;
 import com.mstockRestAPI.mstockRestAPI.entity.PaymentCustomerCredit;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CreditOfCustomersCreator;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CustomerCreator;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.PaymentCustomerCreditCreator;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -95,6 +96,28 @@ public class CreditOfCustomersRepositoryTest {
 
         // Assert
         assertEquals(22, total.intValue());
+
+    }
+
+    @Test
+    @DisplayName("Fetch credit by id")
+    @Order(4)
+    public void givenCreditId_whenFindAll_thenReturnList(){
+        entity.setPayments(
+                PaymentCustomerCreditCreator.entityList()
+        );
+
+        // Save
+        CreditOfCustomers credit = creditOfCustomersRepository.save(entity);
+
+        // Find All
+        CreditOfCustomers creditFromDb = creditOfCustomersRepository.findById(credit.getId()).orElse(null);
+
+        assertNotNull(creditFromDb);
+        assertNotNull(creditFromDb.getPayments());
+        assertFalse(creditFromDb.getPayments().isEmpty());
+        assertEquals(entity.getPayments().size(), creditFromDb.getPayments().size());
+
 
     }
 
