@@ -34,6 +34,9 @@ public class Customer {
     @Column(name="surname")
     private String surname;
 
+    @Column(name="idCardNumber", unique = true, nullable = false)
+    private String idCardNumber;
+
     @Column(name="email")
     private String email;
 
@@ -54,7 +57,18 @@ public class Customer {
     @UpdateTimestamp
     private Timestamp updatedDate;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.DETACH,
+            CascadeType.MERGE
+    })
+    @JoinColumn(name = "CreditOfCustomers_id")
+    private List<CreditOfCustomers> credits;
+
     @Column(columnDefinition = "TINYINT DEFAULT 1")
     @Builder.Default
     private Byte isActive = 1;
+
+
 }

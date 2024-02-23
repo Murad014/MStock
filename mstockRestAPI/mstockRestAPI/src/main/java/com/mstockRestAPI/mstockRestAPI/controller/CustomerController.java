@@ -56,4 +56,13 @@ public class CustomerController {
     }
 
 
+    @GetMapping("/idCardNumber/{idCardNumber}")
+    public ResponseEntity<CustomerDto> getByCustomerId(@PathVariable("idCardNumber") String idCardNumber){
+        return new ResponseEntity<>(
+                customerService.getCustomerByIdCardNumber(idCardNumber),
+                HttpStatus.OK
+        );
+    }
+
+
 }

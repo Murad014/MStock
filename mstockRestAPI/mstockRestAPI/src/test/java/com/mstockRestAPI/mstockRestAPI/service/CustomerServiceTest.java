@@ -2,6 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.service;
 
 import com.mstockRestAPI.mstockRestAPI.dto.CustomerDto;
 import com.mstockRestAPI.mstockRestAPI.dto.ProductBarcodeDto;
+import com.mstockRestAPI.mstockRestAPI.entity.CreditOfCustomers;
 import com.mstockRestAPI.mstockRestAPI.entity.Customer;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductBarcode;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
@@ -15,6 +16,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,6 +121,32 @@ public class CustomerServiceTest {
         // Assert
         assertThrows(ResourceNotFoundException.class,
                 () -> customerService.update(updatedId, dto));
+    }
+
+    @Test
+    @DisplayName("Fetch Customer Credits by Customer Id")
+    @Order(4)
+    public void givenCustomerId_whenFind_thenReturnCreditsList(){
+        Long customerId = 1L;
+        entity.setCredits(List.of(
+                CreditOfCustomers.builder().givenAmount(
+                        BigDecimal.valueOf(12.12)
+                ).build(),
+                CreditOfCustomers.builder().givenAmount(
+                        BigDecimal.valueOf(23)
+                ).build()
+        ));
+
+        // When
+        singleMock(entity, dto);
+        when(customerRepository.save(entity))
+                .thenReturn(entity);
+        when(customerRepository.findById(customerId))
+                .thenThrow(ResourceNotFoundException.class);
+
+        // Assert
+        assertThrows(ResourceNotFoundException.class,
+                () -> customerService.update(customerId, dto));
     }
 
 

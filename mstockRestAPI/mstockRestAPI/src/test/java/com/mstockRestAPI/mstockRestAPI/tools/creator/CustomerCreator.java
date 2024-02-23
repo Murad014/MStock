@@ -5,6 +5,7 @@ import com.mstockRestAPI.mstockRestAPI.entity.Customer;
 import net.bytebuddy.utility.RandomString;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -23,7 +24,9 @@ public class CustomerCreator {
                         RandomString.make(6),
                         RandomString.make(4)))
                 .phone(RandomString.make(10))
+                .idCardNumber(RandomString.make(7))
                 .comment(RandomString.make(PRODUCT_RANDOM_LENGTH))
+                .credits(new ArrayList<>())
                 .bonusRate(BigDecimal.TEN)
                 .isActive(isActive)
                 .build();
@@ -38,8 +41,10 @@ public class CustomerCreator {
                 .email(String.format("%s@%s.com",
                         RandomString.make(6),
                         RandomString.make(4)))
+                .idCardNumber(RandomString.make(7))
                 .phone(RandomString.make(10))
                 .comment(RandomString.make(PRODUCT_RANDOM_LENGTH))
+                .credits(new ArrayList<>())
                 .bonusRate(BigDecimal.TEN)
                 .isActive(isActive)
                 .build();

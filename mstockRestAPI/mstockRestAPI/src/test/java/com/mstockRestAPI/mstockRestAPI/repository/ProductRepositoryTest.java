@@ -132,6 +132,7 @@ public class ProductRepositoryTest {
                 .findById(productEntity.getId()).orElse(null);
 
         // Assert
+        assertNotNull(newProduct.getCompany());
         Assertions.assertNotNull(newProduct);
         assertThat(newProduct)
                 .usingRecursiveComparison()

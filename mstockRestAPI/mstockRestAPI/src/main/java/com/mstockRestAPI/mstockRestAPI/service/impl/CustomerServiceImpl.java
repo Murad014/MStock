@@ -1,15 +1,19 @@
 package com.mstockRestAPI.mstockRestAPI.service.impl;
 
+import com.mstockRestAPI.mstockRestAPI.dto.CreditOfCustomersDto;
 import com.mstockRestAPI.mstockRestAPI.dto.CustomerDto;
+import com.mstockRestAPI.mstockRestAPI.entity.CreditOfCustomers;
 import com.mstockRestAPI.mstockRestAPI.entity.Customer;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.repository.CustomerRepository;
 import com.mstockRestAPI.mstockRestAPI.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -68,4 +72,34 @@ public class CustomerServiceImpl implements CustomerService {
 
         return converter.mapToDto(findCustomer, CustomerDto.class);
     }
+
+    @Override
+    public List<CreditOfCustomersDto> getCreditsByCustomerId(Long customerId) {
+        // Fetch
+        Customer customerFromDB = customerRepository.findById(customerId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Customer", "Id", customerId.toString()));
+
+        return customerFromDB.getCredits().stream().map(
+                credit ->
+                        converter.mapToDto(credit, CreditOfCustomersDto.class)
+        ).toList();
+    }
+
+    @Override
+    public CustomerDto getCustomerByIdCardNumber(String idCardNumber) {
+        // Fetch
+        Customer customerFromDB = customerRepository.findByIdCardNumber(idCardNumber);
+        if(customerFromDB == null)
+            throw new ResourceNotFoundException("Customer", "idCardNumber", idCardNumber);
+
+        return converter.mapToDto(customerFromDB, CustomerDto.class);
+    }
+
+    @Override
+    public CustomerDto addCreditByIdCardNumber(String idCardNumber, CreditOfCustomersDto credit) {
+        return null;
+    }
+
+
 }
