@@ -39,8 +39,8 @@ public class CreditOfCustomersRepositoryTest {
         entity = CreditOfCustomersCreator.entity();
         entityList = CreditOfCustomersCreator.entityList();
 
-        creditOfCustomersRepository.deleteAll();
-        customerRepository.deleteAll();
+//        customerRepository.deleteAll();
+//        creditOfCustomersRepository.deleteAll();
     }
 
     @Test
