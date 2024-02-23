@@ -122,7 +122,7 @@ public class CustomerControllerTest {
     @Test
     @DisplayName("Get By Id")
     @Order(4)
-    public void givenId_whenGive_thenReturnDto() throws Exception{
+    public void givenId_whenFind_thenReturnDto() throws Exception{
         when(customerService.getById(anyLong())).thenReturn(customerDto);
 
         ResultActions result = mockMvc.perform(
@@ -133,6 +133,24 @@ public class CustomerControllerTest {
         verify(customerService, times(1))
                 .getById(anyLong());
     }
+
+    @Test
+    @DisplayName("Get By Id card Number")
+    @Order(4)
+    public void givenidCardNumber_whenFind_thenReturnDto() throws Exception{
+        String idCardNumber = "73M2313";
+        customerDto.setIdCardNumber(idCardNumber);
+        when(customerService.getCustomerByIdCardNumber(idCardNumber)).thenReturn(customerDto);
+
+        ResultActions result = mockMvc.perform(
+                get(endPoint + "/idCardNumber/" + idCardNumber)
+        );
+
+        assertions(result, status().isOk());
+        verify(customerService, times(1))
+                .getCustomerByIdCardNumber(idCardNumber);
+    }
+
 
 
 

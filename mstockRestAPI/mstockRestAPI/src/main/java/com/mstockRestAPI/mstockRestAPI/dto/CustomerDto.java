@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,12 +25,18 @@ public class CustomerDto {
     private String surname;
 
     @Valid
+    @NotEmpty(message = "Customer idCardNumber cannot be null")
+    @NotNull(message = "Customer idCardNumber cannot be empty")
+    private String idCardNumber;
+
+    @Valid
     @Email
     private String email;
 
     private String phone;
     private String comment;
     private BigDecimal bonusRate;
+    private List<CreditOfCustomersDto> credits;
 
     @Builder.Default
     private Byte isActive = 1;
