@@ -1,5 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.dto;
 
+import com.mstockRestAPI.mstockRestAPI.enums.Currency;
 import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -19,6 +20,14 @@ public class ProductMovementListDto {
     @NotEmpty(message = "Payment type cannot be empty")
     @Valid
     private PaymentType paymentType;
+
+    private PaymentExtraInfoDto paymentExtraInfo;
+
+    private CustomerDto customer;
+
+    private String receiptComment;
+
+    private Currency currency;
 
     @NotNull(message = "Product list cannot be null")
     @NotEmpty(message = "Product list cannot be empty")

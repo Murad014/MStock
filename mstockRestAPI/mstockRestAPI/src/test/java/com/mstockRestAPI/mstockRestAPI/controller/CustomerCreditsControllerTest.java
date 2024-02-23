@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -74,6 +74,23 @@ public class CustomerCreditsControllerTest {
         assertions(result, status().isCreated());
         verify(creditsOfCustomersService, times(1))
                 .addByCustomerIdCardNumber(any(CreditOfCustomersDto.class), anyString());
+    }
+
+    @Test
+    @DisplayName("Fetch by Id")
+    @Order(2)
+    public void givenCreditId_whenFind_thenReturnDto() throws Exception {
+        Long creditId = 12L;
+        when(creditsOfCustomersService.fetchById(creditId))
+                .thenReturn(creditOfCustomersDto);
+
+        ResultActions result = mockMvc.perform(
+                get(endPoint + "/" + creditId)
+        );
+
+        assertions(result, status().isOk());
+        verify(creditsOfCustomersService, times(1))
+                .fetchById(anyLong());
     }
 
 

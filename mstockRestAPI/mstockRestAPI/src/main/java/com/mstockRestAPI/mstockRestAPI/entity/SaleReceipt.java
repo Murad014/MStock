@@ -50,7 +50,7 @@ public class SaleReceipt {
     private Timestamp updatedDate;
 
     @OneToMany(mappedBy = "receipt",
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private List<ProductMovements> productSaleList;
 
     @Column(name="currency")

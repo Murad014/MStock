@@ -1,8 +1,11 @@
 package com.mstockRestAPI.mstockRestAPI.repository;
 
 
+import com.mstockRestAPI.mstockRestAPI.entity.CreditOfCustomers;
 import com.mstockRestAPI.mstockRestAPI.entity.PaymentCustomerCredit;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.CreditOfCustomersCreator;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.PaymentCustomerCreditCreator;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +25,7 @@ public class PaymentCustomerCreditRepositoryTest {
     @Autowired
     private PaymentCustomerCreditRepository paymentCustomerCreditRepository;
 
+
     private PaymentCustomerCredit entity;
     private List<PaymentCustomerCredit> entityList;
 
@@ -33,6 +37,7 @@ public class PaymentCustomerCreditRepositoryTest {
 
     @Test
     @DisplayName("Add payment")
+    @Transactional
     @Order(1)
     public void givenEntity_whenAdd_thenReturnEntity(){
         // Save
@@ -45,6 +50,27 @@ public class PaymentCustomerCreditRepositoryTest {
                 .isEqualTo(entity);
 
     }
+
+//    @Test
+//    @DisplayName("Fetch payments by credit id")
+//    @Order(2)
+//    public void givenCreditId_whenFind_thenReturnList(){
+//        CreditOfCustomers credit = CreditOfCustomersCreator.entity();
+//        List<PaymentCustomerCredit> payments = PaymentCustomerCreditCreator.entityList()
+//                .stream()
+//                .peek((payment) -> payment.setCredit(credit))
+//                .toList();
+//
+//
+//        // Save
+//        paymentCustomerCreditRepository.saveAll(payments);
+//
+//        // Fetch by credit Id
+//        Long creditId = payments.get(0).getCredit().getId();
+//        List<PaymentCustomerCredit> paymentsFromDB = paymentCustomerCreditRepository.find
+//    }
+
+
 
 
 }

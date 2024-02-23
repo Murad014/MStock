@@ -13,6 +13,7 @@ public interface CreditsOfCustomersService {
 
     Boolean closeCreditByCustomerIdCardNumberAndCreditId(Long creditId);
 
+    CreditOfCustomersDto fetchById(Long creditId);
 
 
 

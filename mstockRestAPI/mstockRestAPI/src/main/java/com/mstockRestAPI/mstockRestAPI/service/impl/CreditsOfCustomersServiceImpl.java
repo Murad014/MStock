@@ -64,6 +64,8 @@ public class CreditsOfCustomersServiceImpl implements CreditsOfCustomersService 
         return converter.mapToDto(saved, CreditOfCustomersDto.class);
     }
 
+
+
     @Override
     public Boolean closeCreditByCustomerIdCardNumberAndCreditId(Long creditId) {
         // Find Credit by id
@@ -78,7 +80,15 @@ public class CreditsOfCustomersServiceImpl implements CreditsOfCustomersService 
         // Then Save
         CreditOfCustomers savedClosedCredit = creditsOfCustomersRepository.save(findCredit);
 
-        return savedClosedCredit != null;
+        return true;
+    }
+
+    @Override
+    public CreditOfCustomersDto fetchById(Long creditId) {
+        CreditOfCustomers creditFromDB = creditsOfCustomersRepository.findById(creditId)
+                .orElseThrow(() -> new ResourceNotFoundException("CreditOfCustomers", "id", creditId.toString()));
+
+        return converter.mapToDto(creditFromDB, CreditOfCustomersDto.class);
     }
 
 

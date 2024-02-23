@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -98,6 +99,27 @@ public class CreditsOfCustomersServiceTest {
                 .usingRecursiveComparison()
                 .isEqualTo(dto);
     }
+
+    @Test
+    @DisplayName("Fetch by credit Id")
+    @Order(3)
+    public void givenId_whenFind_thenReturnEntity(){
+        // When
+        entity.setId(1L);
+        singleMock(entity, dto);
+
+        when(creditsOfCustomersRepository.save(entity))
+                .thenReturn(entity);
+
+        when(creditsOfCustomersRepository.findById(anyLong())).thenReturn(Optional.ofNullable(entity));
+
+        CreditOfCustomersDto saveDto = creditsOfCustomersService.fetchById(entity.getId());
+        assertNotNull(saveDto);
+        assertThat(saveDto)
+                .usingRecursiveComparison()
+                .isEqualTo(dto);
+    }
+
 
 
     private void singleMock(CreditOfCustomers entity, CreditOfCustomersDto dto){
