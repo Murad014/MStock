@@ -1,5 +1,6 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
+import com.mstockRestAPI.mstockRestAPI.dto.SaleReceiptDto;
 import com.mstockRestAPI.mstockRestAPI.entity.PaymentExtraInfo;
 import com.mstockRestAPI.mstockRestAPI.entity.SaleReceipt;
 import com.mstockRestAPI.mstockRestAPI.enums.Currency;
@@ -26,6 +27,25 @@ public class SaleReceiptCreator {
         );
 
         return SaleReceipt.builder()
+                .customer(CustomerCreator.entity())
+                .number(staticReceiptNumber)
+                .paymentExtraInfo(paymentExtraInfo)
+                .currency(Util.chooseRandomEnum(Currency.class))
+                .comment(RandomString.make(PRODUCT_RANDOM_DESCRIPTION_LENGTH))
+                .isActive(isActive)
+                .build();
+    }
+
+    public static SaleReceiptDto dto(){
+        byte isActive = (byte) (Math.random() * 2);
+        PaymentExtraInfo paymentExtraInfo = PaymentExtraInfoCreator.createEntity(
+                BigDecimal.valueOf(23.23), // CashPay
+                BigDecimal.valueOf(24.32), // cardPay
+                null, // creditPay
+                PaymentType.CASH_AND_CARD
+        );
+
+        return SaleReceiptDto.builder()
                 .customer(CustomerCreator.entity())
                 .number(staticReceiptNumber)
                 .paymentExtraInfo(paymentExtraInfo)

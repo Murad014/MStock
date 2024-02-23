@@ -1,6 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.tools.creator;
 
 import com.mstockRestAPI.mstockRestAPI.dto.ProductMovementDto;
+import com.mstockRestAPI.mstockRestAPI.dto.SaleReceiptDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Product;
 
 import com.mstockRestAPI.mstockRestAPI.entity.ProductMovements;
@@ -41,7 +42,25 @@ public class ProductMovementCreator {
     }
 
     public static ProductMovementDto dto(){
-        return null;
+        Product productEntity = ProductCreator.entity();
+        SaleReceiptDto receipt = SaleReceiptCreator.dto();
+        receipt.setId(1L);
+        return ProductMovementDto.builder()
+                .product(productEntity)
+                .quantity(BigDecimal.valueOf(Util.generateRandomPrice(1, 607)))
+                .salePrice(BigDecimal.valueOf(Util.generateRandomPrice(1, 1000)))
+                .discountPercent(BigDecimal.valueOf(Util.generateRandomPrice(1, 1000)))
+                .discountDecimal(BigDecimal.valueOf(Util.generateRandomPrice(1, 1000)))
+                .comment(RandomString.make(PRODUCT_RANDOM_DESCRIPTION_LENGTH))
+                .saleStatus(Util.chooseRandomEnum(SaleStatus.class))
+                .receipt(receipt)
+                .build();
+    }
+
+    public static List<ProductMovementDto> dtoList(){
+        return Stream.generate(ProductMovementCreator::dto)
+                .limit(NUMBER_OF_PRODUCT_SALE)
+                .toList();
     }
 
 

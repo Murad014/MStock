@@ -3,6 +3,7 @@ package com.mstockRestAPI.mstockRestAPI.service.impl;
 import com.mstockRestAPI.mstockRestAPI.dto.PaymentExtraInfoDto;
 import com.mstockRestAPI.mstockRestAPI.dto.ProductMovementDto;
 import com.mstockRestAPI.mstockRestAPI.dto.ProductMovementListDto;
+import com.mstockRestAPI.mstockRestAPI.dto.SaleReceiptDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Customer;
 import com.mstockRestAPI.mstockRestAPI.entity.PaymentExtraInfo;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductMovements;
@@ -41,7 +42,7 @@ public class ProductMovementsServiceImpl implements ProductMovementsService {
 
     @Override
     @Transactional
-    public SaleReceipt addAllSalesOrReturnsProducts(ProductMovementListDto productMovementListDto) {
+    public SaleReceiptDto addAllSalesOrReturnsProducts(ProductMovementListDto productMovementListDto) {
 
         // Create receipt
         String receiptNumber = String.valueOf(Util.generateReceiptNumber());
@@ -78,9 +79,7 @@ public class ProductMovementsServiceImpl implements ProductMovementsService {
 
         // Finally save
         productMovementsRepository.saveAll(entities);
-
-
-        return receipt;
+        return converter.mapToDto(receipt, SaleReceiptDto.class);
     }
 
 
