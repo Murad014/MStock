@@ -56,4 +56,15 @@ public class Util {
         return values[index];
     }
 
+    public static String generateRandomCardNumber() {
+        Random random = new Random();
+        StringBuilder cardNumber = new StringBuilder();
+
+        for (int i = 0; i < 16; i++) {
+            cardNumber.append(random.nextInt(10));
+        }
+
+        return cardNumber.toString();
+    }
+
 }
