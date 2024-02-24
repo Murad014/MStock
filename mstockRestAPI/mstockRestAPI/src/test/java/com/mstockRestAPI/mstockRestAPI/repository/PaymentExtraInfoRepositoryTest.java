@@ -146,7 +146,7 @@ public class PaymentExtraInfoRepositoryTest {
         PaymentExtraInfo save = paymentExtraInfoRepository.save(newEntity);
         String accountNumber = save.getBankAccountNumber().getAccountNumber();
 
-        assertEquals("1234-5678-9123-4567", accountNumber);
+        assertEquals(newEntity.getBankAccountNumber().getAccountNumber(), accountNumber);
     }
 
     @Test

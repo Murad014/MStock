@@ -61,6 +61,7 @@ public class BankCardAccount {
     @PrePersist
     @PreUpdate
     private void preSave(){
+        System.out.println("FUCK: " + accountNumber);
         if(!Util.isValidBankAccountNumber(accountNumber)) {
             throw new SomethingWentWrongException(
                     "Wrong Format of Bank Account Number." +
