@@ -32,14 +32,22 @@ public class Invoice {
     @Column(unique = true, nullable = false, length = 100)
     private String invoiceCode;
 
-    @ManyToOne
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.DETACH,
+            CascadeType.MERGE
+    })
     @JoinColumn(name="supplierOfProduct_id")
     private SupplierOfProduct supplier;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime invoiceDate;
 
-    @Column(name = "initialTotalAmount", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
+    @Column(name = "initialTotalAmount",
+            precision = 10,
+            scale = 2,
+            columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal initialTotalAmount;
 
     @Column(name = "createdDate", updatable = false)
