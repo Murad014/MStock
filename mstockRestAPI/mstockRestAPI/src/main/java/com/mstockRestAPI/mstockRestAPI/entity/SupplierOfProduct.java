@@ -44,7 +44,12 @@ public class SupplierOfProduct {
     @Column(unique = true, columnDefinition = "TEXT default null")
     private String address;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.DETACH,
+            CascadeType.MERGE
+    })
     @JoinColumn(name="company_id")
     private Company company;
 

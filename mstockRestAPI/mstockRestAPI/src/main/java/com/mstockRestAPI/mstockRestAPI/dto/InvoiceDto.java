@@ -30,7 +30,6 @@ public class InvoiceDto {
     private String invoiceCode;
 
     @Valid
-    @NotNull(message = "Cannot be null")
     private SupplierOfProduct supplier;
 
     @Builder.Default

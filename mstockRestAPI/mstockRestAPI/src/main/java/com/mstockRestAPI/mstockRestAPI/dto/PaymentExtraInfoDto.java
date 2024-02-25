@@ -21,7 +21,6 @@ public class PaymentExtraInfoDto {
     private BigDecimal cardPay;
     private BigDecimal creditPay;
 
-
     private BankCardAccountDto bankAccountNumber;
 
     @NotNull
