@@ -2,6 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.controller;
 
 import com.mstockRestAPI.mstockRestAPI.dto.CreditOfCustomersDto;
 import com.mstockRestAPI.mstockRestAPI.service.CreditsOfCustomersService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class CustomerCreditsController {
 
     @PostMapping
     public ResponseEntity<CreditOfCustomersDto> addByIdCardNumber(
-            @RequestParam("customerIdCardNumber") String customerIdCardNumber,
+            @Valid @RequestParam("customerIdCardNumber") String customerIdCardNumber,
             @RequestBody CreditOfCustomersDto credit){
 
         CreditOfCustomersDto added =

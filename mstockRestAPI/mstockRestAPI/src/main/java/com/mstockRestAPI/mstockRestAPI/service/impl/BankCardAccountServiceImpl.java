@@ -44,5 +44,10 @@ public class BankCardAccountServiceImpl implements BankCardAccountService {
         return true;
     }
 
+    @Override
+    public Boolean existsByAccountNumber(String accountNumber) {
+        return bankCardAccountRepository.existsByAccountNumber(accountNumber);
+    }
+
 
 }

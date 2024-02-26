@@ -34,6 +34,9 @@ public class PaymentCustomerCredit {
     @JoinColumn(name="creditOfCustomers_id")
     private CreditOfCustomers credit;
 
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "paymentExtraInfo_id", referencedColumnName = "id"/*, nullable = false*/)
+    private PaymentExtraInfo paymentExtraInfo;
 
     @Column(name = "createdDate", updatable = false)
     @CreationTimestamp

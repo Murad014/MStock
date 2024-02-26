@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -37,12 +38,14 @@ public class SupplierOfProductDto {
     private String email;
 
     private String phone;
-
-    private String description;
     private String address;
+    private String comment;
 
+    @NotNull(message = "cannot be null")
+    @Size(min = 1)
+    private Long companyId;
 
-    private Company company;
+    @Builder.Default
     private Byte isActive = 1;
 
 }

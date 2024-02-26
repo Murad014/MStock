@@ -4,6 +4,7 @@ import com.mstockRestAPI.mstockRestAPI.dto.BankCardAccountDto;
 import com.mstockRestAPI.mstockRestAPI.entity.BankCardAccount;
 import com.mstockRestAPI.mstockRestAPI.payload.response.SuccessResponse;
 import com.mstockRestAPI.mstockRestAPI.service.BankCardAccountService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class BankCardAccountController {
 
     @PostMapping
     public ResponseEntity<BankCardAccountDto> add(
-            @RequestBody BankCardAccountDto bankCardAccountDto){
+            @Valid @RequestBody BankCardAccountDto bankCardAccountDto){
 
         return new ResponseEntity<>(
                 bankCardAccountService.add(bankCardAccountDto),

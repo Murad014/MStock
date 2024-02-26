@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -25,12 +26,14 @@ public class PaymentCustomerCreditDto {
     private Long id;
 
     @NotNull(message = "PaymentAmount cannot be null")
-    @NotEmpty(message = "PaymentAmount cannot be empty")
+    @Valid
     private BigDecimal paymentAmount;
 
     @NotNull(message = "Credit cannot be null")
-    @NotEmpty(message = "Credit cannot be empty")
+    @Valid
     private CreditOfCustomersDto credit;
+
+//    @NotNull(message = "")
 
     @Builder.Default
     private Byte isActive = 1;

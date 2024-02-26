@@ -2,6 +2,7 @@ package com.mstockRestAPI.mstockRestAPI.controller;
 
 import com.mstockRestAPI.mstockRestAPI.dto.InvoiceItemDto;
 import com.mstockRestAPI.mstockRestAPI.service.InvoiceItemService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class InvoiceItemController {
 
 
     @PostMapping("/bulkAdd")
-    public ResponseEntity<List<InvoiceItemDto>> addAll(@RequestBody List<InvoiceItemDto> invoiceItemDtoList){
+    public ResponseEntity<List<InvoiceItemDto>> addAll(@Valid @RequestBody List<InvoiceItemDto> invoiceItemDtoList){
         return new ResponseEntity<>(
                 invoiceItemService.addAll(invoiceItemDtoList),
                 HttpStatus.CREATED
@@ -30,7 +31,7 @@ public class InvoiceItemController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceItemDto> add(@RequestBody InvoiceItemDto invoiceItemDto){
+    public ResponseEntity<InvoiceItemDto> add(@Valid @RequestBody InvoiceItemDto invoiceItemDto){
         return new ResponseEntity<>(
                 invoiceItemService.add(invoiceItemDto),
                 HttpStatus.CREATED
@@ -39,7 +40,7 @@ public class InvoiceItemController {
 
     @PutMapping("/{invoiceItemId}")
     public ResponseEntity<InvoiceItemDto> updateById(@PathVariable("invoiceItemId") Long id,
-                                                     @RequestBody InvoiceItemDto invoiceItemDto){
+                                                     @Valid @RequestBody InvoiceItemDto invoiceItemDto){
 
         return new ResponseEntity<>(
                 invoiceItemService.updateById(id,invoiceItemDto),
