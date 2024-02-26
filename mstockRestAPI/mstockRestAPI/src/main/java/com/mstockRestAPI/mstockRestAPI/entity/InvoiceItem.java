@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -27,16 +28,19 @@ public class InvoiceItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="invoice_id")
     private Invoice invoice;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal quantity;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "totalPrice", precision = 10, scale = 2)
     private BigDecimal totalPrice;
@@ -52,6 +56,13 @@ public class InvoiceItem {
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default
     private Byte isActive = 1;
+
+    @PrePersist
+    @PreUpdate
+    public void calc(){
+        BigDecimal totalPrice = quantity.multiply(price);
+        this.totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
+    }
 
 
 }

@@ -104,7 +104,7 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    @DisplayName("Get All")
+    @DisplayName("Save All")
     @Order(4)
     public void getAllListOfCustomerEntity(){
         // Save All
