@@ -55,11 +55,11 @@ public class ProductMovementsRepositoryTest {
         productMovementEntity = ProductMovementCreator.entity();
         productMovementEntityList = ProductMovementCreator.entityList();
 
-        productSaleRepository.deleteAll();
-        productRepository.deleteAll();
-        productBarcodeRepository.deleteAll();
-        saleReceiptRepository.deleteAll();
-        paymentExtraInfoRepository.deleteAll();
+//        productSaleRepository.deleteAll();
+//        productRepository.deleteAll();
+//        productBarcodeRepository.deleteAll();
+//        saleReceiptRepository.deleteAll();
+//        paymentExtraInfoRepository.deleteAll();
     }
 
     @Test

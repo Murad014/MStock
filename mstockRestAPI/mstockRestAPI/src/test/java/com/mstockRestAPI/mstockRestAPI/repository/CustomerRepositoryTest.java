@@ -2,8 +2,10 @@ package com.mstockRestAPI.mstockRestAPI.repository;
 
 import com.mstockRestAPI.mstockRestAPI.entity.CreditOfCustomers;
 import com.mstockRestAPI.mstockRestAPI.entity.Customer;
+import com.mstockRestAPI.mstockRestAPI.entity.PaymentCustomerCredit;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CreditOfCustomersCreator;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.CustomerCreator;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.PaymentCustomerCreditCreator;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +129,6 @@ public class CustomerRepositoryTest {
 
         CreditOfCustomers credit01 = CreditOfCustomersCreator.entity();
         CreditOfCustomers credit02 = CreditOfCustomersCreator.entity();
-
         // Act
         List<CreditOfCustomers> savedCredits = creditsOfCustomersRepository.saveAll(List.of(credit01, credit02));
 

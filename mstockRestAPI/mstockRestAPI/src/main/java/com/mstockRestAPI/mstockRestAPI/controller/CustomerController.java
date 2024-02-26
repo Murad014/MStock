@@ -3,6 +3,7 @@ package com.mstockRestAPI.mstockRestAPI.controller;
 import com.mstockRestAPI.mstockRestAPI.dto.CustomerDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Customer;
 import com.mstockRestAPI.mstockRestAPI.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> add(CustomerDto customerDto){
+    public ResponseEntity<CustomerDto> add(@Valid @RequestBody CustomerDto customerDto){
         CustomerDto customerSave = customerService.add(customerDto);
         return new ResponseEntity<>(
                 customerSave,
@@ -39,7 +40,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDto> update(@PathVariable("id") Long customerId,
-                                              CustomerDto customerDto){
+                                              @Valid @RequestBody CustomerDto customerDto){
         CustomerDto updateCustomer = customerService.update(customerId, customerDto);
         return new ResponseEntity<>(
                 updateCustomer,

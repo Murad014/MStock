@@ -25,7 +25,6 @@ public class PaymentCustomerCreditRepositoryTest {
     @Autowired
     private PaymentCustomerCreditRepository paymentCustomerCreditRepository;
 
-
     private PaymentCustomerCredit entity;
     private List<PaymentCustomerCredit> entityList;
 

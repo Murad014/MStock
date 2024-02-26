@@ -30,9 +30,9 @@ public class SupplierOFProductCreator {
                 .surname(RandomString.make(10))
                 .email(RandomString.make(5) + "@test.com")
                 .phone(RandomString.make(5))
-                .description(RandomString.make(50))
+                .comment(RandomString.make(50))
                 .address(RandomString.make(20))
-                .company(CompanyCreator.createCompanyEntity())
+                .companyId(1L)
                 .isActive(isActive)
                 .build();
     }

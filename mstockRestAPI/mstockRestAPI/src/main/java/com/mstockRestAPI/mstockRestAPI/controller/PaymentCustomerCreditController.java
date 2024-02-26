@@ -4,6 +4,7 @@ import com.mstockRestAPI.mstockRestAPI.dto.PaymentCustomerCreditDto;
 import com.mstockRestAPI.mstockRestAPI.entity.PaymentCustomerCredit;
 import com.mstockRestAPI.mstockRestAPI.repository.PaymentCustomerCreditRepository;
 import com.mstockRestAPI.mstockRestAPI.service.PaymentCustomerCreditService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class PaymentCustomerCreditController {
     @PostMapping("/credit/{creditId}")
     public ResponseEntity<PaymentCustomerCreditDto> add(
             @PathVariable("creditId") Long creditId,
-            @RequestBody PaymentCustomerCreditDto paymentCustomerCreditDto
+            @Valid @RequestBody PaymentCustomerCreditDto paymentCustomerCreditDto
     ){
 
         return new ResponseEntity<>(

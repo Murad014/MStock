@@ -41,8 +41,11 @@ public class SupplierOfProduct {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(unique = true, columnDefinition = "TEXT default null")
+    @Column(columnDefinition = "TEXT")
     private String address;
+
+    @Column(columnDefinition = "TEXT default null")
+    private String comment;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,
@@ -64,7 +67,5 @@ public class SupplierOfProduct {
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default
     private Byte isActive = 1;
-
-
 
 }

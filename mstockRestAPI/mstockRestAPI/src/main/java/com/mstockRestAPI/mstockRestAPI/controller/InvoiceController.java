@@ -3,6 +3,7 @@ package com.mstockRestAPI.mstockRestAPI.controller;
 import com.mstockRestAPI.mstockRestAPI.dto.InvoiceDto;
 import com.mstockRestAPI.mstockRestAPI.entity.Invoice;
 import com.mstockRestAPI.mstockRestAPI.service.InvoiceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceDto> add(@RequestBody InvoiceDto invoice){
+    public ResponseEntity<InvoiceDto> add(@Valid @RequestBody InvoiceDto invoice){
         return new ResponseEntity<>(invoiceService.add(invoice), HttpStatus.CREATED);
     }
 
     @PutMapping("/{invoiceId}")
     public ResponseEntity<InvoiceDto> update(
             @PathVariable("invoiceId") Long invoiceId,
-            @RequestBody InvoiceDto invoiceDto){
+            @Valid @RequestBody InvoiceDto invoiceDto){
 
         return new ResponseEntity<>(
                 invoiceService.update(invoiceId, invoiceDto),
