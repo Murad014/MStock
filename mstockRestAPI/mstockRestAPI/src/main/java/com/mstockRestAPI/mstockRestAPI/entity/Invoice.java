@@ -41,6 +41,9 @@ public class Invoice {
     @JoinColumn(name="supplierOfProduct_id")
     private SupplierOfProduct supplier;
 
+//    @OneToMany(fetch = FetchType.LAZY)
+//    private List<InvoiceItem> invoiceItems;
+
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime invoiceDate;
 

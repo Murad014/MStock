@@ -36,7 +36,12 @@ public class ProductCategory {
     @UpdateTimestamp
     private Timestamp updatedDate;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.DETACH,
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    })
     private List<Product> products;
 
     @Column(name="isActive")

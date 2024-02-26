@@ -51,7 +51,7 @@ public class InvoiceServiceTest {
     @Test
     @DisplayName("Add")
     @Order(1)
-    public void givenEntity_whenSave_thenReturnEntity(){
+    public void givenDto_whenSave_thenReturnDto(){
         // When
         mocks();
         when(invoiceRepository.save(any())).thenReturn(entity);
@@ -73,7 +73,7 @@ public class InvoiceServiceTest {
     @Test
     @DisplayName("Update")
     @Order(2)
-    public void givenEntity_whenUpdate_thenReturnEntity(){
+    public void givenDto_whenUpdate_thenReturnDto(){
         Long updateId = 1L;
         // When
         mocks();
@@ -121,7 +121,7 @@ public class InvoiceServiceTest {
     @Test
     @DisplayName("Fetch by invoice Code")
     @Order(4)
-    public void givenId_whenFind_thenReturnEntity(){
+    public void givenId_whenFind_thenReturnDto(){
         String lookingFor = "test1123123";
         // When
         mocks();

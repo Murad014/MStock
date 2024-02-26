@@ -84,7 +84,7 @@ public class Product {
     @Column(name = "expiredDate")
     private Timestamp expiredDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "productCategory_id")
     private ProductCategory category;
 
