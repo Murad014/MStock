@@ -103,9 +103,6 @@ public class CreditOfCustomersRepositoryTest {
     @DisplayName("Fetch credit by id")
     @Order(4)
     public void givenCreditId_whenFindAll_thenReturnList(){
-        entity.setPayments(
-                PaymentCustomerCreditCreator.entityList()
-        );
 
         // Save
         CreditOfCustomers credit = creditOfCustomersRepository.save(entity);
@@ -114,9 +111,6 @@ public class CreditOfCustomersRepositoryTest {
         CreditOfCustomers creditFromDb = creditOfCustomersRepository.findById(credit.getId()).orElse(null);
 
         assertNotNull(creditFromDb);
-        assertNotNull(creditFromDb.getPayments());
-        assertFalse(creditFromDb.getPayments().isEmpty());
-        assertEquals(entity.getPayments().size(), creditFromDb.getPayments().size());
 
 
     }

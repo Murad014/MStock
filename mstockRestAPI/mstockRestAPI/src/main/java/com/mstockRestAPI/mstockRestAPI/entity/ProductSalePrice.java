@@ -25,7 +25,7 @@ public class ProductSalePrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10,2) default 0.00")
+    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) default 0.00")
     private BigDecimal sellingPrice;
 
     @Column(name = "createdDate", updatable = false)

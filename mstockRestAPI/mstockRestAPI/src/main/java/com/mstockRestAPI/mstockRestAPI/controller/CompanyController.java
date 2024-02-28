@@ -33,7 +33,6 @@ public class CompanyController {
     @PutMapping("/")
     public ResponseEntity<CompanyDto> updateCompany(@Valid @RequestBody CompanyDto companyDto){
         CompanyDto companyDtoUpdate = companyService.update(companyDto.getId(), companyDto);
-        System.out.println(companyDtoUpdate);
         return new ResponseEntity<>(companyDtoUpdate, HttpStatus.OK);
     }
 

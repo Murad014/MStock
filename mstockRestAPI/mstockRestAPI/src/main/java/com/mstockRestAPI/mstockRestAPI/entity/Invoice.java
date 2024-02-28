@@ -34,9 +34,7 @@ public class Invoice {
 
     @ManyToOne(cascade = {
             CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.DETACH,
-            CascadeType.MERGE
+            CascadeType.REFRESH
     })
     @JoinColumn(name="supplierOfProduct_id")
     private SupplierOfProduct supplier;

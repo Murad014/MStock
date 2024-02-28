@@ -29,7 +29,6 @@ public class CreditOfCustomers {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,
             CascadeType.REFRESH,
-            CascadeType.DETACH,
             CascadeType.MERGE
     })
     @JoinColumn(name="customer_id")
@@ -56,12 +55,7 @@ public class CreditOfCustomers {
     @Column(name = "dueDate")
     private Timestamp dueDate;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.DETACH,
-            CascadeType.MERGE
-    })
+    @OneToMany
     @JoinColumn(name="paymentCustomerCredit_id")
     private List<PaymentCustomerCredit> payments;
 

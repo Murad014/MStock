@@ -36,13 +36,13 @@ public class InvoiceItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal quantity;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal price;
 
-    @Column(name = "totalPrice", precision = 10, scale = 2)
+    @Column(name = "totalPrice", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal totalPrice;
 
     @Column(name = "createdDate", updatable = false)

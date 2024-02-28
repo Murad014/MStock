@@ -60,8 +60,6 @@ public class Customer {
     @OneToMany(fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,
             CascadeType.REFRESH,
-            CascadeType.DETACH,
-            CascadeType.MERGE
     })
     @JoinColumn(name = "CreditOfCustomers_id")
     private List<CreditOfCustomers> credits;

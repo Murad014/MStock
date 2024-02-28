@@ -138,7 +138,6 @@ public class CustomerRepositoryTest {
         // Find
         Customer findById = customerRepository.findById(save.getId()).orElse(null);
         List<CreditOfCustomers> credits = findById.getCredits();
-        System.out.println(findById);
 
         // Assert
         assertNotNull(findById);

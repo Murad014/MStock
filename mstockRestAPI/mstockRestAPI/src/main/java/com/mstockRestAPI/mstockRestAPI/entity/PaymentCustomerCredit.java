@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "creditOfCustomers")
+@Table(name = "paymentCreditCustomer")
 @Getter
 @Setter
 @ToString
@@ -27,15 +27,13 @@ public class PaymentCustomerCredit {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,
-            CascadeType.DETACH,
             CascadeType.REFRESH,
-            CascadeType.MERGE,
     })
     @JoinColumn(name="creditOfCustomers_id")
     private CreditOfCustomers credit;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "paymentExtraInfo_id", referencedColumnName = "id"/*, nullable = false*/)
+    @JoinColumn(name = "paymentExtraInfo_id", referencedColumnName = "id", nullable = false)
     private PaymentExtraInfo paymentExtraInfo;
 
     @Column(name = "createdDate", updatable = false)
