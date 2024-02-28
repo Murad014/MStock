@@ -88,7 +88,7 @@ public class Product {
     @JoinColumn(name = "productCategory_id")
     private ProductCategory category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 

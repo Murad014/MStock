@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,9 +40,9 @@ public class PaymentCustomerCreditRepositoryTest {
     @Transactional
     @Order(1)
     public void givenEntity_whenAdd_thenReturnEntity(){
+        System.out.println("FFUCK: " + entity.getPaymentExtraInfo());
         // Save
         PaymentCustomerCredit saveEntity = paymentCustomerCreditRepository.save(entity);
-
         // Assert
         assertNotNull(saveEntity);
         assertThat(saveEntity)
