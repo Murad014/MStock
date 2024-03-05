@@ -82,16 +82,16 @@ public class ProductCategoryControllerTest {
     @DisplayName("Update by id")
     @Order(2)
     public void updateProductCategory_whenUpdate_thenReturnDto() throws Exception {
-        when(productCategoriesService.update(any(ProductCategoryDto.class)))
+        when(productCategoriesService.update(anyLong(), any(ProductCategoryDto.class)))
                 .thenReturn(productCategoryDto);
-        ResultActions result = mockMvc.perform(put(endPoint)
+        ResultActions result = mockMvc.perform(put(endPoint + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productCategoryDto)));
 
         assertions(result, status().isOk());
 
         verify(productCategoriesService, times(1))
-                .update(any(ProductCategoryDto.class));
+                .update(anyLong(), any(ProductCategoryDto.class));
 
     }
 
@@ -99,10 +99,10 @@ public class ProductCategoryControllerTest {
     @DisplayName("Update Not exist id")
     @Order(3)
     public void updateProductCategoryDoesNotExistId_whenTryUpdate_thenReturnException() throws Exception {
-        when(productCategoriesService.update(any(ProductCategoryDto.class)))
+        when(productCategoriesService.update(anyLong(), any(ProductCategoryDto.class)))
                 .thenThrow(ResourceNotFoundException.class);
 
-        ResultActions result = mockMvc.perform(put(endPoint)
+        ResultActions result = mockMvc.perform(put(endPoint+"/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productCategoryDto)));
 
@@ -110,7 +110,7 @@ public class ProductCategoryControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(productCategoriesService, times(1))
-                .update(any(ProductCategoryDto.class));
+                .update(anyLong(), any(ProductCategoryDto.class));
 
     }
 

@@ -1,6 +1,7 @@
 package com.mstockRestAPI.mstockRestAPI.controller;
 
 import com.mstockRestAPI.mstockRestAPI.dto.ProductCategoryDto;
+import com.mstockRestAPI.mstockRestAPI.payload.response.SuccessResponse;
 import com.mstockRestAPI.mstockRestAPI.service.ProductCategoriesService;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
@@ -30,10 +31,12 @@ public class ProductCategoryController {
                 HttpStatus.CREATED);
     }
 
-    @PutMapping()
-    public ResponseEntity<ProductCategoryDto> update(@Valid @RequestBody ProductCategoryDto productCategoryDto){
+    @PutMapping("{id}")
+    public ResponseEntity<ProductCategoryDto> update(@PathVariable("id") Long productId,
+            @Valid @RequestBody ProductCategoryDto productCategoryDto){
+
         return new ResponseEntity<>(
-                productCategoriesService.update(productCategoryDto),
+                productCategoriesService.update(productId, productCategoryDto),
                 HttpStatus.OK
                 );
     }
@@ -61,6 +64,18 @@ public class ProductCategoryController {
                 HttpStatus.OK
         );
 
+    }
+
+    @PutMapping("{categoryId}/isActive/{isActive}")
+    public ResponseEntity<SuccessResponse> updateCategoryIsActiveById(
+            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("isActive") Byte isActive
+
+    ){
+        return new ResponseEntity<>(
+                productCategoriesService.updateIsActiveById(categoryId, isActive),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("isActive/{isActive}")
