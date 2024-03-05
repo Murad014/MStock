@@ -8,4 +8,6 @@ import java.util.List;
 public interface ProductPictureRepository extends JpaRepository<ProductPicture, Long> {
     List<ProductPicture> findByIsActive(Byte isActive);
 
+    boolean existsByPictureName(String pictureName);
+
 }

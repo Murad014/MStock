@@ -155,7 +155,18 @@ public class ProductBarcodeRepositoryTest {
         boolean existByBarcode = productBarcodeRepository.existsByBarcode(existsBarcode.getBarcode());
 
         assertTrue(existByBarcode);
+    }
 
+    @Test
+    @DisplayName("Delete by id")
+    @Order(6)
+    public void givenLongId_whenFind_thenDelete(){
+        ProductBarcode productBarcode = productBarcodeRepository.save(productBarcodeEntity);
+
+        productBarcodeRepository.deleteById(productBarcode.getId());
+
+        ProductBarcode getFromDBByID = productBarcodeRepository.findById(productBarcode.getId()).orElse(null);
+        assertNull(getFromDBByID);
 
     }
 

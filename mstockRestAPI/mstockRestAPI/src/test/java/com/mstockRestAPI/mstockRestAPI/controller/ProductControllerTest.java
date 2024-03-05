@@ -99,7 +99,7 @@ public class ProductControllerTest {
     @Order(2)
     public void givenDto_whenUpdate_thenReturnDto() throws Exception{
         productDto.setId(1L);
-        when(productService.update(any(ProductDto.class)))
+        when(productService.update(anyLong(), any(ProductDto.class)))
                 .thenReturn(productDto);
 
         ResultActions result = mockMvc.perform(
@@ -111,7 +111,7 @@ public class ProductControllerTest {
         assertions(result, status().isOk());
 
         verify(productService, times(1))
-                .update(any(ProductDto.class));
+                .update(anyLong(), any(ProductDto.class));
     }
 
     @Test
@@ -224,14 +224,14 @@ public class ProductControllerTest {
 
         String id = "$.id";
         String productName = "$.productName";
-        String barcode = "$.productBarcodeList[0].id";
+        String barcode = "$.productBarcodeList[0]";
         String isActive = "$.isActive";
 
         result.andExpect(resultMatcher)
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(id).value(productDto.getId()))
                 .andExpect(jsonPath(productName).value(productDto.getProductName()))
-                .andExpect(jsonPath(barcode).value(productDto.getProductBarcodeList().get(0).getId()))
+                .andExpect(jsonPath(barcode).value(productDto.getProductBarcodeList().get(0)))
                 .andExpect(jsonPath(isActive).value(String.valueOf(productDto.getIsActive())));
 
     }

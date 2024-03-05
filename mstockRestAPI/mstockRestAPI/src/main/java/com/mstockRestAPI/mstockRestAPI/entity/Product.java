@@ -32,23 +32,21 @@ public class Product {
 
     @OneToMany(// mappedBy = "product",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            orphanRemoval = true)
+            fetch = FetchType.EAGER
+    )
     @Column(unique = true)
     private List<ProductBarcode> productBarcodeList;
 
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER
-//            orphanRemoval = true
     )
     @Column(unique = true)
     private List<ProductPicture> productPictureList;
 
-    @OneToMany(// mappedBy = "product",
+    @OneToMany(
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            orphanRemoval = true
+            fetch = FetchType.EAGER
     )
     private List<ProductSalePrice> productSalePrices;
 

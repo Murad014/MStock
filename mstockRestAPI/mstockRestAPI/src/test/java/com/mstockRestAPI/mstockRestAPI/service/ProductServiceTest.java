@@ -101,7 +101,7 @@ public class ProductServiceTest {
         productDto.setId(1L);
         productDto.setProductName("Test Update");
         // Act
-        ProductDto update = productService.update(productDto);
+        ProductDto update = productService.update(1L, productDto);
 
         assertNotNull(update);
         assertThat(update)
@@ -119,14 +119,14 @@ public class ProductServiceTest {
 
         // Assert
         assertThrows(SqlProcessException.class,
-                () -> productService.update(productDto));
+                () -> productService.update(anyLong(), productDto));
 
         // Test Exception - Not exist id
         productDto.setId(1L);
         when(productRepository.findById(1L)).thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class,
-                () -> productService.update(productDto));
+                () -> productService.update(anyLong(), productDto));
 
     }
 

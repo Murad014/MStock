@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Table(name = "productBarcodes")
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,5 +45,8 @@ public class ProductBarcode {
     @Builder.Default
     private Byte isActive = 1;
 
-
+    @Override
+    public String toString() {
+        return this.getBarcode();
+    }
 }

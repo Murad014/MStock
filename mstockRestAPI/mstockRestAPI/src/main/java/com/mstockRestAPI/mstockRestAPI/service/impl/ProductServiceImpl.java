@@ -1,32 +1,41 @@
 package com.mstockRestAPI.mstockRestAPI.service.impl;
 
 import com.mstockRestAPI.mstockRestAPI.dto.*;
-import com.mstockRestAPI.mstockRestAPI.entity.ProductPicture;
+import com.mstockRestAPI.mstockRestAPI.entity.*;
 import com.mstockRestAPI.mstockRestAPI.exception.FileUploadException;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.exception.SomethingWentWrongException;
 import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
-import com.mstockRestAPI.mstockRestAPI.entity.Product;
 import com.mstockRestAPI.mstockRestAPI.exception.SqlProcessException;
+import com.mstockRestAPI.mstockRestAPI.payload.request.ProductSearchKeys;
+import com.mstockRestAPI.mstockRestAPI.payload.response.ProductResponse;
+import com.mstockRestAPI.mstockRestAPI.payload.response.SuccessResponse;
 import com.mstockRestAPI.mstockRestAPI.repository.*;
 import com.mstockRestAPI.mstockRestAPI.service.*;
 import com.mstockRestAPI.mstockRestAPI.utils.Util;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
     @Value("${upload.directory}") // Specify the directory where you want to save the uploaded files
     private String uploadDirectory;
     private final ProductRepository productRepository;
+    private final CompanyRepository companyRepository;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final ProductBarcodeRepository productBarcodeRepository;
+    private final ProductPictureRepository productPictureRepository;
+    private final ProductSalePricesRepository productSalePricesRepository;
 
     private final Converter converter;
     private final Util util;
@@ -34,10 +43,18 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
-            Util util,
+            CompanyRepository companyRepository, ProductCategoryRepository productCategoryRepository,
+            ProductBarcodeRepository productBarcodeRepository,
+            ProductPictureRepository productPictureRepository,
+            ProductSalePricesRepository productSalePricesRepository, Util util,
             Converter converter
     ){
         this.productRepository = productRepository;
+        this.companyRepository = companyRepository;
+        this.productCategoryRepository = productCategoryRepository;
+        this.productBarcodeRepository = productBarcodeRepository;
+        this.productPictureRepository = productPictureRepository;
+        this.productSalePricesRepository = productSalePricesRepository;
         this.util = util;
         this.converter = converter;
 
@@ -45,28 +62,51 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto add(ProductDto productDto) throws SqlProcessException {
-        if(!checkIdIsNull(productDto))
-            throw new SqlProcessException("Product", "add", "every entity id must be null");
-
         Product entity = converter.mapToEntity(productDto, Product.class);
+
+        findAndSet(productDto, entity);
+        addBarcodesAndSet(productDto, entity);
+        addPicturesAndSet(productDto, entity);
+        addSalePricesAndSet(productDto, entity);
+
         Product productSave = productRepository.save(entity);
 
         return converter.mapToDto(productSave, ProductDto.class);
     }
 
-    @Override
-    public ProductDto update(ProductDto productDto) throws SqlProcessException {
-        Long productId = productDto.getId();
-        if(productId == null)
-            throw new SqlProcessException("Product", "add", "every entity id must not be null");
 
-        productRepository.findById(productId)
+
+    @Override
+    @Transactional
+    public ProductDto update(Long productId, ProductDto productDto) throws SqlProcessException {
+        Product productFromDB = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId.toString()));
 
-        Product entity = converter.mapToEntity(productDto, Product.class);
-        Product productSave = productRepository.save(entity);
+        deleteAllReferences(productFromDB);
+        findAndSet(productDto, productFromDB);
+
+        addBarcodesAndSet(productDto, productFromDB);
+        addPicturesAndSet(productDto, productFromDB);
+        addSalePricesAndSet(productDto, productFromDB);
+
+        Product productSave = productRepository.save(productFromDB);
 
         return converter.mapToDto(productSave, ProductDto.class);
+    }
+
+
+
+    @Override
+    public SuccessResponse deActiveById(Long productId, Byte isActive) {
+        Product findProductFromDB = productRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product", "id", productId.toString())
+        );
+        findProductFromDB.setIsActive(isActive);
+        productRepository.save(findProductFromDB);
+        return SuccessResponse
+                .builder()
+                .message("Success, id:" + productId)
+                .build();
     }
 
 
@@ -140,30 +180,121 @@ public class ProductServiceImpl implements ProductService {
                 ProductDto.class);
     }
 
+    @Override
+    public ProductResponse searchAndPagination(ProductSearchKeys productSearchKeys) {
+        Sort sort = productSearchKeys.getSortDir().equalsIgnoreCase(
+                Sort.Direction.ASC.name()) ?
+                Sort.by(productSearchKeys.getSortBy()).ascending() :
+                Sort.by(productSearchKeys.getSortBy()).descending();
+
+
+        Pageable pageable = PageRequest.of(
+                productSearchKeys.getPageNo(),
+                productSearchKeys.getPageSize(), sort);
+
+        Page<Product> searchProduct = productRepository.findByBarcodeAndOtherFields(
+                productSearchKeys.getBarcode(),
+                productSearchKeys.getProductName(),
+                productSearchKeys.getCategory(),
+                productSearchKeys.getIsActive(),
+                pageable
+        );
+
+        List<Product> listOfPosts = searchProduct.getContent();
+        List<ProductDto> postList = listOfPosts.stream().map(product ->
+                converter.mapToDto(product, ProductDto.class)).toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(postList);
+        productResponse.setLast(searchProduct.isLast());
+        productResponse.setPageNo(searchProduct.getNumber());
+        productResponse.setPageSize(searchProduct.getSize());
+        productResponse.setTotalElements(searchProduct.getTotalElements());
+        productResponse.setTotalPages(searchProduct.getTotalPages());
+
+        return productResponse;
+    }
+
 
     // ----------------------------------- Not Override Methods --------------------------------------------
-    private boolean checkIdIsNull(ProductDto productDto) {
-        return isProductIdNull(productDto)
-                && areBarcodeIdsNull(productDto.getProductBarcodeList())
-                && areSalePriceIdsNull(productDto.getProductSalePrices())
-                && arePictureIdsNull(productDto.getProductPictureList());
+    private void deleteAllReferences(Product productFromDB) {
+
+        productFromDB.getProductBarcodeList().forEach(
+                productBarcodeRepository::delete
+        );
+
+        productFromDB.getProductSalePrices().forEach(
+                productSalePricesRepository::delete
+        );
+
+        productFromDB.getProductPictureList().forEach(
+                productPictureRepository::delete
+        );
     }
 
-    private boolean isProductIdNull(ProductDto productDto) {
-        return productDto.getId() == null;
+    private void findAndSet(ProductDto productDto, Product save){
+        save.setCompany(
+                findCompanyById(productDto.getCompanyId())
+        );
+        save.setCategory(
+                findByProductCategory(productDto.getProductCategoryId())
+        );
+
     }
 
-    private boolean areBarcodeIdsNull(List<ProductBarcodeDto> barcodeList) {
-        return barcodeList == null || barcodeList.stream().noneMatch(barcode -> barcode.getId() != null);
+    private void addPicturesAndSet(ProductDto productDto, Product entity) {
+        entity.setProductPictureList(new ArrayList<>());
+        productDto.getProductPictureList().forEach(picture -> {
+            if(!productPictureRepository.existsByPictureName(picture))
+                    entity.getProductPictureList().add(
+                            ProductPicture
+                                    .builder()
+                                    .pictureName(picture)
+                                    .build()
+                    );
+                }
+        );
     }
 
-    private boolean areSalePriceIdsNull(List<ProductSalePriceDto> salePriceList) {
-        return salePriceList == null || salePriceList.stream().noneMatch(salePrice -> salePrice.getId() != null);
+    private void addBarcodesAndSet(ProductDto productDto, Product entity) {
+        entity.setProductBarcodeList(new ArrayList<>());
+        productDto.getProductBarcodeList().forEach(barcode -> {
+                if(!productBarcodeRepository.existsByBarcode(barcode))
+                    entity.getProductBarcodeList().add(
+                            ProductBarcode
+                                    .builder()
+                                    .barcode(barcode)
+                                    .build()
+                    );
+                }
+        );
     }
 
-    private boolean arePictureIdsNull(List<ProductPictureDto> pictureList) {
-        return pictureList == null || pictureList.stream().noneMatch(picture -> picture.getId() != null);
+    private void addSalePricesAndSet(ProductDto productDto, Product entity) {
+        entity.setProductSalePrices(new ArrayList<>());
+        productDto.getProductSalePrices().forEach(salePrice ->
+                entity.getProductSalePrices().add(
+                        ProductSalePrice.builder()
+                                .sellingPrice(salePrice)
+                                .build()
+                )
+        );
     }
+
+
+
+    private Company findCompanyById(Long companyId){
+        return companyRepository.findById(companyId).orElseThrow(
+                () -> new ResourceNotFoundException("Company", "id", companyId.toString())
+        );
+    }
+
+    private ProductCategory findByProductCategory(Long productCategoryId){
+        return productCategoryRepository.findById(productCategoryId).orElseThrow(
+                () -> new ResourceNotFoundException("ProductCategory", "id", productCategoryId.toString())
+        );
+    }
+
 
     private void checkImageFiles(List<MultipartFile> pictures){
         for(MultipartFile file: pictures) {
