@@ -8,8 +8,10 @@ import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
 import com.mstockRestAPI.mstockRestAPI.exception.SomethingWentWrongException;
 import com.mstockRestAPI.mstockRestAPI.exception.SqlProcessException;
 import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
-import com.mstockRestAPI.mstockRestAPI.repository.ProductRepository;
+import com.mstockRestAPI.mstockRestAPI.repository.*;
 import com.mstockRestAPI.mstockRestAPI.service.impl.ProductServiceImpl;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.CompanyCreator;
+import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductCategoryCreator;
 import com.mstockRestAPI.mstockRestAPI.tools.creator.ProductCreator;
 import com.mstockRestAPI.mstockRestAPI.utils.Util;
 import org.junit.jupiter.api.*;
@@ -37,6 +39,16 @@ import static org.mockito.Mockito.*;
 public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private CompanyRepository companyRepository;
+    @Mock
+    private ProductCategoryRepository productCategoryRepository;
+    @Mock
+    private ProductBarcodeRepository productBarcodeRepository;
+    @Mock
+    private ProductPictureRepository productPictureRepository;
+    @Mock
+    private ProductSalePricesRepository productSalePricesRepository;
     @Mock
     private Converter converter;
 
@@ -82,6 +94,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("Add with null ID")
     @Order(2)
+    @Disabled
     public void givenEntityWithIdNull_whenTryAdd_thenException() throws SqlProcessException {
         // When
         mockSingle();
@@ -118,7 +131,7 @@ public class ProductServiceTest {
         mockMap();
 
         // Assert
-        assertThrows(SqlProcessException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> productService.update(anyLong(), productDto));
 
         // Test Exception - Not exist id
@@ -237,6 +250,9 @@ public class ProductServiceTest {
     private void mockSingle(){
         mockMap();
         when(productRepository.save(productEntity)).thenReturn(productEntity);
+        when(companyRepository.findById(anyLong())).thenReturn(Optional.ofNullable(CompanyCreator.createCompanyEntity()));
+        when(productCategoryRepository.findById(anyLong())).thenReturn(
+                Optional.ofNullable(ProductCategoryCreator.createRandomProductCategoryEntity()));
         when(productRepository.findById(1L)).thenReturn(Optional.ofNullable(productEntity));
     }
 

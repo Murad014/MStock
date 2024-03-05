@@ -103,7 +103,7 @@ public class ProductControllerTest {
                 .thenReturn(productDto);
 
         ResultActions result = mockMvc.perform(
-                put(endPoint)
+                put(endPoint + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDto))
         );
