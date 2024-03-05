@@ -4,6 +4,7 @@ import com.mstockRestAPI.mstockRestAPI.dto.ProductCategoryDto;
 import com.mstockRestAPI.mstockRestAPI.payload.converter.Converter;
 import com.mstockRestAPI.mstockRestAPI.entity.ProductCategory;
 import com.mstockRestAPI.mstockRestAPI.exception.ResourceNotFoundException;
+import com.mstockRestAPI.mstockRestAPI.payload.response.SuccessResponse;
 import com.mstockRestAPI.mstockRestAPI.repository.ProductCategoryRepository;
 import com.mstockRestAPI.mstockRestAPI.service.ProductCategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,16 @@ public class ProductCategoriesServiceImpl implements ProductCategoriesService {
     }
 
     @Override
-    public ProductCategoryDto update(ProductCategoryDto productCategoryDto) {
-        // Check exists or not
-        Long existsId = productCategoryDto.getId();
-        productCategoryRepository.findById(existsId).orElseThrow(
-                () -> new ResourceNotFoundException("Product Category", "id", existsId.toString())
+    public ProductCategoryDto update(Long productId, ProductCategoryDto productCategoryDto) {
+        productCategoryRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product Category", "id", productId.toString())
         );
 
+        productCategoryDto.setId(productId);
         ProductCategory updateProductCategory = productCategoryRepository.save(
-                converter.mapToEntity(productCategoryDto, ProductCategory.class));
+                converter.mapToEntity(productCategoryDto, ProductCategory.class)
+        );
+
 
         return converter.mapToDto(updateProductCategory, ProductCategoryDto.class);
     }
@@ -59,10 +61,7 @@ public class ProductCategoriesServiceImpl implements ProductCategoriesService {
 
     @Override
     public ProductCategoryDto getById(Long id) {
-        ProductCategory productCategoryDto = productCategoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Product Category", "id", id.toString())
-        );
-        return converter.mapToDto(productCategoryDto, ProductCategoryDto.class);
+        return converter.mapToDto(checkExistsAndReturnEntity(id), ProductCategoryDto.class);
     }
 
     @Override
@@ -85,6 +84,23 @@ public class ProductCategoriesServiceImpl implements ProductCategoriesService {
                 .map(entity ->
                         converter.mapToDto(entity, ProductCategoryDto.class))
                 .toList();
+    }
+
+    @Override
+    public SuccessResponse updateIsActiveById(Long categoryId, Byte isActive) {
+        ProductCategory productCategoryFromDB = checkExistsAndReturnEntity(categoryId);
+        productCategoryFromDB.setIsActive(isActive);
+
+        productCategoryRepository.save(productCategoryFromDB);
+
+        return new SuccessResponse("Success, deActive category id: " + categoryId);
+    }
+
+    // -------------------------------------- NOT OVERRIDE METHODS ---------------------------
+    private ProductCategory checkExistsAndReturnEntity(Long categoryId){
+        return productCategoryRepository.findById(categoryId).orElseThrow(
+                () -> new ResourceNotFoundException("Product Category", "id", categoryId.toString())
+        );
     }
 
 }

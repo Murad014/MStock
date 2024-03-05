@@ -77,7 +77,7 @@ public class ProductCategoryServiceTest {
                 .thenReturn(productCategoryEntity);
 
         // Act
-        ProductCategoryDto productCategoryDtoUpdate = productCategoriesService.update(productCategoryDto);
+        ProductCategoryDto productCategoryDtoUpdate = productCategoriesService.update(existsId, productCategoryDto);
 
         // Assert
         singleDtoAssertions(productCategoryDto, productCategoryDtoUpdate);
@@ -85,7 +85,7 @@ public class ProductCategoryServiceTest {
 
         // Assert - does not exists
         productCategoryDtoUpdate.setId(notExists);
-        assertThrows(ResourceNotFoundException.class, () -> { productCategoriesService.update(productCategoryDto);}
+        assertThrows(ResourceNotFoundException.class, () -> { productCategoriesService.update(notExists, productCategoryDto);}
         , "If there is not product category in DB then should be throw exception.");
 
     }

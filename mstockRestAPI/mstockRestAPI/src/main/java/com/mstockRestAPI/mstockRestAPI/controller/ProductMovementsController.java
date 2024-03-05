@@ -32,4 +32,6 @@ public class ProductMovementsController {
 
         return new ResponseEntity<>(saleReceiptDto, HttpStatus.CREATED);
     }
+
+
 }
