@@ -10,4 +10,7 @@ public interface ProductBarcodeRepository extends JpaRepository<ProductBarcode, 
     List<ProductBarcode> findByIsActive(Byte isActive);
     boolean existsByBarcode(String barcode);
 
+    void deleteByBarcode(String barcode);
+
+
 }

@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Table(name = "productPictures")
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,5 +44,9 @@ public class ProductPicture {
     @Column(nullable = false)
     @Builder.Default
     private Byte isActive = 1;
+
+    public String toString(){
+        return this.getPictureName();
+    }
 
 }

@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name = "productSalePrices")
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,6 +38,10 @@ public class ProductSalePrice {
     @Column(nullable = false)
     @Builder.Default
     private Byte isActive = 1;
+
+    public String toString(){
+        return String.valueOf(this.getSellingPrice());
+    }
 
 
     //    @ManyToOne(fetch = FetchType.LAZY)

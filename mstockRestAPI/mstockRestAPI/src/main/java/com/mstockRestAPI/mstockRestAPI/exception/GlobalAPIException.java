@@ -110,7 +110,7 @@ public class GlobalAPIException {
 
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<Object> handleSQLException(SQLException exception, WebRequest webRequest) {
-        String staticMessage = "Error occurred in SQL process";
+        String staticMessage = exception.getMessage();
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
                 staticMessage,

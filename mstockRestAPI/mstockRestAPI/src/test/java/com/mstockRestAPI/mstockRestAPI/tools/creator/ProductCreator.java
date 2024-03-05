@@ -62,9 +62,8 @@ public class ProductCreator {
 
         ProductCategoryDto productCategory = ProductCategoryCreator.createProductCategoryDto();
         CompanyDto productCompany = CompanyCreator.createCompanyDto();
-        List<ProductSalePriceDto> productSalePrice = ProductSalePricesCreator.dtoList();
         List<ProductBarcodeDto> productBarcodeList = ProductBarcodeCreator.dtoList();
-        List<ProductPictureDto> productPictureList = ProductPictureCreator.dtoList();
+
 
         productCategory.setId(1L);
         return ProductDto.builder()
@@ -72,15 +71,17 @@ public class ProductCreator {
                 .description(RandomString.make(PRODUCT_RANDOM_DESCRIPTION_LENGTH))
                 .wholesale(wholesale)
                 .unit(Util.chooseRandomEnum(Unit.class))
-                .companyDto(CompanyCreator.createCompanyDto())
+                .companyId(1L)
                 .quantity(quantity)
                 .currentQuantity(quantity)
-                .productSalePrices(productSalePrice)
-                .productPictureList(productPictureList)
-                .productBarcodeList(productBarcodeList)
+                .productPictureList(List.of(RandomString.make(5), RandomString.make(5)))
+                .productBarcodeList(List.of(RandomString.make(5), RandomString.make(5)))
+                .productSalePrices(List.of(
+                        String.valueOf(Util.generateRandomPrice(1, 100)),
+                        String.valueOf(Util.generateRandomPrice(1, 100))
+                ))
                 .expiredDate(Timestamp.valueOf(createdDate.toLocalDateTime().plusDays(20)))
-                .productCategory(productCategory)
-                .companyDto(productCompany)
+                .productCategoryId(1L)
                 .discount(discount)
                 .discountLastDate(null)
                 .isActive(isActive)
