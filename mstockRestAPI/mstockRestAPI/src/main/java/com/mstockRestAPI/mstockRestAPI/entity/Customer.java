@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer {
+public class Customer extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,14 +48,6 @@ public class Customer {
 
     @Column(name="bonusRate", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal bonusRate;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,

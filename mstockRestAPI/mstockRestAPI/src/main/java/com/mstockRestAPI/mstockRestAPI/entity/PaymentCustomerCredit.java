@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PaymentCustomerCredit {
+public class PaymentCustomerCredit extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,14 +35,6 @@ public class PaymentCustomerCredit {
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "paymentExtraInfo_id", referencedColumnName = "id", nullable = false)
     private PaymentExtraInfo paymentExtraInfo;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(name="isActive")
     @Builder.Default

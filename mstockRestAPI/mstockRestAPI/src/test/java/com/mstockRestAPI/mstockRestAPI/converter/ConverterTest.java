@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 public class ConverterTest {
@@ -26,17 +27,16 @@ public class ConverterTest {
 
     private Company companyEntity;
     private CompanyDto companyDto;
-    private final Timestamp createdDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
+    private final LocalDateTime createdDate = LocalDateTime.now();
 
     private void setupTestData(){
 
-        this.companyEntity = Company.builder()
-                .id(1L)
-                .companyName("Nexus")
-                .createdDate(createdDate)
-                .updatedDate(createdDate)
-                .isActive((byte)1)
-                .build();
+        this.companyEntity = new Company();
+        this.companyEntity.setId(1L);
+        this.companyEntity.setCompanyName("Nexus");
+        this.companyEntity.setCreatedDate(createdDate);
+        this.companyEntity.setUpdatedDate(createdDate);
+        this.companyEntity.setIsActive((byte)1);
 
         this.companyDto = CompanyDto.builder()
                 .id(1L)

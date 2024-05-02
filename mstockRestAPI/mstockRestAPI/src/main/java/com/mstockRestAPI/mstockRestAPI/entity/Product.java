@@ -21,7 +21,7 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,14 +99,6 @@ public class Product {
     @Column(name="discountLastDate")
     @Builder.Default
     private Timestamp discountLastDate = null;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
 
     @Column(name = "isActive", nullable = false, columnDefinition = "TINYINT DEFAULT 1")

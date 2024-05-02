@@ -22,7 +22,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceItem {
+public class InvoiceItem extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,14 +44,6 @@ public class InvoiceItem {
 
     @Column(name = "totalPrice", precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal totalPrice;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default

@@ -246,10 +246,11 @@ public class CompanyServiceTest {
     }
 
     private Company convertCompanyDtoToEntity(CompanyDto companyDto) {
-        return Company.builder()
-                .companyName(companyDto.getCompanyName())
-                .isActive(companyDto.getIsActive())
-                .build();
+        Company company = new Company();
+        company.setCompanyName(companyDto.getCompanyName());
+        company.setIsActive(companyDto.getIsActive());
+
+        return company;
 
     }
 
