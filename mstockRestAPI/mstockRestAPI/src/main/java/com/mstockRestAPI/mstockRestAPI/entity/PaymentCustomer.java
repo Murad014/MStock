@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
-public class PaymentCustomer {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaymentCustomer extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,14 +40,6 @@ public class PaymentCustomer {
 
     @Column(name = "cardPay", columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
     private BigDecimal cardPay;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "paymentExtraInfo_id", referencedColumnName = "id")

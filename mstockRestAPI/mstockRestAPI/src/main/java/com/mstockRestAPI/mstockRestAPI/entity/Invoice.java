@@ -23,7 +23,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Invoice {
+public class Invoice extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,14 +50,6 @@ public class Invoice {
             scale = 2,
             columnDefinition = "DECIMAL(10,2) default 0.00")
     private BigDecimal initialTotalAmount;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(name="currency")
     @Builder.Default

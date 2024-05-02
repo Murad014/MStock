@@ -25,11 +25,11 @@ public class CompanyCreator {
 
     public static Company createCompanyEntity(){
         Byte isActive = (byte) (Math.random() * 2);
+        Company company1 = new Company();
+        company1.setCompanyName(RandomString.make(10));
+        company1.setIsActive(isActive);
+        return company1;
 
-        return Company.builder()
-                .companyName(RandomString.make(10))
-                .isActive(isActive)
-                .build();
     }
 
 

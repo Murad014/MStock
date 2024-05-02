@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductSalePrice {
+public class ProductSalePrice extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +26,6 @@ public class ProductSalePrice {
 
     @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) default 0.00")
     private BigDecimal sellingPrice;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(nullable = false)
     @Builder.Default

@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductPicture {
+public class ProductPicture extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +32,6 @@ public class ProductPicture {
 
     @Column(unique = true, nullable = false)
     private String pictureName;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(nullable = false)
     @Builder.Default

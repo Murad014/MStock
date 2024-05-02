@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductMovements {
+public class ProductMovements extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,14 +57,6 @@ public class ProductMovements {
 
     @Column(name="saleStatus")
     private SaleStatus saleStatus;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default

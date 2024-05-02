@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaleReceipt {
+public class SaleReceipt extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,13 +41,6 @@ public class SaleReceipt {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @OneToMany(mappedBy = "receipt",
             fetch = FetchType.LAZY)

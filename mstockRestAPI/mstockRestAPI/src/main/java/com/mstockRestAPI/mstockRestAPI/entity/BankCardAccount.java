@@ -25,7 +25,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankCardAccount {
+public class BankCardAccount extends BaseEntity {
 
     @Id
     @Column(name = "accountNumber", nullable = false)
@@ -45,14 +45,6 @@ public class BankCardAccount {
     @Column(name = "isActive", columnDefinition = "BOOLEAN DEFAULT false")
     @Builder.Default
     private Byte isActive = 1;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(name="currency")
     @Builder.Default

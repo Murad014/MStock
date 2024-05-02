@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ProductCategory {
+public class ProductCategory extends BaseEntity{
 
     @Id
     @Column(name="id")
@@ -27,14 +27,6 @@ public class ProductCategory {
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @OneToMany(mappedBy = "category", cascade = {
             CascadeType.PERSIST,

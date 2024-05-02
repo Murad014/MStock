@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentInvoice {
+public class PaymentInvoice extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,14 +41,6 @@ public class PaymentInvoice {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="bankCardAccount_accountNumber")
     private BankCardAccount bankCardAccount;
-
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default

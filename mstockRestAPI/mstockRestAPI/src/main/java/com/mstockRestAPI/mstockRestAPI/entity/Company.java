@@ -19,9 +19,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
-public class Company {
+public class Company extends BaseEntity{
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,19 +29,7 @@ public class Company {
     @Column(name = "companyName", unique = true, nullable = false, length = 100)
     private String companyName;
 
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
-
-//    @OneToMany(mappedBy = "company")
-//    private List<Product> products;
-
     @Column(name="isActive")
-    @Builder.Default
     private Byte isActive = 1;
 
 }

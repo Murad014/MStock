@@ -27,7 +27,7 @@ import com.mstockRestAPI.mstockRestAPI.enums.PaymentType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentExtraInfo {
+public class PaymentExtraInfo extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,14 +48,6 @@ public class PaymentExtraInfo {
     @Enumerated(EnumType.STRING)
     @Column(name = "paymentType", nullable = false)
     private PaymentType paymentType;
-
-    @Column(nullable = false)
-    @UpdateTimestamp
-    private Timestamp updatedDate;
-
-    @Column(nullable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
 
     @PrePersist
     @PreUpdate

@@ -10,6 +10,8 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @SpringBootTest
@@ -64,7 +66,7 @@ public class ProductCategoryRepositoryTest {
     public void givenProductCategoryEntity_whenUpdate_thenReturnProductCategoryEntity(){
         String name = "Books";
         String description = "Updated description";
-        Timestamp updateDate = Timestamp.valueOf("2023-12-03 17:48:52.083725");
+        LocalDateTime updateDate = LocalDateTime.now();//("2023-12-03 17:48:52.083725");
         Byte isActive = 0;
 
 

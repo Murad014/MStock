@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SupplierOfProduct {
+public class SupplierOfProduct extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,13 +56,6 @@ public class SupplierOfProduct {
     @JoinColumn(name="company_id")
     private Company company;
 
-    @Column(name = "createdDate", updatable = false)
-    @CreationTimestamp
-    private Timestamp createdDate;
-
-    @Column(name = "updatedDate")
-    @UpdateTimestamp
-    private Timestamp updatedDate;
 
     @Column(nullable = false, columnDefinition = "TINYINT default 1")
     @Builder.Default
